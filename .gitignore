@@ -1,0 +1,26 @@
+# ── Environnement ─────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Docs locaux (non versionnés — pour Alex uniquement) ───
+docs/
+
+# ── Claude Code ───────────────────────────────────────────
+.claude/
+
+# ── Netlify (CLI local) ───────────────────────────────────
+.netlify/
+
+# ── Node (Netlify Functions) ──────────────────────────────
+node_modules/
+package-lock.json
+
+# ── OS ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Éditeurs ──────────────────────────────────────────────
+.vscode/
+*.swp
+*.swo
