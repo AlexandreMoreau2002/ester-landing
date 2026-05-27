@@ -17,6 +17,7 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.14",
     "jsdom": "^29.1.1",
+    "netlify-cli": "^26.0.2",
     "vite": "^8.0.14",
     "vitest": "^4.0.14"
   }

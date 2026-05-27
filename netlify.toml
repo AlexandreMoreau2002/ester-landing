@@ -6,6 +6,10 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  # ESTER_MODE n'est pas un secret — désactive le faux positif du scanner
+  SECRETS_SCAN_OMIT_KEYS = "ESTER_MODE"
+
 # ── Cache des assets statiques (fonts, images, CSS/JS versionnés) ──
 [[headers]]
   for = "/assets/*"
