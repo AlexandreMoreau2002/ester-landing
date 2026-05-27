@@ -1,0 +1,59 @@
+name: Deploy
+
+# Déploiement manuel uniquement — déclencher depuis GitHub Actions → "Run workflow"
+# Pour passer en automatique sur tag : décommenter le bloc "push: tags:" ci-dessous
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environnement cible'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+
+  # push:
+  #   tags:
+  #     - 'v*'   # décommenter pour auto-deploy sur chaque tag vX.Y.Z
+
+jobs:
+  deploy:
+    name: Build & Deploy → Netlify
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Test
+        run: npm test
+        env:
+          ESTER_MODE: dev
+
+      # Build prod — génère les données Notion + Google Places réelles
+      - name: Build
+        run: npm run build
+        env:
+          ESTER_MODE: prod
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+
+      # Envoie le dist/ directement à Netlify — Netlify ne rebuild pas
+      - name: Deploy to Netlify
+        run: npx netlify-cli deploy --prod --dir=dist --message "Deploy ${{ github.ref_name }} @ ${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
