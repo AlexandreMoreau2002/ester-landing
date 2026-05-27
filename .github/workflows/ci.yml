@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [develop, 'feature/**']
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  ci:
+    name: Lint · Test · Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      # Lint — passe silencieusement si aucun script "lint" n'existe dans package.json
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Test
+        run: npm test
+        env:
+          ESTER_MODE: dev
+
+      # Build avec données mock pour vérifier que Vite ne casse pas
+      - name: Build
+        run: npm run build
+        env:
+          ESTER_MODE: dev
