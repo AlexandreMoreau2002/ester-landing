@@ -4,107 +4,78 @@ Site vitrine d'un bureau d'études en ingénierie structurelle, Hautes-Alpes.
 
 ## Stack
 
-- HTML / CSS / JS vanilla — aucun framework, aucune dépendance NPM côté front
-- [Netlify](https://netlify.com) pour l'hébergement et les fonctions serverless
-- [Notion](https://notion.so) comme CMS headless pour les réalisations (à venir)
-- [Formspree](https://formspree.io) pour le formulaire de contact (à configurer)
+- HTML / CSS / JS vanilla
+- Vite pour le serveur local et le build Netlify
+- Aucune fonction serverless : les données publiques sont générées au build
 
 ## Lancer en local
 
 ```bash
-# Serveur statique simple
-python3 -m http.server 8080
-# → http://localhost:8080
-
-# Ou avec la CLI Netlify (recommandé pour tester les Functions)
-npm install -g netlify-cli
-netlify dev
-# → http://localhost:8888
+cp .env.example .env
+# Mets ESTER_MODE=dev pour voir les avis mockés sans clés API.
+npm install
+npm run dev
+# → http://localhost:5173
 ```
 
-Copier `.env.example` en `.env` et remplir les valeurs avant de lancer `netlify dev`.
+En local, `ESTER_MODE=dev` génère `public/data/avis.json` avec des avis mockés et laisse les réalisations vides si Notion n'est pas configuré.
 
 ## Structure
 
 ```
 ester-landing/
-├── index.html          # Page unique
-├── style.css           # Tout le CSS (design tokens + composants)
-├── main.js             # JS vanilla (nav, scroll, i18n, pagination…)
-├── i18n.js             # Traductions FR / EN
-├── assets/             # Images (logo.png, favicon…)
-├── netlify/
-│   └── functions/      # Serverless functions (Notion API)
-├── .env.example        # Variables d'environnement à copier en .env
+├── index.html
+├── style.css
+├── main.js
+├── js/
+│   ├── avis.js
+│   ├── contact.js
+│   ├── i18n.js
+│   ├── mountains.js
+│   ├── nav.js
+│   ├── notion.js
+│   ├── pagination.js
+│   ├── reveal.js
+│   └── smooth-scroll.js
+├── scripts/
+│   └── generate-data.mjs
+├── public/
+│   └── data/
+├── assets/
 └── README.md
 ```
 
-## Gitflow
+## Données dynamiques
 
-Ce projet suit [Gitflow](https://nvie.com/posts/a-successful-git-branching-model/).
+`scripts/generate-data.mjs` lit les variables d'environnement au moment du build, appelle Google Places et Notion côté Node, puis écrit :
 
-| Branche | Rôle |
-|---|---|
-| `main` | Production — chaque commit correspond à un tag de version |
-| `develop` | Intégration — branche de base pour le développement |
-| `feature/xxx` | Nouvelles fonctionnalités (`feature/notion-cms`, `feature/formspree`…) |
-| `release/x.x.x` | Préparation d'une mise en production |
-| `hotfix/xxx` | Correctif urgent directement sur `main` |
+- `public/data/avis.json`
+- `public/data/realisations.json`
 
-### Workflow type
+Le navigateur ne reçoit que ces JSON publics, jamais les clés API.
 
-```bash
-# Nouvelle feature
-git checkout develop
-git checkout -b feature/notion-cms
+La section Avis reste masquée si le JSON ne contient aucun avis 4 ou 5 étoiles. La section Réalisations affiche l'empty state si Notion ne renvoie aucun projet publié.
 
-# ... travail ...
+## Déploiement Netlify
 
-git checkout develop
-git merge --no-ff feature/notion-cms
-git branch -d feature/notion-cms
+Dans l'interface Netlify :
 
-# Préparer une release
-git checkout -b release/1.1.0
-# (ajustements, bump version si besoin)
-git checkout main
-git merge --no-ff release/1.1.0
-git tag v1.1.0
-git checkout develop
-git merge --no-ff release/1.1.0
-git branch -d release/1.1.0
-```
+- Build command : `npm run build`
+- Publish directory : `dist`
 
-### Système de tags (versioning)
+Variables à créer dans Netlify :
 
-Format : `vMAJEUR.MINEUR.PATCH`
-
-| Incrément | Quand |
-|---|---|
-| MAJEUR | Refonte visuelle complète |
-| MINEUR | Nouvelle section ou fonctionnalité (Notion, form…) |
-| PATCH | Correction de bug, ajustement texte, fix CSS |
-
-```bash
-# Créer et pousser un tag
-git tag v1.0.0 -m "Premier déploiement en production"
-git push origin v1.0.0
-
-# Voir tous les tags
-git tag -l
-```
-
-Les tags sont posés sur `main`, après merge d'une `release/`.
-
-## Déploiement
-
-Le site est déployé automatiquement sur Netlify à chaque push sur `main`.
-
-Variables d'environnement à configurer dans l'UI Netlify (Site settings → Environment variables) :
-
+- `ESTER_MODE=prod`
+- `GOOGLE_PLACES_API_KEY`
+- `GOOGLE_PLACE_ID`
 - `NOTION_TOKEN`
 - `NOTION_DATABASE_ID`
-- `FORMSPREE_ENDPOINT`
+
+## Gitflow
+
+`main` → production, `develop` → intégration, `feature/xxx` → branches de travail.
+
+Tags : `vMAJEUR.MINEUR.PATCH`.
 
 ## Licence
 

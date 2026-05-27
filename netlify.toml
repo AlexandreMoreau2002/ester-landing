@@ -1,0 +1,40 @@
+# ═══════════════════════════════════════════════════════════
+# ESTER SAS — Configuration Netlify
+# ═══════════════════════════════════════════════════════════
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# ── Cache des assets statiques (fonts, images, CSS/JS versionnés) ──
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# ── Headers de sécurité ───────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# ── Redirections www → non-www (ou inverse selon domaine final) ──
+# À activer une fois le domaine configuré dans Netlify
+# [[redirects]]
+#   from = "https://ester-gap.fr/*"
+#   to = "https://www.ester-gap.fr/:splat"
+#   status = 301
+#   force = true
