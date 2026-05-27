@@ -12,9 +12,12 @@ docs/
 # ── Netlify (CLI local) ───────────────────────────────────
 .netlify/
 
-# ── Node (Netlify Functions) ──────────────────────────────
+# ── Node / Vite ───────────────────────────────────────────
 node_modules/
-package-lock.json
+dist/
+coverage/
+public/data/*.json
+!public/data/.gitkeep
 
 # ── OS ────────────────────────────────────────────────────
 .DS_Store
@@ -25,3 +28,4 @@ Thumbs.db
 *.swp
 *.swo
 CLAUDE.md
+AGENTS.md

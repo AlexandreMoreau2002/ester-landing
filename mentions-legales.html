@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title data-i18n="legal.meta.title">ESTER SAS — Mentions légales</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+<script defer src="i18n.js"></script>
+<style>
+  /* ============================================================
+     RESET & THEME (mêmes tokens que le hero)
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    color: white;
+    background:
+      radial-gradient(ellipse at 50% 0%, #1a3a64 0%, #0f2a4a 35%, #0a1f3a 100%) no-repeat fixed;
+  }
+  a { color: inherit; }
+
+  /* grid subtil sur le fond */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 85%);
+  }
+  main, header { position: relative; z-index: 1; }
+
+  /* ============================================================
+     HEADER (mini, repris du hero)
+     ============================================================ */
+  .legal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px clamp(20px, 5vw, 56px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .legal-logo {
+    background: white; padding: 8px 11px; border-radius: 5px;
+    font-weight: 800; color: #0f2a4a; line-height: 1; text-decoration: none;
+  }
+  .legal-logo strong { display: block; font-size: 14px; letter-spacing: .06em; }
+  .legal-logo small  { display: block; font-size: 6px; font-weight: 500; margin-top: 2px; color: #6b7280; }
+  .legal-back {
+    font-size: 12px; color: rgba(255,255,255,.6); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .legal-back:hover { color: white; }
+  .legal-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .legal-actions .ester-nav-lang {
+    color: rgba(255,255,255,.58);
+  }
+  .legal-actions .nav-lang-btn {
+    color: rgba(255,255,255,.58);
+  }
+  .legal-actions .nav-lang-btn.is-active,
+  .legal-actions .nav-lang-btn:hover {
+    color: white;
+  }
+
+  /* ============================================================
+     CONTENT
+     ============================================================ */
+  .legal-page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: clamp(48px, 8vw, 72px) clamp(20px, 5vw, 56px) 96px;
+  }
+  .legal-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: rgba(255,255,255,.5);
+    margin-bottom: 14px;
+  }
+  .legal-page h1 {
+    font-family: "Libre Baskerville", Georgia, serif;
+    font-weight: 500; font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.02; letter-spacing: -.015em;
+    margin: 0 0 18px;
+  }
+  .legal-page h1 em { font-style: italic; color: rgba(255,255,255,.72); }
+  .legal-intro {
+    font-size: 15px; color: rgba(255,255,255,.7); line-height: 1.55; margin: 0;
+  }
+  .legal-section {
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 28px; margin-top: 28px;
+  }
+  .legal-section h2 {
+    font-family: "Libre Baskerville", Georgia, serif;
+    font-weight: 500; font-size: 28px;
+    margin: 0 0 18px; letter-spacing: -.01em;
+  }
+  .legal-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px;
+  }
+  .legal-grid > div, .legal-stack > div { margin-bottom: 14px; }
+  .legal-label {
+    display: block;
+    font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+    font-family: ui-monospace, "JetBrains Mono", monospace;
+    margin-bottom: 4px;
+  }
+  .legal-val {
+    font-size: 14px; color: rgba(255,255,255,.88); line-height: 1.55;
+  }
+  .legal-text {
+    font-size: 14px; color: rgba(255,255,255,.78); line-height: 1.6; margin: 0;
+  }
+  .legal-note {
+    font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.6; margin: 14px 0 0;
+  }
+  .placeholder {
+    display: inline-block;
+    background: rgba(255,255,255,.05);
+    padding: 3px 8px; border-radius: 4px;
+    font-family: ui-monospace, "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: .02em;
+    color: rgba(255,255,255,.4); font-style: italic;
+  }
+  .legal-foot {
+    margin-top: 56px; padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    font-size: 11px; letter-spacing: .06em;
+    color: rgba(255,255,255,.4);
+    font-family: ui-monospace, "JetBrains Mono", monospace;
+  }
+
+  @media (max-width: 600px) {
+    .legal-header { align-items: flex-start; gap: 18px; }
+    .legal-actions { align-items: flex-end; flex-direction: column-reverse; gap: 12px; }
+    .legal-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="legal-header">
+  <a class="legal-logo" href="/">
+    <strong>ESTER</strong>
+    <small data-i18n-html="legal.logo.sub">Études Techniques<br/>&amp; TP Structures BA</small>
+  </a>
+  <div class="legal-actions">
+    <a class="legal-back" href="/" data-i18n="legal.back">← Retour à l'accueil</a>
+    <span class="ester-nav-lang" role="group" aria-label="Langue / Language">
+      <button class="nav-lang-btn is-active" data-lang="fr" aria-pressed="true">FR</button>
+      <span class="nav-lang-sep" aria-hidden="true">|</span>
+      <button class="nav-lang-btn" data-lang="en" aria-pressed="false">EN</button>
+    </span>
+  </div>
+</header>
+
+<main class="legal-page">
+
+  <div class="legal-eyebrow" data-i18n="legal.eyebrow">Informations légales</div>
+  <h1 data-i18n-html="legal.heading">Mentions <em>légales</em></h1>
+  <p class="legal-intro" data-i18n="legal.intro">
+    Conformément aux articles 6‑III et 19 de la Loi n° 2004‑575 du 21 juin 2004
+    pour la Confiance dans l'économie numérique (LCEN).
+  </p>
+
+  <!-- ====================== ÉDITEUR ====================== -->
+  <section class="legal-section">
+    <h2 data-i18n="legal.publisher.title">Éditeur du site</h2>
+    <div class="legal-grid">
+      <div>
+        <span class="legal-label" data-i18n="legal.publisher.company.label">Raison sociale</span>
+        <div class="legal-val">ESTER SAS</div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.publisher.legal.label">Forme juridique</span>
+        <div class="legal-val" data-i18n="legal.publisher.legal.value">Société par actions simplifiée</div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.publisher.address.label">Siège social</span>
+        <div class="legal-val">3 bis avenue Maréchal Foch<br/>05000 Gap, France</div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.publisher.phone.label">Téléphone</span>
+        <div class="legal-val">04 92 51 70 86</div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.publisher.capital.label">Capital social</span>
+        <div class="legal-val"><span class="placeholder">{{ capital_social }}</span></div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.publisher.rcs.label">RCS</span>
+        <div class="legal-val"><span class="placeholder">{{ rcs_gap }}</span></div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.publisher.director.label">Directeur de la publication</span>
+        <div class="legal-val">Philippe Duez</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== HÉBERGEUR ====================== -->
+  <section class="legal-section">
+    <h2 data-i18n="legal.host.title">Hébergeur</h2>
+    <p class="legal-val" style="margin-bottom: 18px;" data-i18n-html="legal.host.value">
+      <strong style="color:white">Netlify, Inc.</strong><br/>
+      512 2nd Street, Suite 200<br/>
+      San Francisco, CA 94107, États‑Unis<br/>
+      <span style="color:rgba(255,255,255,.55)">netlify.com</span>
+    </p>
+    <p class="legal-note" data-i18n-html="legal.host.note">
+      Les données de visite sont susceptibles d'être transférées hors de l'Union européenne
+      (États‑Unis). Netlify adhère au cadre <em>EU‑US Data Privacy Framework</em>
+      certifié par le Département du Commerce américain, garantissant un niveau de
+      protection adéquat conformément à la décision d'adéquation de la Commission
+      européenne du 10 juillet 2023.
+    </p>
+  </section>
+
+  <!-- ====================== ASSURANCE ====================== -->
+  <section class="legal-section">
+    <h2 data-i18n="legal.insurance.title">Assurance professionnelle</h2>
+    <div class="legal-grid">
+      <div>
+        <span class="legal-label" data-i18n="legal.insurance.insurer.label">Assureur</span>
+        <div class="legal-val">MMA Assurances IARD</div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.insurance.cover.label">Garantie</span>
+        <div class="legal-val" data-i18n="legal.insurance.cover.value">Responsabilité civile professionnelle et décennale</div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.insurance.zone.label">Zone de couverture</span>
+        <div class="legal-val" data-i18n="legal.insurance.zone.value">France métropolitaine</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== RGPD ====================== -->
+  <section class="legal-section">
+    <h2 data-i18n-html="legal.privacy.title">Données personnelles &amp; RGPD</h2>
+    <p class="legal-text" data-i18n="legal.privacy.intro">
+      Conformément au Règlement (UE) 2016/679 (RGPD) et à la Loi Informatique et
+      Libertés modifiée, vous disposez d'un droit d'accès, de rectification, d'effacement,
+      de portabilité, de limitation et d'opposition au traitement de vos données.
+    </p>
+
+    <div class="legal-stack" style="margin-top: 22px; display: grid; gap: 22px;">
+      <div>
+        <span class="legal-label" data-i18n="legal.privacy.controller.label">Responsable du traitement</span>
+        <div class="legal-val">ESTER SAS — 3 bis avenue Maréchal Foch, 05000 Gap</div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.privacy.legalbasis.label">Base légale</span>
+        <div class="legal-val" data-i18n-html="legal.privacy.legalbasis.value">
+          Consentement (formulaire de contact) — art. 6.1.a du RGPD<br/>
+          Intérêt légitime (mesure d'audience anonyme) — art. 6.1.f
+        </div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.privacy.data.label">Données collectées</span>
+        <div class="legal-val" data-i18n="legal.privacy.data.value">
+          Via le formulaire de contact : nom, e‑mail, message, et toute donnée que vous
+          choisissez de communiquer. Aucun cookie publicitaire n'est déposé.
+        </div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.privacy.retention.label">Durée de conservation</span>
+        <div class="legal-val" data-i18n="legal.privacy.retention.value">
+          3 ans à compter du dernier contact pour les prospects ;
+          durée de la relation contractuelle pour les clients,
+          puis archivage conforme aux obligations légales.
+        </div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.privacy.processor.label">Sous‑traitant — formulaire</span>
+        <div class="legal-val" data-i18n-html="legal.privacy.processor.value">
+          <span class="placeholder">{{ form_provider }}</span> traite les soumissions du
+          formulaire pour notre compte. Aucun partage de données à des fins commerciales.
+        </div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.privacy.rights.label">Exercer vos droits</span>
+        <div class="legal-val" data-i18n-html="legal.privacy.rights.value">
+          Par courrier à l'adresse du siège, ou par e‑mail à
+          <a href="mailto:contact@ester-bet.fr" style="color:white">contact@ester-bet.fr</a>.<br/>
+          Réclamation possible auprès de la <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SERVICES TIERS ====================== -->
+  <section class="legal-section">
+    <h2 data-i18n="legal.third.title">Services tiers intégrés</h2>
+    <div class="legal-stack" style="display: grid; gap: 22px;">
+      <div>
+        <span class="legal-label" data-i18n="legal.third.maps.label">Google Maps</span>
+        <div class="legal-val" data-i18n="legal.third.maps.value">
+          La page Contact intègre une carte Google Maps afin d'afficher la localisation
+          d'ESTER SAS au 3 bis avenue Maréchal Foch, 05000 Gap. Lors du chargement de
+          cette carte, votre navigateur établit une connexion avec les serveurs de Google.
+          Des données techniques, telles que votre adresse IP, les informations de votre
+          navigateur et la page consultée, peuvent alors être transmises à Google.
+        </div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.third.purpose.label">Finalité</span>
+        <div class="legal-val" data-i18n="legal.third.purpose.value">
+          Ce service est utilisé uniquement pour faciliter l'accès aux locaux d'ESTER SAS
+          et proposer un lien d'itinéraire vers Google Maps. ESTER SAS ne reçoit pas les
+          données collectées par Google dans ce cadre.
+        </div>
+      </div>
+      <div>
+        <span class="legal-label" data-i18n="legal.third.google.label">Politique de confidentialité Google</span>
+        <div class="legal-val" data-i18n-html="legal.third.google.value">
+          Pour plus d'informations sur le traitement réalisé par Google, vous pouvez
+          consulter la politique de confidentialité de Google :
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:white">policies.google.com/privacy</a>.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== PROPRIÉTÉ INTELLECTUELLE ====================== -->
+  <section class="legal-section">
+    <h2 data-i18n="legal.ip.title">Propriété intellectuelle</h2>
+    <p class="legal-text" data-i18n="legal.ip.text">
+      L'ensemble du contenu de ce site (textes, images, photographies, logos, structure)
+      est la propriété exclusive d'ESTER SAS, sauf mention contraire, et protégé par le
+      Code de la propriété intellectuelle. Toute reproduction, même partielle, est soumise
+      à autorisation préalable écrite.
+    </p>
+  </section>
+
+  <div class="legal-foot">
+    <span data-i18n="legal.foot.updated">Dernière mise à jour · {{ date_maj }}</span>
+    <span data-i18n="legal.foot.company">ESTER SAS · Gap, Hautes‑Alpes</span>
+  </div>
+
+</main>
+
+</body>
+</html>

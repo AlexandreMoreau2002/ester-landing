@@ -1,0 +1,23 @@
+{
+  "name": "ester-landing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "node scripts/generate-data.mjs && vite --host 0.0.0.0",
+    "build": "node scripts/generate-data.mjs && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest --coverage",
+    "test:architecture": "node tests/data-build-architecture.test.mjs"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.14",
+    "jsdom": "^29.1.1",
+    "vite": "^8.0.14",
+    "vitest": "^4.0.14"
+  }
+}

@@ -16,6 +16,13 @@ const TRANSLATIONS = {
     'nav.entreprise':        'L\'entreprise',
     'nav.rejoindre':         'Rejoindre',
     'nav.contact':           'Nous contacter',
+    'nav.logo.aria':         'ESTER SAS — Accueil',
+    'nav.desktop.aria':      'Navigation principale',
+    'nav.lang.aria':         'Langue / Language',
+    'nav.burger.open':       'Ouvrir le menu',
+    'nav.burger.close':      'Fermer le menu',
+    'nav.overlay.aria':      'Menu de navigation',
+    'nav.logo.sub':          'Études Techniques<br/>&amp; TP Structures BA',
     /* Sous-titres overlay mobile */
     'nav.sub.services':      'Études béton armé, expertises',
     'nav.sub.realisations':  '50+ projets dans les Hautes‑Alpes',
@@ -25,7 +32,7 @@ const TRANSLATIONS = {
     /* ── Hero ─────────────────────────────────────────── */
     'hero.kicker':       'Hautes-Alpes · Fondé en 1977 · OPQIBI 1202',
     'hero.kicker.short': 'Gap · Depuis 1977',
-    'hero.heading':      'L\'ingénierie structure<br />à Gap, <em>depuis 47&nbsp;ans.</em>',
+    'hero.heading':      'L\'ingénierie structure<br />à Gap, <em>depuis 49&nbsp;ans.</em>',
     'hero.sub':          'ESTER SAS accompagne architectes, maîtres d\'ouvrage et collectivités des Hautes-Alpes dans leurs projets structurels. Dimensionnement béton, expertise et suivi de chantier.',
     'hero.sub.short':    'ESTER SAS — études structures béton, expertise et suivi de chantier dans les Hautes-Alpes.',
     'hero.cta.write':    'Nous écrire',
@@ -45,14 +52,18 @@ const TRANSLATIONS = {
     'services.kicker':  'Nos domaines d\'intervention',
     'services.heading': 'Une expertise technique complète,<br />du dimensionnement au suivi de chantier.',
     'services.s1.title': 'Études de structures béton',
-    'services.s1.desc':  'Dimensionnement et vérification des éléments porteurs en béton armé pour constructions neuves, extensions et réhabilitations. Calculs conformes aux Eurocodes.',
+    'services.s1.desc':  'Calcul de structure et vérification des éléments porteurs en béton armé pour constructions neuves, extensions et réhabilitations. Notes de calcul conformes aux Eurocodes (Eurocode 2 béton, Eurocode 8 sismique).',
     'services.s2.title': 'Évaluation des risques',
-    'services.s2.desc':  'Diagnostic structurel, expertise de bâtiments existants et évaluation des pathologies. Rapports techniques circonstanciés pour maîtres d\'ouvrage et assureurs.',
+    'services.s2.desc':  'Diagnostic structurel de bâtiments existants, expertise des pathologies et évaluation des risques. Rapports techniques circonstanciés incluant les préconisations de renforcement structurel, pour maîtres d\'ouvrage et assureurs.',
     'services.s3.title': 'Études de faisabilité',
-    'services.s3.desc':  'Analyse structurelle en phase de conception pour valider la faisabilité technique d\'un projet avant dépôt de permis. Aide à la décision pour les maîtres d\'ouvrage.',
+    'services.s3.desc':  'Analyse structurelle en phase de conception pour valider la faisabilité technique d\'un projet avant dépôt de permis, en tenant compte des contraintes sismiques et alpines propres aux Hautes-Alpes (zone 3, Gap). Aide à la décision pour les maîtres d\'ouvrage.',
     'services.s4.title': 'Suivi de chantier',
-    'services.s4.desc':  'Visites de contrôle, levée de réserves structurelles et assistance technique en phase d\'exécution. Interlocuteur technique disponible tout au long du chantier.',
+    'services.s4.desc':  'Visites de contrôle, levée de réserves structurelles et assistance technique en phase d\'exécution. Interlocuteur technique disponible tout au long du chantier, sur Gap et dans les Hautes-Alpes.',
     'services.quote':    'Demander un devis →',
+    'services.s1.quote.aria': 'Nous contacter pour les études de structures béton',
+    'services.s2.quote.aria': 'Nous contacter pour l\'évaluation des risques',
+    'services.s3.quote.aria': 'Nous contacter pour une étude de faisabilité',
+    'services.s4.quote.aria': 'Nous contacter pour un suivi de chantier',
 
     /* ── Réalisations ─────────────────────────────────── */
     'real.kicker':  'Projets récents',
@@ -106,6 +117,8 @@ const TRANSLATIONS = {
     'avis.kicker':  'Témoignages',
     'avis.heading': 'Ce que disent nos clients.',
     'avis.link':    'Voir les avis sur Google Maps →',
+    'avis.stars.aria': '{note} étoile(s) sur 5',
+    'avis.google.reviews': '{note}/5 · {total} avis Google',
     'avis.a1.text':   '"Cabinet sérieux, disponible et rigoureux. Philippe Duez a suivi notre chantier de réhabilitation avec une implication réelle. Les délais ont été tenus et la communication a été claire du début à la fin."',
     'avis.a1.name':   'Arnaud M.',
     'avis.a1.role':   'Architecte DPLG · Gap',
@@ -137,7 +150,9 @@ const TRANSLATIONS = {
     'contact.soc.label':      'Société / Cabinet',
     'contact.soc.placeholder':'Nom de votre structure',
     'contact.email.label':    'Email',
+    'contact.email.placeholder':'votre@email.fr',
     'contact.tel.label':      'Téléphone',
+    'contact.tel.placeholder':'06 XX XX XX XX',
     'contact.sujet.label':    'Nature de la demande',
     'contact.sujet.default':  'Sélectionnez',
     'contact.sujet.o1': 'Étude de structure béton',
@@ -150,14 +165,87 @@ const TRANSLATIONS = {
     'contact.mention': 'Les champs marqués * sont obligatoires. Vos données ne sont utilisées qu\'aux fins de réponse à votre demande.',
     'contact.submit':  'Envoyer le message',
     'contact.success': 'Message envoyé. Nous vous répondrons dans les meilleurs délais.',
+    'contact.map.directions': 'Itinéraire Google Maps →',
 
     /* ── Pagination ──────────────────────────────────── */
     'pagination.prev': '← Précédent',
     'pagination.next': 'Suivant →',
+    'pagination.nav.aria': 'Navigation des réalisations',
+    'pagination.prev.aria': 'Page précédente',
+    'pagination.next.aria': 'Page suivante',
+    'pagination.dot.aria': 'Page {page} sur {total}',
+
+    /* ── Réalisations empty state ─────────────────────── */
+    'realisations.empty.label': 'Zone réservée · projets à venir',
+    'realisations.empty': 'Pas encore de projets à vous présenter,<br/><em>mais ça ne saurait tarder.</em>',
 
     /* ── Footer ───────────────────────────────────────── */
     'footer.baseline': 'Bureau d\'études en ingénierie structurelle<br/>depuis 1977 · Gap, Hautes-Alpes',
+    'footer.nav.aria': 'Navigation pied de page',
+    'footer.hosting': 'Hébergement : Netlify Inc., 512 2nd Street, San Francisco, CA 94107',
+    'footer.copy': 'ESTER SAS. Tous droits réservés.',
     'footer.ml': 'Mentions légales & confidentialité',
+
+    /* ── Métadonnées ──────────────────────────────────── */
+    'meta.home.title': 'ESTER SAS — Bureau d\'études structure · Gap, Hautes-Alpes',
+    'meta.home.description': 'Bureau d\'études structure à Gap (Hautes-Alpes) depuis 1977. Calcul de structure béton, expertise et suivi de chantier. Qualification OPQIBI 1202.',
+    'meta.home.og.title': 'ESTER SAS — Bureau d\'études structure · Gap',
+    'meta.home.og.description': 'Études structurelles, faisabilité et suivi de chantier pour les projets publics et privés des Hautes-Alpes. Implanté à Gap depuis 1977.',
+
+    /* ── Attributs contact ────────────────────────────── */
+    'contact.loading': 'Envoi…',
+    'contact.map.aria': 'Localisation ESTER SAS — 3 bis avenue Maréchal Foch, 05000 Gap',
+    'contact.map.title': 'Carte Google Maps — ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap',
+
+    /* ── Mentions légales ─────────────────────────────── */
+    'legal.meta.title': 'ESTER SAS — Mentions légales',
+    'legal.logo.sub': 'Études Techniques<br/>&amp; TP Structures BA',
+    'legal.back': '← Retour à l\'accueil',
+    'legal.eyebrow': 'Informations légales',
+    'legal.heading': 'Mentions <em>légales</em>',
+    'legal.intro': 'Conformément aux articles 6‑III et 19 de la Loi n° 2004‑575 du 21 juin 2004 pour la Confiance dans l\'économie numérique (LCEN).',
+    'legal.publisher.title': 'Éditeur du site',
+    'legal.publisher.company.label': 'Raison sociale',
+    'legal.publisher.legal.label': 'Forme juridique',
+    'legal.publisher.legal.value': 'Société par actions simplifiée',
+    'legal.publisher.address.label': 'Siège social',
+    'legal.publisher.phone.label': 'Téléphone',
+    'legal.publisher.capital.label': 'Capital social',
+    'legal.publisher.rcs.label': 'RCS',
+    'legal.publisher.director.label': 'Directeur de la publication',
+    'legal.host.title': 'Hébergeur',
+    'legal.host.value': '<strong style="color:white">Netlify, Inc.</strong><br/>512 2nd Street, Suite 200<br/>San Francisco, CA 94107, États‑Unis<br/><span style="color:rgba(255,255,255,.55)">netlify.com</span>',
+    'legal.host.note': 'Les données de visite sont susceptibles d\'être transférées hors de l\'Union européenne (États‑Unis). Netlify adhère au cadre <em>EU‑US Data Privacy Framework</em> certifié par le Département du Commerce américain, garantissant un niveau de protection adéquat conformément à la décision d\'adéquation de la Commission européenne du 10 juillet 2023.',
+    'legal.insurance.title': 'Assurance professionnelle',
+    'legal.insurance.insurer.label': 'Assureur',
+    'legal.insurance.cover.label': 'Garantie',
+    'legal.insurance.cover.value': 'Responsabilité civile professionnelle et décennale',
+    'legal.insurance.zone.label': 'Zone de couverture',
+    'legal.insurance.zone.value': 'France métropolitaine',
+    'legal.privacy.title': 'Données personnelles &amp; RGPD',
+    'legal.privacy.intro': 'Conformément au Règlement (UE) 2016/679 (RGPD) et à la Loi Informatique et Libertés modifiée, vous disposez d\'un droit d\'accès, de rectification, d\'effacement, de portabilité, de limitation et d\'opposition au traitement de vos données.',
+    'legal.privacy.controller.label': 'Responsable du traitement',
+    'legal.privacy.legalbasis.label': 'Base légale',
+    'legal.privacy.legalbasis.value': 'Consentement (formulaire de contact) — art. 6.1.a du RGPD<br/>Intérêt légitime (mesure d\'audience anonyme) — art. 6.1.f',
+    'legal.privacy.data.label': 'Données collectées',
+    'legal.privacy.data.value': 'Via le formulaire de contact : nom, e‑mail, message, et toute donnée que vous choisissez de communiquer. Aucun cookie publicitaire n\'est déposé.',
+    'legal.privacy.retention.label': 'Durée de conservation',
+    'legal.privacy.retention.value': '3 ans à compter du dernier contact pour les prospects ; durée de la relation contractuelle pour les clients, puis archivage conforme aux obligations légales.',
+    'legal.privacy.processor.label': 'Sous‑traitant — formulaire',
+    'legal.privacy.processor.value': '<span class="placeholder">{{ form_provider }}</span> traite les soumissions du formulaire pour notre compte. Aucun partage de données à des fins commerciales.',
+    'legal.privacy.rights.label': 'Exercer vos droits',
+    'legal.privacy.rights.value': 'Par courrier à l\'adresse du siège, ou par e‑mail à <a href="mailto:contact@ester-bet.fr" style="color:white">contact@ester-bet.fr</a>.<br/>Réclamation possible auprès de la <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
+    'legal.third.title': 'Services tiers intégrés',
+    'legal.third.maps.label': 'Google Maps',
+    'legal.third.maps.value': 'La page Contact intègre une carte Google Maps afin d\'afficher la localisation d\'ESTER SAS au 3 bis avenue Maréchal Foch, 05000 Gap. Lors du chargement de cette carte, votre navigateur établit une connexion avec les serveurs de Google. Des données techniques, telles que votre adresse IP, les informations de votre navigateur et la page consultée, peuvent alors être transmises à Google.',
+    'legal.third.purpose.label': 'Finalité',
+    'legal.third.purpose.value': 'Ce service est utilisé uniquement pour faciliter l\'accès aux locaux d\'ESTER SAS et proposer un lien d\'itinéraire vers Google Maps. ESTER SAS ne reçoit pas les données collectées par Google dans ce cadre.',
+    'legal.third.google.label': 'Politique de confidentialité Google',
+    'legal.third.google.value': 'Pour plus d\'informations sur le traitement réalisé par Google, vous pouvez consulter la politique de confidentialité de Google : <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:white">policies.google.com/privacy</a>.',
+    'legal.ip.title': 'Propriété intellectuelle',
+    'legal.ip.text': 'L\'ensemble du contenu de ce site (textes, images, photographies, logos, structure) est la propriété exclusive d\'ESTER SAS, sauf mention contraire, et protégé par le Code de la propriété intellectuelle. Toute reproduction, même partielle, est soumise à autorisation préalable écrite.',
+    'legal.foot.updated': 'Dernière mise à jour · {{ date_maj }}',
+    'legal.foot.company': 'ESTER SAS · Gap, Hautes‑Alpes',
   },
 
   /* ════════════════════════════════════════════════════
@@ -170,6 +258,13 @@ const TRANSLATIONS = {
     'nav.entreprise':        'About',
     'nav.rejoindre':         'Join us',
     'nav.contact':           'Contact us',
+    'nav.logo.aria':         'ESTER SAS — Home',
+    'nav.desktop.aria':      'Main navigation',
+    'nav.lang.aria':         'Language',
+    'nav.burger.open':       'Open menu',
+    'nav.burger.close':      'Close menu',
+    'nav.overlay.aria':      'Navigation menu',
+    'nav.logo.sub':          'Technical Studies<br/>&amp; Reinforced Concrete Structures',
     /* Overlay mobile subtitles */
     'nav.sub.services':      'Structural design, assessments',
     'nav.sub.realisations':  '50+ projects in the Hautes‑Alpes',
@@ -199,14 +294,18 @@ const TRANSLATIONS = {
     'services.kicker':  'Our areas of expertise',
     'services.heading': 'Comprehensive technical expertise,<br />from design to site supervision.',
     'services.s1.title': 'Concrete structural studies',
-    'services.s1.desc':  'Sizing and verification of reinforced concrete load-bearing elements for new constructions, extensions and renovations. Calculations compliant with Eurocodes.',
+    'services.s1.desc':  'Structural calculation and verification of reinforced concrete load-bearing elements for new constructions, extensions and renovations. Calculations compliant with Eurocodes (Eurocode 2 concrete, Eurocode 8 seismic).',
     'services.s2.title': 'Risk assessment',
-    'services.s2.desc':  'Structural diagnosis, assessment of existing buildings and pathology evaluation. Detailed technical reports for project owners and insurers.',
+    'services.s2.desc':  'Building structural diagnosis, assessment of existing structures and pathology evaluation. Detailed technical reports including structural reinforcement recommendations, for project owners and insurers.',
     'services.s3.title': 'Feasibility studies',
-    'services.s3.desc':  'Structural analysis during the design phase to validate the technical feasibility of a project prior to planning permission. Decision support for project owners.',
+    'services.s3.desc':  'Structural analysis during the design phase to validate the technical feasibility of a project prior to planning permission, taking into account the seismic and Alpine constraints specific to the Hautes-Alpes (seismic zone 3, Gap area). Decision support for project owners.',
     'services.s4.title': 'Site supervision',
-    'services.s4.desc':  'Inspection visits, structural defect resolution and technical assistance during construction. A dedicated technical contact throughout the project.',
+    'services.s4.desc':  'Inspection visits, structural defect resolution and technical assistance during construction. A dedicated technical contact throughout the project, serving Gap and the Hautes-Alpes.',
     'services.quote':    'Request a quote →',
+    'services.s1.quote.aria': 'Contact us about concrete structural studies',
+    'services.s2.quote.aria': 'Contact us about risk assessment',
+    'services.s3.quote.aria': 'Contact us about a feasibility study',
+    'services.s4.quote.aria': 'Contact us about site supervision',
 
     /* ── Réalisations ─────────────────────────────────── */
     'real.kicker':  'Recent projects',
@@ -260,6 +359,8 @@ const TRANSLATIONS = {
     'avis.kicker':  'Testimonials',
     'avis.heading': 'What our clients say.',
     'avis.link':    'See reviews on Google Maps →',
+    'avis.stars.aria': '{note} star(s) out of 5',
+    'avis.google.reviews': '{note}/5 · {total} Google reviews',
     'avis.a1.text':   '"A serious, available and rigorous firm. Philippe Duez monitored our renovation project with genuine commitment. Deadlines were met and communication was clear from start to finish."',
     'avis.a1.name':   'Arnaud M.',
     'avis.a1.role':   'DPLG Architect · Gap',
@@ -291,7 +392,9 @@ const TRANSLATIONS = {
     'contact.soc.label':      'Company / Firm',
     'contact.soc.placeholder':'Your organisation',
     'contact.email.label':    'Email',
+    'contact.email.placeholder':'your@email.com',
     'contact.tel.label':      'Phone',
+    'contact.tel.placeholder':'+33 6 XX XX XX XX',
     'contact.sujet.label':    'Nature of request',
     'contact.sujet.default':  'Select',
     'contact.sujet.o1': 'Concrete structural study',
@@ -304,14 +407,87 @@ const TRANSLATIONS = {
     'contact.mention': 'Fields marked * are required. Your data is used solely to respond to your request.',
     'contact.submit':  'Send message',
     'contact.success': 'Message sent. We will get back to you as soon as possible.',
+    'contact.map.directions': 'Google Maps directions →',
 
     /* ── Pagination ──────────────────────────────────── */
     'pagination.prev': '← Previous',
     'pagination.next': 'Next →',
+    'pagination.nav.aria': 'Projects navigation',
+    'pagination.prev.aria': 'Previous page',
+    'pagination.next.aria': 'Next page',
+    'pagination.dot.aria': 'Page {page} of {total}',
+
+    /* ── Réalisations empty state ─────────────────────── */
+    'realisations.empty.label': 'Reserved area · projects coming soon',
+    'realisations.empty': 'No projects to show yet,<br/><em>but that won\'t be long.</em>',
 
     /* ── Footer ───────────────────────────────────────── */
     'footer.baseline': 'Structural engineering firm<br/>since 1977 · Gap, Hautes-Alpes',
+    'footer.nav.aria': 'Footer navigation',
+    'footer.hosting': 'Hosting: Netlify Inc., 512 2nd Street, San Francisco, CA 94107',
+    'footer.copy': 'ESTER SAS. All rights reserved.',
     'footer.ml': 'Legal notice & privacy policy',
+
+    /* ── Metadata ─────────────────────────────────────── */
+    'meta.home.title': 'ESTER SAS — Structural engineering firm · Gap, Hautes-Alpes',
+    'meta.home.description': 'Structural engineering firm in Gap, Hautes-Alpes, since 1977. Concrete structural calculation, building diagnosis, site supervision. OPQIBI 1202.',
+    'meta.home.og.title': 'ESTER SAS — Structural engineering firm · Gap',
+    'meta.home.og.description': 'Structural studies, feasibility and site supervision for public and private projects in the Hautes-Alpes. Based in Gap since 1977.',
+
+    /* ── Contact attributes ───────────────────────────── */
+    'contact.loading': 'Sending…',
+    'contact.map.aria': 'ESTER SAS location — 3 bis avenue Maréchal Foch, 05000 Gap',
+    'contact.map.title': 'Google Maps — ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap',
+
+    /* ── Legal notice ─────────────────────────────────── */
+    'legal.meta.title': 'ESTER SAS — Legal notice',
+    'legal.logo.sub': 'Technical Studies<br/>&amp; Reinforced Concrete Structures',
+    'legal.back': '← Back to home',
+    'legal.eyebrow': 'Legal information',
+    'legal.heading': 'Legal <em>notice</em>',
+    'legal.intro': 'In accordance with Articles 6‑III and 19 of French Law no. 2004‑575 of 21 June 2004 on confidence in the digital economy (LCEN).',
+    'legal.publisher.title': 'Website publisher',
+    'legal.publisher.company.label': 'Company name',
+    'legal.publisher.legal.label': 'Legal form',
+    'legal.publisher.legal.value': 'Simplified joint-stock company',
+    'legal.publisher.address.label': 'Registered office',
+    'legal.publisher.phone.label': 'Phone',
+    'legal.publisher.capital.label': 'Share capital',
+    'legal.publisher.rcs.label': 'Trade register',
+    'legal.publisher.director.label': 'Publication director',
+    'legal.host.title': 'Hosting provider',
+    'legal.host.value': '<strong style="color:white">Netlify, Inc.</strong><br/>512 2nd Street, Suite 200<br/>San Francisco, CA 94107, United States<br/><span style="color:rgba(255,255,255,.55)">netlify.com</span>',
+    'legal.host.note': 'Visitor data may be transferred outside the European Union (United States). Netlify participates in the <em>EU‑US Data Privacy Framework</em> certified by the U.S. Department of Commerce, ensuring an adequate level of protection under the European Commission adequacy decision of 10 July 2023.',
+    'legal.insurance.title': 'Professional insurance',
+    'legal.insurance.insurer.label': 'Insurer',
+    'legal.insurance.cover.label': 'Coverage',
+    'legal.insurance.cover.value': 'Professional civil liability and ten-year liability',
+    'legal.insurance.zone.label': 'Coverage area',
+    'legal.insurance.zone.value': 'Metropolitan France',
+    'legal.privacy.title': 'Personal data &amp; GDPR',
+    'legal.privacy.intro': 'In accordance with Regulation (EU) 2016/679 (GDPR) and the amended French Data Protection Act, you have the right to access, rectify, erase, port, restrict and object to the processing of your personal data.',
+    'legal.privacy.controller.label': 'Data controller',
+    'legal.privacy.legalbasis.label': 'Legal basis',
+    'legal.privacy.legalbasis.value': 'Consent (contact form) — Art. 6.1.a GDPR<br/>Legitimate interest (anonymous audience measurement) — Art. 6.1.f',
+    'legal.privacy.data.label': 'Data collected',
+    'legal.privacy.data.value': 'Via the contact form: name, email, message, and any information you choose to provide. No advertising cookies are placed.',
+    'legal.privacy.retention.label': 'Retention period',
+    'legal.privacy.retention.value': '3 years from the last contact for prospects; for clients, for the duration of the contractual relationship, then archived in accordance with legal obligations.',
+    'legal.privacy.processor.label': 'Processor — form',
+    'legal.privacy.processor.value': '<span class="placeholder">{{ form_provider }}</span> processes form submissions on our behalf. No data is shared for commercial purposes.',
+    'legal.privacy.rights.label': 'Exercise your rights',
+    'legal.privacy.rights.value': 'By post to the registered office address, or by email at <a href="mailto:contact@ester-bet.fr" style="color:white">contact@ester-bet.fr</a>.<br/>You may also lodge a complaint with the <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
+    'legal.third.title': 'Integrated third-party services',
+    'legal.third.maps.label': 'Google Maps',
+    'legal.third.maps.value': 'The Contact page embeds a Google Maps map to display the location of ESTER SAS at 3 bis avenue Maréchal Foch, 05000 Gap. When this map loads, your browser connects to Google servers. Technical data, such as your IP address, browser information and the page viewed, may then be transmitted to Google.',
+    'legal.third.purpose.label': 'Purpose',
+    'legal.third.purpose.value': 'This service is used only to make it easier to access ESTER SAS premises and to provide a route link to Google Maps. ESTER SAS does not receive the data collected by Google in this context.',
+    'legal.third.google.label': 'Google privacy policy',
+    'legal.third.google.value': 'For more information about Google processing, you can read Google\'s privacy policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:white">policies.google.com/privacy</a>.',
+    'legal.ip.title': 'Intellectual property',
+    'legal.ip.text': 'All content on this website (texts, images, photographs, logos, structure) is the exclusive property of ESTER SAS unless otherwise stated, and is protected by the French Intellectual Property Code. Any reproduction, even partial, requires prior written authorization.',
+    'legal.foot.updated': 'Last updated · {{ date_maj }}',
+    'legal.foot.company': 'ESTER SAS · Gap, Hautes‑Alpes',
   }
 };
 
@@ -353,6 +529,18 @@ function applyTranslations(lang) {
     if (t[key] !== undefined) el.setAttribute('aria-label', t[key]);
   });
 
+  /* Title attributes */
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.dataset.i18nTitle;
+    if (t[key] !== undefined) el.setAttribute('title', t[key]);
+  });
+
+  /* Meta content */
+  document.querySelectorAll('[data-i18n-content]').forEach(el => {
+    const key = el.dataset.i18nContent;
+    if (t[key] !== undefined) el.setAttribute('content', t[key]);
+  });
+
   /* Langue du document */
   document.documentElement.lang = lang;
 
@@ -375,5 +563,8 @@ function initI18n() {
   /* Application initiale */
   applyTranslations(currentLang);
 }
+
+window.applyEsterTranslations = (lang = currentLang) => applyTranslations(lang);
+window.getEsterTranslation = (key, lang = currentLang) => TRANSLATIONS[lang]?.[key] ?? key;
 
 document.addEventListener('DOMContentLoaded', initI18n);

@@ -3,19 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ESTER SAS — Bureau d'études en ingénierie structurelle à Gap, Hautes-Alpes. Études de structures béton, évaluation des risques, faisabilité, suivi de chantier. Qualification OPQIBI 1202. Depuis 1977." />
+  <meta name="description" content="ESTER SAS — Bureau d'études en ingénierie structurelle à Gap, Hautes-Alpes. Études de structures béton, évaluation des risques, faisabilité, suivi de chantier. Qualification OPQIBI 1202. Depuis 1977." data-i18n-content="meta.home.description" />
   <meta name="keywords" content="bureau d'études structure Gap, ingénierie structurelle Hautes-Alpes, études béton 05, OPQIBI, maître d'ouvrage Gap, architecte Gap, bureau d'études PACA" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="ESTER SAS — Bureau d'études structure · Gap" />
-  <meta property="og:description" content="Études structurelles, faisabilité et suivi de chantier pour les projets publics et privés des Hautes-Alpes. Implanté à Gap depuis 1977." />
+  <meta property="og:title" content="ESTER SAS — Bureau d'études structure · Gap" data-i18n-content="meta.home.og.title" />
+  <meta property="og:description" content="Études structurelles, faisabilité et suivi de chantier pour les projets publics et privés des Hautes-Alpes. Implanté à Gap depuis 1977." data-i18n-content="meta.home.og.description" />
   <meta property="og:type" content="website" />
 
-  <title>ESTER SAS — Bureau d'études structure · Gap, Hautes-Alpes</title>
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.ester-gap.fr/" />
 
-  <!-- Fonts auto-hébergées — aucun appel tiers, conforme RGPD -->
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="fr" href="https://www.ester-gap.fr/" />
+  <link rel="alternate" hreflang="en" href="https://www.ester-gap.fr/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.ester-gap.fr/" />
 
+  <!-- Open Graph complet -->
+  <meta property="og:url" content="https://www.ester-gap.fr/" />
+  <meta property="og:image" content="https://www.ester-gap.fr/assets/logo.png" />
+  <meta property="og:image:width" content="605" />
+  <meta property="og:image:height" content="354" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content="ESTER SAS" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ESTER SAS — Bureau d'études structure · Gap" />
+  <meta name="twitter:description" content="Bureau d'études en ingénierie structurelle à Gap depuis 1977. OPQIBI 1202." />
+
+  <title data-i18n="meta.home.title">ESTER SAS — Bureau d'études structure · Gap, Hautes-Alpes</title>
+
+  <!-- Favicon optimisé (64×64 PNG — 2 KB vs 118 KB) -->
+  <link rel="icon" type="image/png" href="assets/favicon-32.png" />
+
+  <!-- Préchargement du logo nav — LCP candidate sur mobile -->
+  <link rel="preload" href="assets/logo-sm.webp" as="image" type="image/webp" />
+
+  <!-- Stylesheet principal -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "ProfessionalService"],
+    "@id": "https://www.ester-gap.fr/#business",
+    "name": "ESTER SAS",
+    "legalName": "ESTER SAS",
+    "description": "Bureau d'études en ingénierie structurelle à Gap (Hautes-Alpes). Études de structures béton, calcul de structure, évaluation des risques, faisabilité, diagnostic bâtiment, suivi de chantier. Qualification OPQIBI 1202. Depuis 1977.",
+    "url": "https://www.ester-gap.fr",
+    "logo": "https://www.ester-gap.fr/assets/logo.png",
+    "image": "https://www.ester-gap.fr/assets/logo.png",
+    "telephone": "+33492517086",
+    "email": "contact@ester-bet.fr",
+    "foundingDate": "1977",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "3 bis avenue Maréchal Foch",
+      "addressLocality": "Gap",
+      "postalCode": "05000",
+      "addressRegion": "Hautes-Alpes",
+      "addressCountry": "FR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 44.5594,
+      "longitude": 6.0778
+    },
+    "areaServed": [
+      {"@type": "City", "name": "Gap"},
+      {"@type": "AdministrativeArea", "name": "Hautes-Alpes"},
+      {"@type": "AdministrativeArea", "name": "Provence-Alpes-Côte d'Azur"}
+    ],
+    "serviceType": [
+      "Étude de structures béton",
+      "Calcul de structure",
+      "Diagnostic structurel bâtiment",
+      "Évaluation des risques sismiques",
+      "Faisabilité structurelle",
+      "Suivi de chantier"
+    ],
+    "hasCredential": {
+      "@type": "EducationalOccupationalCredential",
+      "name": "Qualification OPQIBI 1202 — Structures béton courantes"
+    },
+    "identifier": {
+      "@type": "PropertyValue",
+      "name": "SIREN",
+      "value": "311605406"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens": "08:00",
+      "closes": "18:00"
+    },
+    "sameAs": [
+      "https://www.societe.com/societe/ester-311605406.html"
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -25,21 +113,24 @@
   <!-- ═══ NAV — état fermé ═══ -->
   <header class="ester-nav" id="site-header">
 
-    <a class="ester-nav-logo" href="#hero" aria-label="ESTER SAS — Accueil">
-      <img src="assets/logo.png" alt="ESTER" class="ester-nav-logo-img" />
+    <a class="ester-nav-logo" href="#hero" aria-label="ESTER SAS — Accueil" data-i18n-aria="nav.logo.aria">
+      <picture>
+        <source type="image/webp" srcset="assets/logo-sm.webp" />
+        <img src="assets/logo.png" alt="ESTER SAS — Bureau d'études structure Gap" class="ester-nav-logo-img" width="300" height="175" fetchpriority="high" />
+      </picture>
       <span class="ester-nav-logo-text" aria-hidden="true">
         <strong>ESTER</strong>
-        <small>Études Techniques<br/>&amp; TP Structures BA</small>
+        <small data-i18n-html="nav.logo.sub">Études Techniques<br/>&amp; TP Structures BA</small>
       </span>
     </a>
 
-    <nav class="ester-nav-desktop" aria-label="Navigation principale">
+    <nav class="ester-nav-desktop" aria-label="Navigation principale" data-i18n-aria="nav.desktop.aria">
       <a href="#services"     class="nav-link" data-i18n="nav.services">Services</a>
       <a href="#realisations" class="nav-link" data-i18n="nav.realisations">Réalisations</a>
       <a href="#pourquoi-ester" class="nav-link" data-i18n="nav.entreprise">L'entreprise</a>
       <a href="#recrutement"  class="nav-link" data-i18n="nav.rejoindre">Rejoindre</a>
       <a href="#contact" class="ester-nav-desktop-cta" data-i18n="nav.contact">Nous contacter</a>
-      <span class="ester-nav-lang" role="group" aria-label="Langue / Language">
+      <span class="ester-nav-lang" role="group" aria-label="Langue / Language" data-i18n-aria="nav.lang.aria">
         <button class="nav-lang-btn is-active" data-lang="fr" aria-pressed="true">FR</button>
         <span class="nav-lang-sep" aria-hidden="true">|</span>
         <button class="nav-lang-btn" data-lang="en" aria-pressed="false">EN</button>
@@ -47,7 +138,7 @@
     </nav>
 
     <button class="ester-nav-burger" id="nav-burger"
-            aria-label="Ouvrir le menu" aria-expanded="false"
+            aria-label="Ouvrir le menu" data-i18n-aria="nav.burger.open" aria-expanded="false"
             aria-controls="ester-nav-overlay">
       <span></span><span></span><span></span>
     </button>
@@ -56,7 +147,7 @@
 
   <!-- ═══ NAV — overlay mobile ═══ -->
   <div class="ester-nav-overlay" id="ester-nav-overlay"
-       role="dialog" aria-modal="true" aria-label="Menu de navigation">
+       role="dialog" aria-modal="true" aria-label="Menu de navigation" data-i18n-aria="nav.overlay.aria">
     <nav>
       <a class="ester-nav-item" href="#services">
         <div>
@@ -106,7 +197,7 @@
       </a>
       <div class="ester-nav-meta">
         <span>3 bis av. Maréchal Foch · 05000 Gap</span>
-        <span class="ester-nav-meta-lang" role="group" aria-label="Langue / Language">
+        <span class="ester-nav-meta-lang" role="group" aria-label="Langue / Language" data-i18n-aria="nav.lang.aria">
           <button class="nav-lang-btn is-active" data-lang="fr" aria-pressed="true">FR</button>
           <span class="nav-lang-sep" aria-hidden="true">|</span>
           <button class="nav-lang-btn" data-lang="en" aria-pressed="false">EN</button>
@@ -135,7 +226,7 @@
 
         <h1 class="hero-heading" id="hero-heading" data-i18n-html="hero.heading">
           L'ingénierie structure<br />
-          à Gap, <em>depuis 47&nbsp;ans.</em>
+          à Gap, <em>depuis <span class="ester-age-dynamic">49</span>&nbsp;ans.</em>
         </h1>
 
         <!-- Description longue (tablette / desktop) -->
@@ -254,7 +345,7 @@
               </svg>
             </div>
             <div class="certif-body">
-              <strong class="certif-title" data-i18n="certif.opqibi.title">Qualification OPQIBI 1202</strong>
+              <a class="certif-title" href="https://www.opqibi.com/qualifications/1202" target="_blank" rel="noopener" data-i18n="certif.opqibi.title" style="color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:600;font-size:var(--text-sm)">Qualification OPQIBI 1202</a>
               <span class="certif-desc" data-i18n="certif.opqibi.desc">Structures béton courantes · Valide jusqu'en 2029</span>
             </div>
           </li>
@@ -330,12 +421,12 @@
               </svg>
             </div>
             <div class="service-card-body">
-              <h3 class="service-card-title">Études de structures béton</h3>
-              <p class="service-card-desc">
+              <h3 class="service-card-title" data-i18n="services.s1.title">Études de structures béton</h3>
+              <p class="service-card-desc" data-i18n="services.s1.desc">
                 Dimensionnement et vérification des éléments porteurs en béton armé pour constructions neuves, extensions et réhabilitations. Calculs conformes aux Eurocodes.
               </p>
             </div>
-            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour les études de structures béton">Demander un devis →</a>
+            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour les études de structures béton" data-i18n="services.quote" data-i18n-aria="services.s1.quote.aria">Demander un devis →</a>
           </li>
 
           <li class="service-card reveal">
@@ -347,12 +438,12 @@
               </svg>
             </div>
             <div class="service-card-body">
-              <h3 class="service-card-title">Évaluation des risques</h3>
-              <p class="service-card-desc">
+              <h3 class="service-card-title" data-i18n="services.s2.title">Évaluation des risques</h3>
+              <p class="service-card-desc" data-i18n="services.s2.desc">
                 Diagnostic structurel, expertise de bâtiments existants et évaluation des pathologies. Rapports techniques circonstanciés pour maîtres d'ouvrage et assureurs.
               </p>
             </div>
-            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour l'évaluation des risques">Demander un devis →</a>
+            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour l'évaluation des risques" data-i18n="services.quote" data-i18n-aria="services.s2.quote.aria">Demander un devis →</a>
           </li>
 
           <li class="service-card reveal">
@@ -367,12 +458,12 @@
               </svg>
             </div>
             <div class="service-card-body">
-              <h3 class="service-card-title">Études de faisabilité</h3>
-              <p class="service-card-desc">
+              <h3 class="service-card-title" data-i18n="services.s3.title">Études de faisabilité</h3>
+              <p class="service-card-desc" data-i18n="services.s3.desc">
                 Analyse structurelle en phase de conception pour valider la faisabilité technique d'un projet avant dépôt de permis. Aide à la décision pour les maîtres d'ouvrage.
               </p>
             </div>
-            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour une étude de faisabilité">Demander un devis →</a>
+            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour une étude de faisabilité" data-i18n="services.quote" data-i18n-aria="services.s3.quote.aria">Demander un devis →</a>
           </li>
 
           <li class="service-card reveal">
@@ -388,12 +479,12 @@
               </svg>
             </div>
             <div class="service-card-body">
-              <h3 class="service-card-title">Suivi de chantier</h3>
-              <p class="service-card-desc">
+              <h3 class="service-card-title" data-i18n="services.s4.title">Suivi de chantier</h3>
+              <p class="service-card-desc" data-i18n="services.s4.desc">
                 Visites de contrôle, levée de réserves structurelles et assistance technique en phase d'exécution. Interlocuteur technique disponible tout au long du chantier.
               </p>
             </div>
-            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour un suivi de chantier">Demander un devis →</a>
+            <a href="#contact" class="service-card-link" aria-label="Nous contacter pour un suivi de chantier" data-i18n="services.quote" data-i18n-aria="services.s4.quote.aria">Demander un devis →</a>
           </li>
 
         </ul>
@@ -413,239 +504,33 @@
           <h2 class="section-heading" id="realisations-heading" data-i18n="real.heading">
             Des réalisations ancrées dans le territoire alpin.
           </h2>
-          <p class="section-intro">
+          <p class="section-intro" data-i18n="real.intro">
             Établissements scolaires, logements collectifs, bâtiments publics, ouvrages en montagne — ESTER intervient sur des projets variés dans les Hautes-Alpes et la région PACA.
           </p>
         </header>
 
         <ul class="realisations-grid" role="list">
-
-          <!-- 1 — École primaire -->
-          <li class="realisation-card reveal">
-            <div class="realisation-img" aria-label="Réhabilitation structurelle d'une école primaire">
-              <div class="realisation-img-placeholder realisation-img-1" aria-hidden="true"></div>
-              <!-- Colonnade / bâtiment public -->
-              <div class="realisation-img-icon" aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 58H62" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M16 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/>
-                  <path d="M26 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/>
-                  <path d="M36 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/>
-                  <path d="M46 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/>
-                  <path d="M56 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/>
-                  <path d="M12 40H60" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
-                  <path d="M36 22L8 40H64L36 22Z" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linejoin="round"/>
-                  <path d="M36 22V16" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="36" cy="14" r="2.5" fill="rgba(255,255,255,0.75)"/>
-                </svg>
-              </div>
-              <span class="realisation-badge" data-i18n="real.p1.loc">Gap — 05</span>
-            </div>
-            <div class="realisation-body">
-              <p class="realisation-type" data-i18n="real.p1.type">Bâtiment public · Réhabilitation</p>
-              <h3 class="realisation-title" data-i18n="real.p1.title">Restructuration d'une école primaire</h3>
-              <p class="realisation-desc" data-i18n="real.p1.desc">Diagnostic structurel, étude de renforcement et suivi d'exécution pour la mise aux normes sismiques.</p>
-            </div>
-          </li>
-
-          <!-- 2 — Immeuble R+4 -->
-          <li class="realisation-card reveal">
-            <div class="realisation-img" aria-label="Immeuble collectif à Briançon">
-              <div class="realisation-img-placeholder realisation-img-2" aria-hidden="true"></div>
-              <!-- Bâtiment R+4 en élévation -->
-              <div class="realisation-img-icon" aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="14" y="14" width="44" height="44" rx="1.5" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
-                  <path d="M14 28H58" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
-                  <path d="M14 42H58" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
-                  <!-- Fenêtres rangée 1 -->
-                  <rect x="19" y="17.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/>
-                  <rect x="32.5" y="17.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/>
-                  <rect x="46" y="17.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/>
-                  <!-- Fenêtres rangée 2 -->
-                  <rect x="19" y="31.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/>
-                  <rect x="46" y="31.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/>
-                  <!-- Porte -->
-                  <path d="M30 58V46H42V58" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/>
-                  <path d="M8 58H64" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <span class="realisation-badge" data-i18n="real.p2.loc">Briançon — 05</span>
-            </div>
-            <div class="realisation-body">
-              <p class="realisation-type" data-i18n="real.p2.type">Logement collectif · Construction neuve</p>
-              <h3 class="realisation-title" data-i18n="real.p2.title">Structure béton d'un immeuble R+4</h3>
-              <p class="realisation-desc" data-i18n="real.p2.desc">Dimensionnement complet de la structure béton armé, des fondations aux planchers en zone sismique.</p>
-            </div>
-          </li>
-
-          <!-- 3 — Salle polyvalente -->
-          <li class="realisation-card reveal">
-            <div class="realisation-img" aria-label="Expertise d'un bâtiment communal à Embrun">
-              <div class="realisation-img-placeholder realisation-img-3" aria-hidden="true"></div>
-              <!-- Grande portée / charpente treillis -->
-              <div class="realisation-img-icon" aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Toiture grande portée -->
-                  <path d="M8 44L36 20L64 44" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linejoin="round"/>
-                  <!-- Murs -->
-                  <path d="M8 44V60" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-                  <path d="M64 44V60" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-                  <path d="M8 60H64" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/>
-                  <!-- Ferme de toiture -->
-                  <path d="M36 20V60" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-dasharray="3 3"/>
-                  <path d="M8 44L64 44" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-                  <path d="M22 44L36 32" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-                  <path d="M50 44L36 32" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-                  <!-- Loupe expertise -->
-                  <circle cx="56" cy="22" r="8" stroke="rgba(255,255,255,0.8)" stroke-width="1.8"/>
-                  <path d="M62 28L68 34" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <span class="realisation-badge" data-i18n="real.p3.loc">Embrun — 05</span>
-            </div>
-            <div class="realisation-body">
-              <p class="realisation-type" data-i18n="real.p3.type">Collectivité · Expertise</p>
-              <h3 class="realisation-title" data-i18n="real.p3.title">Expertise d'une salle polyvalente</h3>
-              <p class="realisation-desc" data-i18n="real.p3.desc">Évaluation des désordres structurels, rapport technique et préconisations de réparation pour la commune.</p>
-            </div>
-          </li>
-
-          <!-- 4 — Résidence altitude -->
-          <li class="realisation-card reveal">
-            <div class="realisation-img" aria-label="Résidence touristique en altitude">
-              <div class="realisation-img-placeholder realisation-img-4" aria-hidden="true"></div>
-              <!-- Silhouette montagne + chalet -->
-              <div class="realisation-img-icon" aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Sommet neigeux -->
-                  <path d="M36 8L50 28H22L36 8Z" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linejoin="round"/>
-                  <path d="M28 20L36 8L44 20" stroke="rgba(255,255,255,0.55)" stroke-width="1.2"/>
-                  <!-- Pentes montagne -->
-                  <path d="M8 50L22 28H50L64 50" stroke="rgba(255,255,255,0.7)" stroke-width="1.6" stroke-linejoin="round"/>
-                  <!-- Chalet -->
-                  <path d="M24 50L36 40L48 50" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linejoin="round"/>
-                  <rect x="27" y="50" width="18" height="12" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/>
-                  <rect x="33" y="55" width="6" height="7" stroke="rgba(255,255,255,0.7)" stroke-width="1.4"/>
-                  <!-- Sol -->
-                  <path d="M8 62H64" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <span class="realisation-badge" data-i18n="real.p4.loc">Hautes-Alpes — 05</span>
-            </div>
-            <div class="realisation-body">
-              <p class="realisation-type" data-i18n="real.p4.type">Tourisme · Faisabilité</p>
-              <h3 class="realisation-title" data-i18n="real.p4.title">Résidence en altitude — étude de faisabilité</h3>
-              <p class="realisation-desc" data-i18n="real.p4.desc">Étude de faisabilité structurelle pour un projet de résidence touristique sur site contraint en zone de montagne.</p>
-            </div>
-          </li>
-
-          <!-- 5 — Lycée professionnel -->
-          <li class="realisation-card reveal">
-            <div class="realisation-img" aria-label="Extension d'un lycée professionnel">
-              <div class="realisation-img-placeholder realisation-img-5" aria-hidden="true"></div>
-              <!-- Plan masse / extension -->
-              <div class="realisation-img-icon" aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Corps principal -->
-                  <rect x="10" y="22" width="34" height="28" rx="1.5" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
-                  <!-- Extension -->
-                  <rect x="44" y="32" width="18" height="18" rx="1.5" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-dasharray="0"/>
-                  <!-- Jonction -->
-                  <path d="M44 36H44" stroke="rgba(255,255,255,0.6)" stroke-width="1.4"/>
-                  <!-- Fenêtres bâtiment principal -->
-                  <rect x="15" y="27" width="6" height="6" rx="0.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.3"/>
-                  <rect x="25" y="27" width="6" height="6" rx="0.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.3"/>
-                  <rect x="35" y="27" width="6" height="6" rx="0.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.3"/>
-                  <rect x="15" y="37" width="6" height="6" rx="0.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.3"/>
-                  <rect x="25" y="37" width="6" height="6" rx="0.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.3"/>
-                  <!-- Flèche extension -->
-                  <path d="M38 40H48" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-dasharray="2 2"/>
-                  <!-- Sol -->
-                  <path d="M8 60H64" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-linecap="round"/>
-                  <path d="M10 50V60" stroke="rgba(255,255,255,0.55)" stroke-width="1.5"/>
-                  <path d="M44 50V60" stroke="rgba(255,255,255,0.55)" stroke-width="1.5"/>
-                  <path d="M62 50V60" stroke="rgba(255,255,255,0.55)" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <span class="realisation-badge" data-i18n="real.p5.loc">Gap — 05</span>
-            </div>
-            <div class="realisation-body">
-              <p class="realisation-type" data-i18n="real.p5.type">Enseignement · Extension</p>
-              <h3 class="realisation-title" data-i18n="real.p5.title">Extension d'un lycée professionnel</h3>
-              <p class="realisation-desc" data-i18n="real.p5.desc">Études structure pour l'extension d'un établissement scolaire public, coordination avec l'architecte mandataire.</p>
-            </div>
-          </li>
-
-          <!-- 6 — Bâtiment industriel -->
-          <li class="realisation-card reveal">
-            <div class="realisation-img" aria-label="Rénovation d'un bâtiment industriel">
-              <div class="realisation-img-placeholder realisation-img-6" aria-hidden="true"></div>
-              <!-- Structure treillis / hangar -->
-              <div class="realisation-img-icon" aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Toiture 2 pentes -->
-                  <path d="M6 36L20 20H52L66 36" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linejoin="round"/>
-                  <!-- Murs -->
-                  <path d="M6 36V58" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-                  <path d="M66 36V58" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-                  <path d="M6 58H66" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/>
-                  <!-- Structure treillis intérieure -->
-                  <path d="M20 20V58" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
-                  <path d="M52 20V58" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
-                  <path d="M6 47H66" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
-                  <!-- Diagonales treillis -->
-                  <path d="M20 20L6 36" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-                  <path d="M52 20L66 36" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-                  <path d="M20 58L6 47" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-                  <path d="M52 58L66 47" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-                  <!-- Portail -->
-                  <rect x="28" y="40" width="16" height="18" rx="0.5" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
-                  <path d="M36 40V58" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
-                </svg>
-              </div>
-              <span class="realisation-badge" data-i18n="real.p6.loc">PACA</span>
-            </div>
-            <div class="realisation-body">
-              <p class="realisation-type" data-i18n="real.p6.type">Industriel · Rénovation</p>
-              <h3 class="realisation-title" data-i18n="real.p6.title">Reconversion d'un bâtiment industriel</h3>
-              <p class="realisation-desc" data-i18n="real.p6.desc">Diagnostic, calcul de renforcement et accompagnement technique pour la reconversion en locaux tertiaires.</p>
-            </div>
-          </li>
-
-          <!-- 7 — TEST PAGINATION (à retirer) -->
-          <li class="realisation-card reveal">
-            <div class="realisation-img" aria-label="Passerelle piétonne à Sisteron">
-              <div class="realisation-img-placeholder realisation-img-1" aria-hidden="true"></div>
-              <div class="realisation-img-icon" aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Arc de pont -->
-                  <path d="M8 52 Q36 20 64 52" stroke="rgba(255,255,255,0.9)" stroke-width="2" fill="none"/>
-                  <!-- Tablier -->
-                  <path d="M8 52H64" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/>
-                  <!-- Suspentes -->
-                  <path d="M20 52V38" stroke="rgba(255,255,255,0.55)" stroke-width="1.3"/>
-                  <path d="M30 52V30" stroke="rgba(255,255,255,0.55)" stroke-width="1.3"/>
-                  <path d="M36 52V26" stroke="rgba(255,255,255,0.55)" stroke-width="1.3"/>
-                  <path d="M42 52V30" stroke="rgba(255,255,255,0.55)" stroke-width="1.3"/>
-                  <path d="M52 52V38" stroke="rgba(255,255,255,0.55)" stroke-width="1.3"/>
-                  <!-- Culées -->
-                  <rect x="4" y="52" width="8" height="8" rx="1" stroke="rgba(255,255,255,0.75)" stroke-width="1.5"/>
-                  <rect x="60" y="52" width="8" height="8" rx="1" stroke="rgba(255,255,255,0.75)" stroke-width="1.5"/>
-                  <!-- Sol -->
-                  <path d="M4 60H68" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <span class="realisation-badge">Sisteron — 04</span>
-            </div>
-            <div class="realisation-body">
-              <p class="realisation-type">Ouvrage d'art · Conception</p>
-              <h3 class="realisation-title">Passerelle piétonne en arc</h3>
-              <p class="realisation-desc">Conception structurelle d'une passerelle piétonne en arc métallique franchissant la Durance. Calculs aux Eurocodes, coordination avec la MOE.</p>
-            </div>
-          </li>
-
         </ul>
+
+        <div class="realisations-empty" role="status" aria-live="polite" hidden>
+          <div class="realisations-empty__grid" aria-hidden="true"></div>
+
+          <span class="realisations-empty__corner realisations-empty__corner--tl" aria-hidden="true"></span>
+          <span class="realisations-empty__corner realisations-empty__corner--tr" aria-hidden="true"></span>
+          <span class="realisations-empty__corner realisations-empty__corner--bl" aria-hidden="true"></span>
+          <span class="realisations-empty__corner realisations-empty__corner--br" aria-hidden="true"></span>
+
+          <div class="realisations-empty__label" aria-hidden="true" data-i18n="realisations.empty.label">
+            Zone réservée · projets à venir
+          </div>
+
+          <div class="realisations-empty__content">
+            <p class="realisations-empty__text" data-i18n-html="realisations.empty">
+              Pas encore de projets à vous présenter,<br/>
+              <em>mais ça ne saurait tarder.</em>
+            </p>
+          </div>
+        </div>
 
       </div>
     </section>
@@ -659,15 +544,15 @@
 
         <div class="pourquoi-left reveal">
           <p class="section-kicker" data-i18n="why.kicker">L'entreprise</p>
-          <h2 class="section-heading" id="pourquoi-heading">
+          <h2 class="section-heading" id="pourquoi-heading" data-i18n="why.heading">
             Un bureau d'études à taille humaine, ancré dans les Alpes.
           </h2>
-          <p class="pourquoi-lead">
+          <p class="pourquoi-lead" data-i18n="why.lead">
             Depuis près de 50 ans, ESTER accompagne les projets structurels des Hautes-Alpes avec une expertise technique reconnue et une relation directe avec ses clients.
           </p>
           <blockquote class="pourquoi-quote">
-            <p>"Chaque projet mérite une attention technique rigoureuse et un interlocuteur disponible, du premier calcul à la réception des travaux."</p>
-            <footer>— Philippe Duez, dirigeant ESTER SAS</footer>
+            <p data-i18n="why.quote">"Chaque projet mérite une attention technique rigoureuse et un interlocuteur disponible, du premier calcul à la réception des travaux."</p>
+            <footer data-i18n="why.quote.author">— Philippe Duez, dirigeant ESTER SAS</footer>
           </blockquote>
         </div>
 
@@ -678,8 +563,8 @@
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M11 7V11L13.5 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </div>
             <div>
-              <h3 class="pourquoi-point-title">Ancienneté et continuité</h3>
-              <p class="pourquoi-point-desc">Fondée en 1977, ESTER a accompagné des décennies de constructions dans les Hautes-Alpes. Une mémoire technique locale difficile à égaler.</p>
+              <h3 class="pourquoi-point-title" data-i18n="why.p1.title">Ancienneté et continuité</h3>
+              <p class="pourquoi-point-desc" data-i18n="why.p1.desc">Fondée en 1977, ESTER a accompagné des décennies de constructions dans les Hautes-Alpes. Une mémoire technique locale difficile à égaler.</p>
             </div>
           </li>
 
@@ -688,8 +573,8 @@
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L13.39 8.26L20 9.27L15.5 13.64L16.78 20.5L11 17.27L5.22 20.5L6.5 13.64L2 9.27L8.61 8.26L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
             </div>
             <div>
-              <h3 class="pourquoi-point-title">Qualification OPQIBI certifiée</h3>
-              <p class="pourquoi-point-desc">Qualification 1202 — structures béton courantes, valide jusqu'en 2029. Un gage objectif de compétence technique reconnu par la profession.</p>
+              <h3 class="pourquoi-point-title" data-i18n="why.p2.title">Qualification OPQIBI certifiée</h3>
+              <p class="pourquoi-point-desc" data-i18n="why.p2.desc">Qualification 1202 — structures béton courantes, valide jusqu'en 2029. Un gage objectif de compétence technique reconnu par la profession.</p>
             </div>
           </li>
 
@@ -698,8 +583,8 @@
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2C7.69 2 5 4.69 5 8C5 12.25 11 20 11 20C11 20 17 12.25 17 8C17 4.69 14.31 2 11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="11" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/></svg>
             </div>
             <div>
-              <h3 class="pourquoi-point-title">Connaissance du territoire alpin</h3>
-              <p class="pourquoi-point-desc">Sismicité, neige, contraintes de montagne — ESTER maîtrise les spécificités techniques des projets alpins que les bureaux d'études éloignés ignorent souvent.</p>
+              <h3 class="pourquoi-point-title" data-i18n="why.p3.title">Connaissance du territoire alpin</h3>
+              <p class="pourquoi-point-desc" data-i18n="why.p3.desc">Sismicité, neige, contraintes de montagne — ESTER maîtrise les spécificités techniques des projets alpins que les bureaux d'études éloignés ignorent souvent.</p>
             </div>
           </li>
 
@@ -708,8 +593,8 @@
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 18C2 15.24 4.69 13 8 13C11.31 13 14 15.24 14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 14C15.5 13.36 17.26 14.5 18.5 14.5C19.5 14.5 20 15 20 16V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </div>
             <div>
-              <h3 class="pourquoi-point-title">Relation directe, sans intermédiaire</h3>
-              <p class="pourquoi-point-desc">Structure à taille humaine : vous échangez directement avec les ingénieurs qui travaillent sur votre dossier. Pas de transfert entre commerciaux et techniciens.</p>
+              <h3 class="pourquoi-point-title" data-i18n="why.p4.title">Relation directe, sans intermédiaire</h3>
+              <p class="pourquoi-point-desc" data-i18n="why.p4.desc">Structure à taille humaine : vous échangez directement avec les ingénieurs qui travaillent sur votre dossier. Pas de transfert entre commerciaux et techniciens.</p>
             </div>
           </li>
 
@@ -718,8 +603,8 @@
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11H18M12 5L18 11L12 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <div>
-              <h3 class="pourquoi-point-title">Réactivité et disponibilité</h3>
-              <p class="pourquoi-point-desc">Délais de réponse courts, interlocuteur joignable, suivi régulier — une réactivité que les structures de grande taille peuvent difficilement garantir.</p>
+              <h3 class="pourquoi-point-title" data-i18n="why.p5.title">Réactivité et disponibilité</h3>
+              <p class="pourquoi-point-desc" data-i18n="why.p5.desc">Délais de réponse courts, interlocuteur joignable, suivi régulier — une réactivité que les structures de grande taille peuvent difficilement garantir.</p>
             </div>
           </li>
 
@@ -728,8 +613,8 @@
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 7L11 2L19 7V15L11 20L3 15V7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 2V20" stroke="currentColor" stroke-width="1.5"/><path d="M3 7L19 7" stroke="currentColor" stroke-width="1.5"/><path d="M3 15L19 15" stroke="currentColor" stroke-width="1.5"/></svg>
             </div>
             <div>
-              <h3 class="pourquoi-point-title">Accompagnement de bout en bout</h3>
-              <p class="pourquoi-point-desc">De la faisabilité au suivi de chantier, ESTER peut intervenir à chaque étape du projet, assurant une cohérence technique et une continuité du suivi.</p>
+              <h3 class="pourquoi-point-title" data-i18n="why.p6.title">Accompagnement de bout en bout</h3>
+              <p class="pourquoi-point-desc" data-i18n="why.p6.desc">De la faisabilité au suivi de chantier, ESTER peut intervenir à chaque étape du projet, assurant une cohérence technique et une continuité du suivi.</p>
             </div>
           </li>
 
@@ -742,7 +627,7 @@
     <!-- ═══════════════════════════════════════════════
          AVIS CLIENTS
     ═══════════════════════════════════════════════ -->
-    <section class="avis" id="avis" aria-labelledby="avis-heading">
+    <section class="avis" id="avis" aria-labelledby="avis-heading" hidden>
       <div class="container">
 
         <header class="section-header reveal">
@@ -752,51 +637,10 @@
           </h2>
         </header>
 
-        <ul class="avis-grid" role="list">
-
-          <li class="avis-card reveal">
-            <div class="avis-stars" aria-label="5 étoiles sur 5">
-              <span aria-hidden="true">★★★★★</span>
-            </div>
-            <blockquote class="avis-text">
-              "Cabinet sérieux, disponible et rigoureux. Philippe Duez a suivi notre chantier de réhabilitation avec une implication réelle. Les délais ont été tenus et la communication a été claire du début à la fin."
-            </blockquote>
-            <footer class="avis-author">
-              <strong>Arnaud M.</strong>
-              <span>Architecte DPLG · Gap</span>
-            </footer>
-          </li>
-
-          <li class="avis-card reveal">
-            <div class="avis-stars" aria-label="5 étoiles sur 5">
-              <span aria-hidden="true">★★★★★</span>
-            </div>
-            <blockquote class="avis-text">
-              "Nous faisons appel à ESTER pour les projets de notre collectivité depuis plusieurs années. Leur connaissance du territoire et leur réactivité sont des atouts réels pour nos marchés publics."
-            </blockquote>
-            <footer class="avis-author">
-              <strong>Service technique</strong>
-              <span>Collectivité locale · Hautes-Alpes</span>
-            </footer>
-          </li>
-
-          <li class="avis-card reveal">
-            <div class="avis-stars" aria-label="5 étoiles sur 5">
-              <span aria-hidden="true">★★★★★</span>
-            </div>
-            <blockquote class="avis-text">
-              "L'étude de structure a été menée avec précision et dans les délais convenus, malgré la complexité du site en altitude. Un accompagnement technique de qualité, sans jargon inutile."
-            </blockquote>
-            <footer class="avis-author">
-              <strong>C. Fontaine</strong>
-              <span>Maître d'ouvrage privé · Briançon</span>
-            </footer>
-          </li>
-
-        </ul>
+        <ul class="avis-grid" role="list"></ul>
 
         <p class="avis-note reveal">
-          <a href="https://www.google.com/maps/search/ESTER+SAS+Gap" target="_blank" rel="noopener" class="avis-note-link" data-i18n="avis.link">
+          <a href="https://www.google.com/maps/place/Ester+Sarl/@44.5624537,6.0846692,17z/data=!3m1!4b1!4m6!3m5!1s0x12cb4069d06a9419:0x72daaab867139eef!8m2!3d44.5624537!4d6.0846692!16s%2Fg%2F1v7x_w0s" target="_blank" rel="noopener" class="avis-note-link" data-i18n="avis.link">
             Voir les avis sur Google Maps →
           </a>
         </p>
@@ -880,11 +724,11 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="contact-email" class="form-label"><span data-i18n="contact.email.label">Email</span> <span aria-hidden="true">*</span></label>
-                  <input type="email" id="contact-email" name="email" class="form-input" required autocomplete="email" placeholder="votre@email.fr" />
+                  <input type="email" id="contact-email" name="email" class="form-input" required autocomplete="email" placeholder="votre@email.fr" data-i18n-placeholder="contact.email.placeholder" />
                 </div>
                 <div class="form-group">
                   <label for="contact-tel" class="form-label" data-i18n="contact.tel.label">Téléphone</label>
-                  <input type="tel" id="contact-tel" name="tel" class="form-input" autocomplete="tel" placeholder="06 XX XX XX XX" />
+                  <input type="tel" id="contact-tel" name="tel" class="form-input" autocomplete="tel" placeholder="06 XX XX XX XX" data-i18n-placeholder="contact.tel.placeholder" />
                 </div>
               </div>
 
@@ -909,7 +753,7 @@
                 <p class="form-mention" data-i18n="contact.mention">Les champs marqués * sont obligatoires. Vos données ne sont utilisées qu'aux fins de réponse à votre demande.</p>
                 <button type="submit" class="btn btn-primary form-submit" id="form-submit">
                   <span class="form-submit-label" data-i18n="contact.submit">Envoyer le message</span>
-                  <span class="form-submit-loading" aria-hidden="true" hidden>Envoi…</span>
+                  <span class="form-submit-loading" aria-hidden="true" hidden data-i18n="contact.loading">Envoi…</span>
                 </button>
               </div>
 
@@ -935,7 +779,7 @@
             <ul class="contact-coords" role="list">
               <li class="contact-coord">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 1.5C6.1 1.5 3.75 3.85 3.75 6.75C3.75 10.6 9 16.5 9 16.5C9 16.5 14.25 10.6 14.25 6.75C14.25 3.85 11.9 1.5 9 1.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="9" cy="6.75" r="1.75" stroke="currentColor" stroke-width="1.3"/></svg>
-                <span>Gap, 05000 — Hautes-Alpes</span>
+                <span>Gap, 05000 Hautes-Alpes</span>
               </li>
               <li class="contact-coord">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3.5 4.5C3.5 4.5 4 9.5 7.5 13C11 16.5 16 16.5 16 16.5V13.5L13 12L11.5 13.5C11.5 13.5 9 12.5 7.5 11C6 9.5 5 7 5 7L6.5 5.5L5 2.5L3.5 4.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
@@ -947,18 +791,17 @@
               </li>
             </ul>
 
-            <div class="contact-siren">
-              <p>SIREN : 311 605 406</p>
-              <p>OPQIBI 1202 · MMA décennale</p>
-            </div>
-
-            <!-- Carte placeholder -->
-            <div class="contact-map" aria-label="Localisation ESTER SAS — 3 bis avenue Maréchal Foch, Gap">
-              <div class="contact-map-placeholder">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 3C11.03 3 7 7.03 7 12C7 19 16 29 16 29C16 29 25 19 25 12C25 7.03 20.97 3 16 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/></svg>
-                <span>3 bis av. Maréchal Foch<br/>05000 Gap</span>
-                <a href="https://maps.google.com/?q=ESTER+SAS+3+bis+avenue+Marechal+Foch+05000+Gap" target="_blank" rel="noopener" class="contact-map-link">Voir sur Google Maps →</a>
-              </div>
+            <div class="contact-map" aria-label="Localisation ESTER SAS — 3 bis avenue Maréchal Foch, 05000 Gap" data-i18n-aria="contact.map.aria">
+              <iframe
+                class="contact-map-frame"
+                src="https://www.google.com/maps?q=3+B+Avenue+Mar%C3%A9chal+Foch%2C+05000+Gap%2C+France&output=embed"
+                title="Carte Google Maps — ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap"
+                data-i18n-title="contact.map.title"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen>
+              </iframe>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=3+B+Avenue+Mar%C3%A9chal+Foch%2C+05000+Gap%2C+France" target="_blank" rel="noopener" class="contact-map-link" data-i18n="contact.map.directions">Itinéraire Google Maps →</a>
             </div>
 
           </div>
@@ -969,55 +812,6 @@
 
   </main>
 
-
-  <!-- ═══════════════════════════════════════════════
-       MENTIONS LÉGALES
-  ═══════════════════════════════════════════════ -->
-  <section class="mentions" id="mentions-legales" aria-labelledby="mentions-heading">
-    <div class="container">
-      <details class="mentions-details">
-        <summary class="mentions-summary" id="mentions-heading">Mentions légales &amp; politique de confidentialité</summary>
-        <div class="mentions-body">
-
-          <div class="mentions-col">
-            <h3>Mentions légales</h3>
-            <p><strong>Éditeur du site</strong><br />
-            ESTER SAS<br />
-            3 bis avenue Maréchal Foch, 05000 Gap<br />
-            SIREN : 311 605 406<br />
-            Téléphone : 04 92 51 70 86<br />
-            Email : estersarl.ing@gmail.com<br />
-            Directeur de la publication : Philippe Duez</p>
-
-            <p><strong>Hébergeur</strong><br />
-            Netlify Inc.<br />
-            512 2nd Street, Suite 200<br />
-            San Francisco, CA 94107 — États-Unis<br />
-            netlify.com</p>
-          </div>
-
-          <div class="mentions-col">
-            <h3>Données personnelles</h3>
-            <p><strong>Responsable du traitement</strong><br />
-            ESTER SAS — Philippe Duez</p>
-
-            <p><strong>Données collectées</strong><br />
-            Le formulaire de contact collecte : nom, société, email, téléphone, nature de la demande et message. Ces données sont utilisées exclusivement pour répondre à votre demande.</p>
-
-            <p><strong>Durée de conservation</strong><br />
-            Les données sont conservées 3 ans à compter du dernier contact, puis supprimées.</p>
-
-            <p><strong>Vos droits</strong><br />
-            Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression. Demande à adresser à : estersarl.ing@gmail.com</p>
-
-            <p><strong>Cookies</strong><br />
-            Ce site ne dépose aucun cookie. Les polices de caractères sont auto-hébergées — aucune donnée n'est transmise à Google ou à un tiers.</p>
-          </div>
-
-        </div>
-      </details>
-    </div>
-  </section>
 
   <!-- ═══════════════════════════════════════════════
        FOOTER
@@ -1031,29 +825,28 @@
         <p class="footer-baseline" data-i18n-html="footer.baseline">Bureau d'études en ingénierie structurelle<br/>depuis 1977 · Gap, Hautes-Alpes</p>
       </div>
 
-      <nav class="footer-nav" aria-label="Navigation pied de page">
+      <nav class="footer-nav" aria-label="Navigation pied de page" data-i18n-aria="footer.nav.aria">
         <ul role="list">
-          <li><a href="#services">Services</a></li>
-          <li><a href="#realisations">Réalisations</a></li>
-          <li><a href="#pourquoi-ester">L'entreprise</a></li>
-          <li><a href="#recrutement">Rejoindre</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#services" data-i18n="nav.services">Services</a></li>
+          <li><a href="#realisations" data-i18n="nav.realisations">Réalisations</a></li>
+          <li><a href="#pourquoi-ester" data-i18n="nav.entreprise">L'entreprise</a></li>
+          <li><a href="#recrutement" data-i18n="nav.rejoindre">Rejoindre</a></li>
+          <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </nav>
 
       <div class="footer-legal">
         <p>ESTER SAS — SIREN 311 605 406</p>
         <p>3 bis avenue Maréchal Foch · 05000 Gap</p>
-        <p>Hébergement : Netlify Inc., 512 2nd Street, San Francisco, CA 94107</p>
-        <p class="footer-copy">© <span id="footer-year">2025</span> ESTER SAS. Tous droits réservés.</p>
-        <p><a href="#mentions-legales" class="footer-ml-link" data-i18n="footer.ml">Mentions légales & confidentialité</a></p>
+        <p data-i18n="footer.hosting">Hébergement : Netlify Inc., 512 2nd Street, San Francisco, CA 94107</p>
+        <p class="footer-copy">© <span id="footer-year">2025</span> <span data-i18n="footer.copy">ESTER SAS. Tous droits réservés.</span></p>
+        <p><a href="/mentions-legales.html" class="footer-ml-link" data-i18n="footer.ml">Mentions légales & confidentialité</a></p>
       </div>
 
     </div>
   </footer>
 
-  <script src="main.js"></script>
-  <script src="i18n.js"></script>
+  <script type="module" src="main.js"></script>
 
 </body>
 </html>
