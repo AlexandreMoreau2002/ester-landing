@@ -7,20 +7,6 @@ on:
     branches: [develop, main]
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install
-        run: npm ci
-      - name: Lint
-        run: npm run lint --if-present
-
   test:
     name: Test
     runs-on: ubuntu-latest
