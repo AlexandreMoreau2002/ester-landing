@@ -89,7 +89,7 @@ export async function fetchJson(url, options = {}) {
 }
 
 export async function generateAvis(env) {
-  if (env.ESTER_MODE === 'dev') {
+  if (env.ESTER_MODE === 'dev' || !env.GOOGLE_PLACES_API_KEY) {
     return {
       ...MOCK_AVIS,
       avis: starsOnly(MOCK_AVIS.avis),
