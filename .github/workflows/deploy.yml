@@ -53,7 +53,7 @@ jobs:
 
       # Envoie le dist/ directement à Netlify — Netlify ne rebuild pas
       - name: Deploy to Netlify
-        run: npx netlify-cli deploy --prod --dir=dist --message "Deploy ${{ github.ref_name }} @ ${{ github.sha }}"
+        run: npx netlify deploy --prod --dir=dist --message "Deploy ${{ github.ref_name }} @ ${{ github.sha }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
