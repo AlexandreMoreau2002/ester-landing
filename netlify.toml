@@ -3,7 +3,7 @@
 # ═══════════════════════════════════════════════════════════
 
 [build]
-  command = "npm run build"
+  # Build géré par GitHub Actions — netlify-cli reçoit le dist/ directement
   publish = "dist"
 
 # ── Cache des assets statiques (fonts, images, CSS/JS versionnés) ──
