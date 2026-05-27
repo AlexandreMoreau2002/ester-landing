@@ -307,7 +307,8 @@ describe('generate-data helpers', () => {
   });
 
   it('loads real env files when present and returns empty objects when absent', async () => {
-    await expect(loadEnvFile('.env')).resolves.toHaveProperty('ESTER_MODE');
+    // Utilise un fixture commité — le vrai .env est gitignored et absent en CI
+    await expect(loadEnvFile('tests/fixtures/.env.test')).resolves.toHaveProperty('ESTER_MODE');
     await expect(loadEnvFile('.definitely-missing-env-file')).resolves.toEqual({});
   });
 
