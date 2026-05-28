@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+console.log(`[ester] build ${__GIT_HASH__}`);
+
 import './js/i18n.js';
 import './js/nav.js';
 import './js/reveal.js';
