@@ -218,6 +218,38 @@ describe('DOM behavior modules', () => {
       expect(errorMsg.hidden).toBe(false);
     });
 
+    it('handles error gracefully when form-success element is absent', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, statusText: 'Bad Gateway' }));
+      setBody(`
+        <form id="contact-form">
+          <input name="name" value="Alex">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden>Chargement</span>
+          </button>
+          <p id="form-error" hidden>Erreur</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      const submitBtn = document.getElementById('form-submit');
+      const label = submitBtn.querySelector('.form-submit-label');
+      const loading = submitBtn.querySelector('.form-submit-loading');
+      const errorMsg = document.getElementById('form-error');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(submitBtn.disabled).toBe(false);
+      expect(label.hidden).toBe(false);
+      expect(loading.hidden).toBe(true);
+      expect(errorMsg.hidden).toBe(false);
+    });
+
     it('handles error gracefully when form-error element is absent', async () => {
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, statusText: 'Bad Gateway' }));
       setBody(`
