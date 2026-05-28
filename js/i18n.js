@@ -165,6 +165,7 @@ const TRANSLATIONS = {
     'contact.mention': 'Les champs marqués * sont obligatoires. Vos données ne sont utilisées qu\'aux fins de réponse à votre demande.',
     'contact.submit':  'Envoyer le message',
     'contact.success': 'Message envoyé. Nous vous répondrons dans les meilleurs délais.',
+    'contact.error':   'Une erreur est survenue. Veuillez réessayer ou nous contacter directement.',
     'contact.map.directions': 'Itinéraire Google Maps →',
 
     /* ── Pagination ──────────────────────────────────── */
@@ -407,6 +408,7 @@ const TRANSLATIONS = {
     'contact.mention': 'Fields marked * are required. Your data is used solely to respond to your request.',
     'contact.submit':  'Send message',
     'contact.success': 'Message sent. We will get back to you as soon as possible.',
+    'contact.error':   'An error occurred. Please try again or contact us directly.',
     'contact.map.directions': 'Google Maps directions →',
 
     /* ── Pagination ──────────────────────────────────── */
