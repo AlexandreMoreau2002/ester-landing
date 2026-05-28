@@ -1,8 +1,11 @@
 import { defineConfig } from 'vite';
+import { readFileSync } from 'fs';
+
+const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
   define: {
-    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    __APP_VERSION__: JSON.stringify(version),
   },
   // Dossier servi tel quel (sans processing) — données JSON générées au build
   publicDir: 'public',
