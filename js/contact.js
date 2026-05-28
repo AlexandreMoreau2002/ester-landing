@@ -1,7 +1,7 @@
-/* ── Formulaire de contact ──────────────────────────────── */
 const form       = document.getElementById('contact-form');
 const submitBtn  = document.getElementById('form-submit');
 const successMsg = document.getElementById('form-success');
+const errorMsg   = document.getElementById('form-error');
 
 if (form) {
   form.addEventListener('submit', async e => {
@@ -21,13 +21,24 @@ if (form) {
     label.hidden   = true;
     loading.hidden = false;
 
-    /* Simulation — remplacer par Formspree une fois l'endpoint configuré */
-    await new Promise(r => setTimeout(r, 1000));
+    try {
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(form)).toString()
+      });
+      if (!res.ok) throw new Error(res.statusText);
 
-    form.reset();
-    form.classList.remove('was-validated');
-    submitBtn.hidden  = true;
-    successMsg.hidden = false;
-    successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      form.reset();
+      form.classList.remove('was-validated');
+      submitBtn.hidden  = true;
+      successMsg.hidden = false;
+      successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch {
+      submitBtn.disabled = false;
+      label.hidden   = false;
+      loading.hidden = true;
+      if (errorMsg) errorMsg.hidden = false;
+    }
   });
 }

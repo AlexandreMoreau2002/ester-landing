@@ -53,6 +53,7 @@ describe('DOM behavior modules', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     document.body.className = '';
     document.body.innerHTML = '';
     delete window.getEsterTranslation;
@@ -113,7 +114,7 @@ describe('DOM behavior modules', () => {
     });
 
     it('shows loading state, resets the form, and reveals success after a valid submit', async () => {
-      vi.useFakeTimers();
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
       setBody(`
         <form id="contact-form">
           <input name="name" value="Alex">
@@ -122,6 +123,7 @@ describe('DOM behavior modules', () => {
             <span class="form-submit-loading" hidden>Chargement</span>
           </button>
           <p id="form-success" hidden>Merci</p>
+          <p id="form-error" hidden>Erreur</p>
         </form>
       `);
 
@@ -140,13 +142,110 @@ describe('DOM behavior modules', () => {
       expect(label.hidden).toBe(true);
       expect(loading.hidden).toBe(false);
 
-      await vi.advanceTimersByTimeAsync(1000);
+      await Promise.resolve();
+      await Promise.resolve();
 
       expect(reset).toHaveBeenCalledOnce();
       expect(form.classList.contains('was-validated')).toBe(false);
       expect(submitBtn.hidden).toBe(true);
       expect(successMsg.hidden).toBe(false);
       expect(successMsg.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    it('re-enables the button and shows error message when fetch fails', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, statusText: 'Internal Server Error' }));
+      setBody(`
+        <form id="contact-form">
+          <input name="name" value="Alex">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden>Chargement</span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+          <p id="form-error" hidden>Erreur</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      const submitBtn = document.getElementById('form-submit');
+      const label = submitBtn.querySelector('.form-submit-label');
+      const loading = submitBtn.querySelector('.form-submit-loading');
+      const errorMsg = document.getElementById('form-error');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(submitBtn.disabled).toBe(false);
+      expect(label.hidden).toBe(false);
+      expect(loading.hidden).toBe(true);
+      expect(errorMsg.hidden).toBe(false);
+    });
+
+    it('re-enables the button when fetch throws a network error', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+      setBody(`
+        <form id="contact-form">
+          <input name="name" value="Alex">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden>Chargement</span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+          <p id="form-error" hidden>Erreur</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      const submitBtn = document.getElementById('form-submit');
+      const label = submitBtn.querySelector('.form-submit-label');
+      const loading = submitBtn.querySelector('.form-submit-loading');
+      const errorMsg = document.getElementById('form-error');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(submitBtn.disabled).toBe(false);
+      expect(label.hidden).toBe(false);
+      expect(loading.hidden).toBe(true);
+      expect(errorMsg.hidden).toBe(false);
+    });
+
+    it('handles error gracefully when form-error element is absent', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, statusText: 'Bad Gateway' }));
+      setBody(`
+        <form id="contact-form">
+          <input name="name" value="Alex">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden>Chargement</span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      const submitBtn = document.getElementById('form-submit');
+      const label = submitBtn.querySelector('.form-submit-label');
+      const loading = submitBtn.querySelector('.form-submit-loading');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(submitBtn.disabled).toBe(false);
+      expect(label.hidden).toBe(false);
+      expect(loading.hidden).toBe(true);
     });
 
     it('does nothing when the contact form is absent', async () => {
