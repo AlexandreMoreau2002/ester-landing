@@ -18,6 +18,7 @@ if (form) {
     const loading = submitBtn.querySelector('.form-submit-loading');
 
     submitBtn.disabled = true;
+    if (errorMsg) errorMsg.hidden = true;
     label.hidden   = true;
     loading.hidden = false;
 
@@ -31,13 +32,16 @@ if (form) {
 
       form.reset();
       form.classList.remove('was-validated');
-      submitBtn.hidden  = true;
-      successMsg.hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.hidden   = true;
+      successMsg.hidden  = false;
       successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } catch {
+    } catch (err) {
+      console.error('[contact]', err);
       submitBtn.disabled = false;
       label.hidden   = false;
       loading.hidden = true;
+      if (successMsg) successMsg.hidden = true;
       if (errorMsg) {
         errorMsg.hidden = false;
         errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
