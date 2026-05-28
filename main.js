@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-console.log(`[ester] build ${__GIT_HASH__}`);
+console.log('[ester] version', import.meta.env.VITE_APP_VERSION);
 
 import './js/i18n.js';
 import './js/nav.js';
