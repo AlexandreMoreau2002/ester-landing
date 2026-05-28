@@ -1,6 +1,12 @@
+import { execSync } from 'child_process';
 import { defineConfig } from 'vite';
 
+const gitHash = execSync('git rev-parse --short HEAD').toString().trim();
+
 export default defineConfig({
+  define: {
+    __GIT_HASH__: JSON.stringify(gitHash),
+  },
   // Dossier servi tel quel (sans processing) — données JSON générées au build
   publicDir: 'public',
 
