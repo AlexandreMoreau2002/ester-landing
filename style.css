@@ -1676,6 +1676,20 @@ body.ester-nav-open { overflow: hidden; }
   margin-top: var(--space-2);
 }
 
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: #FFF0F0;
+  border: 1px solid #E8B2B2;
+  color: #7A1A1A;
+  border-radius: var(--radius);
+  padding: var(--space-4) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-top: var(--space-2);
+}
+
 /* Infos contact */
 .contact-info {
   display: flex;

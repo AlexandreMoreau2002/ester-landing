@@ -708,7 +708,9 @@
 
           <!-- Formulaire -->
           <div class="contact-form-wrap reveal">
-            <form class="contact-form" id="contact-form" novalidate>
+            <form class="contact-form" id="contact-form" name="contact" data-netlify="true" novalidate>
+
+              <input type="hidden" name="form-name" value="contact">
 
               <div class="form-row">
                 <div class="form-group">
@@ -760,6 +762,10 @@
               <div class="form-success" id="form-success" role="alert" hidden>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 10L8.75 12.25L13.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <span data-i18n="contact.success">Message envoyé. Nous vous répondrons dans les meilleurs délais.</span>
+              </div>
+
+              <div class="form-error" id="form-error" role="alert" hidden>
+                <span data-i18n="contact.error">Une erreur est survenue. Veuillez réessayer ou nous contacter directement.</span>
               </div>
 
             </form>
