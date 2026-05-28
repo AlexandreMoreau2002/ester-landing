@@ -1,6 +1,6 @@
 # ESTER SAS — Landing page
 
-Site vitrine d'un bureau d'études en ingénierie structurelle, Hautes-Alpes.
+Site vitrine du bureau d'études en ingénierie structurelle Ester sas a Gap, Hautes-Alpes.
 
 ## Stack
 
