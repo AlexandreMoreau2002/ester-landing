@@ -38,7 +38,10 @@ if (form) {
       submitBtn.disabled = false;
       label.hidden   = false;
       loading.hidden = true;
-      if (errorMsg) errorMsg.hidden = false;
+      if (errorMsg) {
+        errorMsg.hidden = false;
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
   });
 }
