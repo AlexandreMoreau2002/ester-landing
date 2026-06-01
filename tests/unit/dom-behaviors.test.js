@@ -334,7 +334,7 @@ describe('DOM behavior modules', () => {
               <option value="candidature">Candidature</option>
             </select>
             <input type="hidden" id="sujet-label" name="sujet_label">
-            <div id="form-group-cv" hidden></div>
+            <div id="form-group-cv"><span data-i18n="contact.cv.label">Pièce jointe</span></div>
             <button id="form-submit" type="submit">
               <span class="form-submit-label">Envoyer</span>
               <span class="form-submit-loading" hidden>Chargement</span>
@@ -355,7 +355,7 @@ describe('DOM behavior modules', () => {
 
       expect(section.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
       expect(document.getElementById('contact-sujet').value).toBe('candidature');
-      expect(document.getElementById('form-group-cv').hidden).toBe(false);
+      expect(document.getElementById('form-group-cv').querySelector('[data-i18n]').dataset.i18n).toBe('contact.cv.label.candidature');
     });
 
     it('CTA does not crash when href target is absent', async () => {
@@ -413,7 +413,7 @@ describe('DOM behavior modules', () => {
       ).not.toThrow();
     });
 
-    it('shows the CV group when candidature is selected, hides it for other values', async () => {
+    it('updates the CV label key when candidature is selected, restores default key for other values', async () => {
       setBody(`
         <form id="contact-form">
           <select id="contact-sujet" name="sujet">
@@ -422,7 +422,8 @@ describe('DOM behavior modules', () => {
             <option value="autre">Autre</option>
           </select>
           <input type="hidden" id="sujet-label" name="sujet_label">
-          <div id="form-group-cv" hidden>
+          <div id="form-group-cv">
+            <span data-i18n="contact.cv.label">Pièce jointe</span>
             <input type="file" id="contact-cv">
           </div>
           <button id="form-submit" type="submit">
@@ -434,26 +435,29 @@ describe('DOM behavior modules', () => {
 
       await importFresh('contact');
       const select = document.getElementById('contact-sujet');
-      const cvGroup = document.getElementById('form-group-cv');
+      const cvLabelEl = document.getElementById('form-group-cv').querySelector('[data-i18n]');
 
       select.selectedIndex = 1; // candidature
       select.dispatchEvent(new Event('change'));
-      expect(cvGroup.hidden).toBe(false);
+      expect(cvLabelEl.dataset.i18n).toBe('contact.cv.label.candidature');
 
       select.selectedIndex = 2; // autre
       select.dispatchEvent(new Event('change'));
-      expect(cvGroup.hidden).toBe(true);
+      expect(cvLabelEl.dataset.i18n).toBe('contact.cv.label');
     });
 
-    it('does not crash when form-group-cv has no file input on select change to non-candidature', async () => {
+    it('calls window.getEsterTranslation to update CV label text when available', async () => {
+      vi.stubGlobal('getEsterTranslation', vi.fn(key => `translated:${key}`));
       setBody(`
         <form id="contact-form">
           <select id="contact-sujet" name="sujet">
-            <option value="candidature" selected>Candidature</option>
-            <option value="autre">Autre</option>
+            <option value="" disabled selected>Sélectionnez</option>
+            <option value="candidature">Candidature</option>
           </select>
           <input type="hidden" id="sujet-label" name="sujet_label">
-          <div id="form-group-cv"><!-- no file input --></div>
+          <div id="form-group-cv">
+            <span data-i18n="contact.cv.label">Pièce jointe</span>
+          </div>
           <button id="form-submit" type="submit">
             <span class="form-submit-label">Envoyer</span>
             <span class="form-submit-loading" hidden></span>
@@ -463,14 +467,39 @@ describe('DOM behavior modules', () => {
 
       await importFresh('contact');
       const select = document.getElementById('contact-sujet');
-      const cvGroup = document.getElementById('form-group-cv');
+      const cvLabelEl = document.getElementById('form-group-cv').querySelector('[data-i18n]');
+
+      select.selectedIndex = 1; // candidature
+      select.dispatchEvent(new Event('change'));
+
+      expect(window.getEsterTranslation).toHaveBeenCalledWith('contact.cv.label.candidature');
+      expect(cvLabelEl.textContent).toBe('translated:contact.cv.label.candidature');
+    });
+
+    it('does not crash when form-group-cv has no [data-i18n] element on select change', async () => {
+      setBody(`
+        <form id="contact-form">
+          <select id="contact-sujet" name="sujet">
+            <option value="candidature" selected>Candidature</option>
+            <option value="autre">Autre</option>
+          </select>
+          <input type="hidden" id="sujet-label" name="sujet_label">
+          <div id="form-group-cv"><!-- no label span --></div>
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const select = document.getElementById('contact-sujet');
 
       select.selectedIndex = 1; // autre
       expect(() => select.dispatchEvent(new Event('change'))).not.toThrow();
-      expect(cvGroup.hidden).toBe(true);
     });
 
-    it('hides the CV group after a successful submit', async () => {
+    it('does not hide the CV group after a successful submit', async () => {
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
       setBody(`
         <form id="contact-form">
@@ -498,7 +527,7 @@ describe('DOM behavior modules', () => {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
 
-      expect(cvGroup.hidden).toBe(true);
+      expect(cvGroup.hidden).toBe(false);
     });
 
     it('does not crash when form-group-cv is absent on select change or submit', async () => {

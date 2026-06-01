@@ -32,10 +32,11 @@ if (form) {
       const cvGroup = document.getElementById('form-group-cv');
       if (cvGroup) {
         const isCandidature = sujetSelect.value === 'candidature';
-        cvGroup.hidden = !isCandidature;
-        if (!isCandidature) {
-          const cvInput = cvGroup.querySelector('input[type="file"]');
-          if (cvInput) cvInput.value = '';
+        const cvLabelEl = cvGroup.querySelector('[data-i18n]');
+        if (cvLabelEl) {
+          const key = isCandidature ? 'contact.cv.label.candidature' : 'contact.cv.label';
+          cvLabelEl.dataset.i18n = key;
+          if (window.getEsterTranslation) cvLabelEl.textContent = window.getEsterTranslation(key);
         }
       }
     });
@@ -68,8 +69,6 @@ if (form) {
 
       form.reset();
       form.classList.remove('was-validated');
-      const cvGroup = document.getElementById('form-group-cv');
-      if (cvGroup) cvGroup.hidden = true;
       submitBtn.disabled = false;
       submitBtn.hidden   = true;
       successMsg.hidden  = false;
