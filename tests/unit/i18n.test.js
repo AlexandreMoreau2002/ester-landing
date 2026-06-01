@@ -116,7 +116,7 @@ describe('i18n', () => {
     startI18n();
 
     expect(document.documentElement.lang).toBe('en');
-    expect(document.querySelector('[data-i18n]').textContent).toBe('Name');
+    expect(document.querySelector('[data-i18n]').textContent).toBe('Last name');
     expect(localStorage.getItem('ester-lang')).toBe('en');
   });
 
