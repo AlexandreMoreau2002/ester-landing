@@ -2,6 +2,12 @@ export default async (request) => {
   try {
     const payload = await request.json();
     const data = payload.data ?? {};
+
+    if (!process.env.RESEND_API_KEY || !process.env.NOTIFY_EMAIL) {
+      console.error('[form-notify] Missing RESEND_API_KEY or NOTIFY_EMAIL');
+      return Response.json({ error: 'Missing env vars' }, { status: 500 });
+    }
+
     const { nom, prenom, email, tel, societe, sujet_label, sujet, message } = data;
 
     const subjectType = sujet_label || sujet || 'Contact';
@@ -15,7 +21,8 @@ export default async (request) => {
       societe ? `Entreprise : ${societe}` : null,
     ].filter(Boolean);
 
-    const text = `${message || ''}\n\n---\n${contactLines.join('\n')}`;
+    const textParts = [message, '---', ...contactLines].filter(Boolean);
+    const text = textParts.join('\n');
 
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -26,7 +33,7 @@ export default async (request) => {
       body: JSON.stringify({
         from:     'ESTER Site Web <onboarding@resend.dev>',
         to:       [process.env.NOTIFY_EMAIL],
-        reply_to: email,
+        ...(email ? { reply_to: email } : {}),
         subject,
         text,
       }),

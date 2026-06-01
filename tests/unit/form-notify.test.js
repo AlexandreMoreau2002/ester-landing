@@ -110,6 +110,28 @@ describe('form-notify Netlify Function', () => {
     expect(json.error).toBe('Invalid API key');
   });
 
+  it('returns 500 when env vars are missing', async () => {
+    delete process.env.RESEND_API_KEY;
+    delete process.env.NOTIFY_EMAIL;
+
+    const { default: handler } = await freshImport();
+    const res = await handler(makeRequest({ nom: 'X', prenom: 'Y', email: 'x@test.fr', message: 'msg' }));
+
+    expect(res.status).toBe(500);
+    const json = await res.json();
+    expect(json.error).toBe('Missing env vars');
+  });
+
+  it('sends without reply_to when email field is absent', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+    const { default: handler } = await freshImport();
+    await handler(makeRequest({ nom: 'X', prenom: 'Y', message: 'msg', sujet_label: 'Contact' }));
+
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.reply_to).toBeUndefined();
+  });
+
   it('returns 500 when request.json() throws', async () => {
     const badRequest = new Request('http://localhost', {
       method: 'POST',
