@@ -280,6 +280,51 @@ describe('DOM behavior modules', () => {
       expect(loading.hidden).toBe(true);
     });
 
+    it('syncs the human-readable label to the hidden sujet_label field on select change', async () => {
+      setBody(`
+        <form id="contact-form">
+          <select id="contact-sujet" name="sujet">
+            <option value="" disabled selected>Sélectionnez</option>
+            <option value="faisabilite">Étude de faisabilité</option>
+          </select>
+          <input type="hidden" id="sujet-label" name="sujet_label">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden>Chargement</span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+
+      const select = document.getElementById('contact-sujet');
+      const hiddenInput = document.getElementById('sujet-label');
+
+      select.selectedIndex = 1;
+      select.dispatchEvent(new Event('change'));
+      expect(hiddenInput.value).toBe('Étude de faisabilité');
+
+      select.selectedIndex = -1;
+      select.dispatchEvent(new Event('change'));
+      expect(hiddenInput.value).toBe('');
+    });
+
+    it('does not crash when the select or sujet-label input is absent', async () => {
+      setBody(`
+        <form id="contact-form">
+          <select id="contact-sujet" name="sujet">
+            <option value="autre">Autre</option>
+          </select>
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden>Chargement</span>
+          </button>
+        </form>
+      `);
+
+      await expect(importFresh('contact')).resolves.toBeDefined();
+    });
+
     it('does nothing when the contact form is absent', async () => {
       setBody('<main></main>');
 

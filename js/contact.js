@@ -4,6 +4,15 @@ const successMsg = document.getElementById('form-success');
 const errorMsg   = document.getElementById('form-error');
 
 if (form) {
+  const sujetSelect = form.querySelector('#contact-sujet');
+  const sujetLabel  = form.querySelector('#sujet-label');
+  if (sujetSelect && sujetLabel) {
+    sujetSelect.addEventListener('change', () => {
+      const opt = sujetSelect.options[sujetSelect.selectedIndex];
+      sujetLabel.value = opt ? opt.textContent.trim() : '';
+    });
+  }
+
   form.addEventListener('submit', async e => {
     e.preventDefault();
     form.classList.add('was-validated');
