@@ -1594,10 +1594,8 @@ body.ester-nav-open { overflow: hidden; }
 .form-label {
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--sombre);
+  color: var(--bleu);
 }
-
-.form-label span { color: var(--bleu); }
 
 .form-input {
   padding: 0.75rem 1rem;
