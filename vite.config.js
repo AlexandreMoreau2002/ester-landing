@@ -1,12 +1,6 @@
 import { defineConfig } from 'vite';
-import { readFileSync } from 'fs';
-
-const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
-  define: {
-    'import.meta.env.VITE_APP_VERSION': JSON.stringify(version),
-  },
   // Dossier servi tel quel (sans processing) — données JSON générées au build
   publicDir: 'public',
 
@@ -25,7 +19,7 @@ export default defineConfig({
 
   test: {
     env: {
-      VITE_APP_VERSION: version,
+      VITE_APP_VERSION: '0.0.0-test',
     },
   },
 });
