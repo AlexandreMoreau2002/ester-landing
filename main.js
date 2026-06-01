@@ -1,4 +1,4 @@
-console.log('[ester] v' + __APP_VERSION__);
+console.log('[ester] v' + import.meta.env.VITE_APP_VERSION);
 
 import './js/i18n.js';
 import './js/nav.js';

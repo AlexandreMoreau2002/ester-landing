@@ -5,7 +5,7 @@ const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
   define: {
-    __APP_VERSION__: JSON.stringify(version),
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(version),
   },
   // Dossier servi tel quel (sans processing) — données JSON générées au build
   publicDir: 'public',
@@ -21,5 +21,11 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: false,
+  },
+
+  test: {
+    env: {
+      VITE_APP_VERSION: version,
+    },
   },
 });
