@@ -325,6 +325,211 @@ describe('DOM behavior modules', () => {
       await expect(importFresh('contact')).resolves.toBeDefined();
     });
 
+    it('clicking a [data-preselect-sujet] link scrolls to the target and pre-selects the sujet', async () => {
+      setBody(`
+        <section id="contact">
+          <form id="contact-form">
+            <select id="contact-sujet" name="sujet">
+              <option value="" disabled selected>Sélectionnez</option>
+              <option value="candidature">Candidature</option>
+            </select>
+            <input type="hidden" id="sujet-label" name="sujet_label">
+            <div id="form-group-cv" hidden></div>
+            <button id="form-submit" type="submit">
+              <span class="form-submit-label">Envoyer</span>
+              <span class="form-submit-loading" hidden>Chargement</span>
+            </button>
+          </form>
+        </section>
+        <a href="#contact" data-preselect-sujet="candidature" id="cta">Postuler</a>
+      `);
+
+      const section = document.getElementById('contact');
+      section.scrollIntoView = vi.fn();
+
+      await importFresh('contact');
+
+      document.getElementById('cta').dispatchEvent(
+        new MouseEvent('click', { bubbles: true, cancelable: true })
+      );
+
+      expect(section.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+      expect(document.getElementById('contact-sujet').value).toBe('candidature');
+      expect(document.getElementById('form-group-cv').hidden).toBe(false);
+    });
+
+    it('CTA does not crash when href target is absent', async () => {
+      setBody(`
+        <form id="contact-form">
+          <select id="contact-sujet"><option value="candidature">Candidature</option></select>
+          <input type="hidden" id="sujet-label">
+          <button id="form-submit"><span class="form-submit-label">E</span><span class="form-submit-loading" hidden></span></button>
+        </form>
+        <a href="#nonexistent" data-preselect-sujet="candidature" id="cta">Postuler</a>
+      `);
+
+      await importFresh('contact');
+      expect(() =>
+        document.getElementById('cta').dispatchEvent(
+          new MouseEvent('click', { bubbles: true, cancelable: true })
+        )
+      ).not.toThrow();
+      expect(document.getElementById('contact-sujet').value).toBe('candidature');
+    });
+
+    it('CTA does not crash when link has no href attribute', async () => {
+      setBody(`
+        <form id="contact-form">
+          <select id="contact-sujet"><option value="candidature">Candidature</option></select>
+          <input type="hidden" id="sujet-label">
+          <button id="form-submit"><span class="form-submit-label">E</span><span class="form-submit-loading" hidden></span></button>
+        </form>
+        <a data-preselect-sujet="candidature" id="cta">Postuler</a>
+      `);
+
+      await importFresh('contact');
+      expect(() =>
+        document.getElementById('cta').dispatchEvent(
+          new MouseEvent('click', { bubbles: true, cancelable: true })
+        )
+      ).not.toThrow();
+      expect(document.getElementById('contact-sujet').value).toBe('candidature');
+    });
+
+    it('CTA does not crash when contact-sujet select is absent', async () => {
+      setBody(`
+        <section id="contact"><p>Contact</p></section>
+        <a href="#contact" data-preselect-sujet="candidature" id="cta">Postuler</a>
+      `);
+
+      const section = document.getElementById('contact');
+      section.scrollIntoView = vi.fn();
+
+      await importFresh('contact');
+      expect(() =>
+        document.getElementById('cta').dispatchEvent(
+          new MouseEvent('click', { bubbles: true, cancelable: true })
+        )
+      ).not.toThrow();
+    });
+
+    it('shows the CV group when candidature is selected, hides it for other values', async () => {
+      setBody(`
+        <form id="contact-form">
+          <select id="contact-sujet" name="sujet">
+            <option value="" disabled selected>Sélectionnez</option>
+            <option value="candidature">Candidature</option>
+            <option value="autre">Autre</option>
+          </select>
+          <input type="hidden" id="sujet-label" name="sujet_label">
+          <div id="form-group-cv" hidden>
+            <input type="file" id="contact-cv">
+          </div>
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const select = document.getElementById('contact-sujet');
+      const cvGroup = document.getElementById('form-group-cv');
+
+      select.selectedIndex = 1; // candidature
+      select.dispatchEvent(new Event('change'));
+      expect(cvGroup.hidden).toBe(false);
+
+      select.selectedIndex = 2; // autre
+      select.dispatchEvent(new Event('change'));
+      expect(cvGroup.hidden).toBe(true);
+    });
+
+    it('does not crash when form-group-cv has no file input on select change to non-candidature', async () => {
+      setBody(`
+        <form id="contact-form">
+          <select id="contact-sujet" name="sujet">
+            <option value="candidature" selected>Candidature</option>
+            <option value="autre">Autre</option>
+          </select>
+          <input type="hidden" id="sujet-label" name="sujet_label">
+          <div id="form-group-cv"><!-- no file input --></div>
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const select = document.getElementById('contact-sujet');
+      const cvGroup = document.getElementById('form-group-cv');
+
+      select.selectedIndex = 1; // autre
+      expect(() => select.dispatchEvent(new Event('change'))).not.toThrow();
+      expect(cvGroup.hidden).toBe(true);
+    });
+
+    it('hides the CV group after a successful submit', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      setBody(`
+        <form id="contact-form">
+          <input name="name" value="Alex">
+          <select id="contact-sujet" name="sujet">
+            <option value="candidature" selected>Candidature</option>
+          </select>
+          <input type="hidden" id="sujet-label" name="sujet_label">
+          <div id="form-group-cv">
+            <input type="file" id="contact-cv">
+          </div>
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      const cvGroup = document.getElementById('form-group-cv');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+
+      expect(cvGroup.hidden).toBe(true);
+    });
+
+    it('does not crash when form-group-cv is absent on select change or submit', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      setBody(`
+        <form id="contact-form">
+          <input name="name" value="Alex">
+          <select id="contact-sujet" name="sujet">
+            <option value="candidature" selected>Candidature</option>
+          </select>
+          <input type="hidden" id="sujet-label" name="sujet_label">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+      const select = document.getElementById('contact-sujet');
+
+      await importFresh('contact');
+
+      expect(() => select.dispatchEvent(new Event('change'))).not.toThrow();
+
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+    });
+
     it('does nothing when the contact form is absent', async () => {
       setBody('<main></main>');
 

@@ -8,7 +8,7 @@ export default async (request) => {
       return Response.json({ error: 'Missing env vars' }, { status: 500 });
     }
 
-    const { nom, prenom, email, tel, societe, sujet_label, sujet, message } = data;
+    const { nom, prenom, email, tel, societe, sujet_label, sujet, message, cv } = data;
 
     const subjectType = sujet_label || sujet || 'Contact';
     const subjectName = [nom, prenom].filter(Boolean).join(' ');
@@ -17,8 +17,9 @@ export default async (request) => {
     const contactLines = [
       `Nom : ${subjectName}`,
       `Email : ${email}`,
-      tel     ? `Tél : ${tel}`           : null,
-      societe ? `Entreprise : ${societe}` : null,
+      tel     ? `Tél : ${tel}`             : null,
+      societe ? `Entreprise : ${societe}`   : null,
+      cv      ? `Pièce jointe : ${cv}`      : null,
     ].filter(Boolean);
 
     const textParts = [message, '---', ...contactLines].filter(Boolean);

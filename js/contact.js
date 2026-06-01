@@ -3,6 +3,24 @@ const submitBtn  = document.getElementById('form-submit');
 const successMsg = document.getElementById('form-success');
 const errorMsg   = document.getElementById('form-error');
 
+// CTA "Candidature spontanée" → scroll vers le formulaire + pré-sélection
+document.querySelectorAll('[data-preselect-sujet]').forEach(link => {
+  link.addEventListener('click', e => {
+    const sujetVal = link.dataset.preselectSujet;
+    const href     = link.getAttribute('href');
+    const target   = href ? document.querySelector(href) : null;
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+    const select = document.getElementById('contact-sujet');
+    if (select) {
+      select.value = sujetVal;
+      select.dispatchEvent(new Event('change'));
+    }
+  });
+});
+
 if (form) {
   const sujetSelect = form.querySelector('#contact-sujet');
   const sujetLabel  = form.querySelector('#sujet-label');
@@ -10,6 +28,16 @@ if (form) {
     sujetSelect.addEventListener('change', () => {
       const opt = sujetSelect.options[sujetSelect.selectedIndex];
       sujetLabel.value = opt ? opt.textContent.trim() : '';
+
+      const cvGroup = document.getElementById('form-group-cv');
+      if (cvGroup) {
+        const isCandidature = sujetSelect.value === 'candidature';
+        cvGroup.hidden = !isCandidature;
+        if (!isCandidature) {
+          const cvInput = cvGroup.querySelector('input[type="file"]');
+          if (cvInput) cvInput.value = '';
+        }
+      }
     });
   }
 
@@ -34,13 +62,14 @@ if (form) {
     try {
       const res = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString()
+        body: new FormData(form),
       });
       if (!res.ok) throw new Error(res.statusText);
 
       form.reset();
       form.classList.remove('was-validated');
+      const cvGroup = document.getElementById('form-group-cv');
+      if (cvGroup) cvGroup.hidden = true;
       submitBtn.disabled = false;
       submitBtn.hidden   = true;
       successMsg.hidden  = false;

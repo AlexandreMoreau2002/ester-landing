@@ -132,6 +132,20 @@ describe('form-notify Netlify Function', () => {
     expect(body.reply_to).toBeUndefined();
   });
 
+  it('includes a CV attachment link in the contact block when cv field is present', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+    const { default: handler } = await freshImport();
+    await handler(makeRequest({
+      nom: 'Moreau', prenom: 'Alexandre', email: 'a@test.fr',
+      sujet_label: 'Candidature', message: 'Mon CV ci-joint.',
+      cv: 'https://uploads.netlify.com/abc123/cv.pdf',
+    }));
+
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.text).toContain('Pièce jointe : https://uploads.netlify.com/abc123/cv.pdf');
+  });
+
   it('returns 500 when request.json() throws', async () => {
     const badRequest = new Request('http://localhost', {
       method: 'POST',
