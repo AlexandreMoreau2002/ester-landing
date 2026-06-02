@@ -33,8 +33,8 @@ const TRANSLATIONS = {
     'hero.kicker':       'Hautes-Alpes · Fondé en 1977 · OPQIBI 1202',
     'hero.kicker.short': 'Gap · Depuis 1977',
     'hero.heading':      'L\'ingénierie structure<br />à Gap, <em>depuis 49&nbsp;ans.</em>',
-    'hero.sub':          'ESTER SAS accompagne architectes, maîtres d\'ouvrage et collectivités des Hautes-Alpes dans leurs projets structurels. Dimensionnement béton, expertise et suivi de chantier.',
-    'hero.sub.short':    'ESTER SAS — études structures béton, expertise et suivi de chantier dans les Hautes-Alpes.',
+    'hero.sub':          'ESTER SAS accompagne architectes, maîtres d\'ouvrage et collectivités des Hautes-Alpes dans leurs projets structurels. Dimensionnement béton et expertise structurelle.',
+    'hero.sub.short':    'ESTER SAS — études structures béton et expertise structurelle dans les Hautes-Alpes.',
     'hero.cta.write':    'Nous écrire',
     'hero.address':      '3 bis avenue Maréchal Foch · 05000 Gap',
 
@@ -50,20 +50,17 @@ const TRANSLATIONS = {
 
     /* ── Services ─────────────────────────────────────── */
     'services.kicker':  'Nos domaines d\'intervention',
-    'services.heading': 'Une expertise technique complète,<br />du dimensionnement au suivi de chantier.',
+    'services.heading': 'Une expertise technique complète,<br />du diagnostic au dimensionnement.',
     'services.s1.title': 'Études de structures béton',
     'services.s1.desc':  'Calcul de structure et vérification des éléments porteurs en béton armé pour constructions neuves, extensions et réhabilitations. Notes de calcul conformes aux Eurocodes (Eurocode 2 béton, Eurocode 8 sismique).',
     'services.s2.title': 'Évaluation des risques',
     'services.s2.desc':  'Diagnostic structurel de bâtiments existants, expertise des pathologies et évaluation des risques. Rapports techniques circonstanciés incluant les préconisations de renforcement structurel, pour maîtres d\'ouvrage et assureurs.',
     'services.s3.title': 'Études de faisabilité',
     'services.s3.desc':  'Analyse structurelle en phase de conception pour valider la faisabilité technique d\'un projet avant dépôt de permis, en tenant compte des contraintes sismiques et alpines propres aux Hautes-Alpes (zone 3, Gap). Aide à la décision pour les maîtres d\'ouvrage.',
-    'services.s4.title': 'Suivi de chantier',
-    'services.s4.desc':  'Visites de contrôle, levée de réserves structurelles et assistance technique en phase d\'exécution. Interlocuteur technique disponible tout au long du chantier, sur Gap et dans les Hautes-Alpes.',
     'services.quote':    'Demander un devis →',
     'services.s1.quote.aria': 'Nous contacter pour les études de structures béton',
     'services.s2.quote.aria': 'Nous contacter pour l\'évaluation des risques',
     'services.s3.quote.aria': 'Nous contacter pour une étude de faisabilité',
-    'services.s4.quote.aria': 'Nous contacter pour un suivi de chantier',
 
     /* ── Réalisations ─────────────────────────────────── */
     'real.kicker':  'Projets récents',
@@ -111,7 +108,7 @@ const TRANSLATIONS = {
     'why.p5.title': 'Réactivité et disponibilité',
     'why.p5.desc':  'Délais de réponse courts, interlocuteur joignable, suivi régulier — une réactivité que les structures de grande taille peuvent difficilement garantir.',
     'why.p6.title': 'Accompagnement de bout en bout',
-    'why.p6.desc':  'De la faisabilité au suivi de chantier, ESTER peut intervenir à chaque étape du projet, assurant une cohérence technique et une continuité du suivi.',
+    'why.p6.desc':  'De la faisabilité au dimensionnement final, ESTER peut intervenir à chaque étape du projet, assurant une cohérence technique tout au long de la conception.',
 
     /* ── Avis ─────────────────────────────────────────── */
     'avis.kicker':  'Témoignages',
@@ -163,7 +160,6 @@ const TRANSLATIONS = {
     'contact.sujet.o1': 'Étude de structure béton',
     'contact.sujet.o2': 'Évaluation des risques',
     'contact.sujet.o3': 'Étude de faisabilité',
-    'contact.sujet.o4': 'Suivi de chantier',
     'contact.sujet.o5': 'Autre demande',
     'contact.sujet.o6': 'Candidature',
     'contact.msg.label':      'Message',
@@ -195,9 +191,9 @@ const TRANSLATIONS = {
 
     /* ── Métadonnées ──────────────────────────────────── */
     'meta.home.title': 'ESTER SAS — Bureau d\'études structure · Gap, Hautes-Alpes',
-    'meta.home.description': 'Bureau d\'études structure à Gap (Hautes-Alpes) depuis 1977. Calcul de structure béton, expertise et suivi de chantier. Qualification OPQIBI 1202.',
+    'meta.home.description': 'Bureau d\'études structure à Gap (Hautes-Alpes) depuis 1977. Calcul de structure béton et expertise structurelle. Qualification OPQIBI 1202.',
     'meta.home.og.title': 'ESTER SAS — Bureau d\'études structure · Gap',
-    'meta.home.og.description': 'Études structurelles, faisabilité et suivi de chantier pour les projets publics et privés des Hautes-Alpes. Implanté à Gap depuis 1977.',
+    'meta.home.og.description': 'Études structurelles et faisabilité pour les projets publics et privés des Hautes-Alpes. Implanté à Gap depuis 1977.',
 
     /* ── Attributs contact ────────────────────────────── */
     'contact.loading': 'Envoi…',
