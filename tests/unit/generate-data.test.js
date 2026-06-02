@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { unlink } from 'node:fs/promises';
+import { readFile, unlink, writeFile } from 'node:fs/promises';
 
 import {
   fetchJson,
@@ -16,6 +16,8 @@ import {
   propText,
   required,
   starsOnly,
+  todayIso,
+  updateSitemapLastmod,
   writeData,
 } from '../../scripts/generate-data.mjs';
 
@@ -310,6 +312,26 @@ describe('generate-data helpers', () => {
     // Utilise un fixture commité — le vrai .env est gitignored et absent en CI
     await expect(loadEnvFile('tests/fixtures/.env.test')).resolves.toHaveProperty('ESTER_MODE');
     await expect(loadEnvFile('.definitely-missing-env-file')).resolves.toEqual({});
+  });
+
+  it('todayIso returns a YYYY-MM-DD string matching today', () => {
+    const result = todayIso();
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(result).toBe(new Date().toISOString().slice(0, 10));
+  });
+
+  it('updateSitemapLastmod replaces all lastmod dates in the sitemap', async () => {
+    const sitemapPath = 'public/sitemap-unit-test.xml';
+    const original = `<?xml version="1.0"?>\n<urlset>\n  <url><lastmod>2020-01-01</lastmod></url>\n  <url><lastmod>2020-01-01</lastmod></url>\n</urlset>\n`;
+    await writeFile(sitemapPath, original);
+
+    await updateSitemapLastmod(sitemapPath, '2099-12-31');
+
+    const result = await readFile(sitemapPath, 'utf8');
+    expect(result).not.toContain('2020-01-01');
+    expect(result.match(/<lastmod>2099-12-31<\/lastmod>/g)).toHaveLength(2);
+
+    await unlink(sitemapPath);
   });
 
   it('writes generated data files and runs the dev main flow', async () => {

@@ -3,6 +3,8 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
+const SITEMAP_PATH = join(process.cwd(), 'public', 'sitemap.xml');
+
 const DATA_DIR = join(process.cwd(), 'public', 'data');
 const GOOGLE_FIELDS = 'rating,user_ratings_total,reviews,url';
 
@@ -211,6 +213,16 @@ export async function generateRealisations(env) {
   return { realisations };
 }
 
+export function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export async function updateSitemapLastmod(sitemapPath = SITEMAP_PATH, date = todayIso()) {
+  const xml = await readFile(sitemapPath, 'utf8');
+  const updated = xml.replace(/<lastmod>[^<]*<\/lastmod>/g, `<lastmod>${date}</lastmod>`);
+  await writeFile(sitemapPath, updated);
+}
+
 export async function writeData(name, data) {
   await mkdir(DATA_DIR, { recursive: true });
   await writeFile(join(DATA_DIR, name), `${JSON.stringify(data, null, 2)}\n`);
@@ -228,6 +240,7 @@ export async function main() {
 
   await writeData('avis.json', avis);
   await writeData('realisations.json', realisations);
+  await updateSitemapLastmod();
   console.log(`Generated public data for ESTER_MODE=${mode}`);
 }
 
