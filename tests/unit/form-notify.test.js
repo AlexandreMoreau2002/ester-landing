@@ -132,7 +132,7 @@ describe('form-notify Netlify Function', () => {
     expect(body.reply_to).toBeUndefined();
   });
 
-  it('includes a CV filename in the contact block when cv field is present', async () => {
+  it('does not include a cv filename line in the text body (attachment handles it)', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
 
     const { default: handler } = await freshImport();
@@ -143,7 +143,7 @@ describe('form-notify Netlify Function', () => {
     }));
 
     const body = JSON.parse(fetch.mock.calls[0][1].body);
-    expect(body.text).toContain('Pièce jointe : cv.pdf');
+    expect(body.text).not.toContain('Pièce jointe');
   });
 
   it('attaches file to email when cv_base64 and cv are provided', async () => {

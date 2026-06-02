@@ -17,12 +17,11 @@ export default async (request) => {
     const contactLines = [
       `Nom : ${subjectName}`,
       `Email : ${email}`,
-      tel     ? `Tél : ${tel}`             : null,
-      societe ? `Entreprise : ${societe}`   : null,
-      cv      ? `Pièce jointe : ${cv}`      : null,
+      tel     ? `Tél : ${tel}`           : null,
+      societe ? `Entreprise : ${societe}` : null,
     ].filter(Boolean);
 
-    const textParts = [message, '---', ...contactLines].filter(Boolean);
+    const textParts = [message, '\n---\n', ...contactLines].filter(Boolean);
     const text = textParts.join('\n');
 
     const res = await fetch('https://api.resend.com/emails', {
