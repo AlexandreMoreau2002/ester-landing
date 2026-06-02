@@ -61,11 +61,23 @@ if (form) {
     loading.hidden = false;
 
     try {
+      const formData = new FormData(form);
       const res = await fetch('/', {
         method: 'POST',
-        body: new FormData(form),
+        body: formData,
       });
       if (!res.ok) throw new Error(res.statusText);
+
+      // Notifier immédiatement sans attendre le webhook Netlify
+      const notifyData = {};
+      formData.forEach((v, k) => {
+        notifyData[k] = v instanceof File ? (v.name || '') : String(v);
+      });
+      fetch('/.netlify/functions/form-notify', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ data: notifyData }),
+      }).catch(err => console.error('[contact] notify:', err));
 
       form.reset();
       form.classList.remove('was-validated');

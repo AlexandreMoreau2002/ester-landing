@@ -150,6 +150,105 @@ describe('DOM behavior modules', () => {
       expect(submitBtn.hidden).toBe(true);
       expect(successMsg.hidden).toBe(false);
       expect(successMsg.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'nearest' });
+
+      // Notify function called directly — no webhook delay
+      expect(fetch).toHaveBeenCalledTimes(2);
+      expect(fetch.mock.calls[1][0]).toBe('/.netlify/functions/form-notify');
+      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(notifyBody).toHaveProperty('data');
+    });
+
+    it('passes file name (not File object) in notify payload for file inputs', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      setBody(`
+        <form id="contact-form">
+          <input name="nom" value="Dupont">
+          <input type="file" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+
+      // Patch FormData to simulate a File entry
+      const originalFormData = global.FormData;
+      global.FormData = class {
+        constructor() { this._entries = [['nom', 'Dupont'], ['cv', new File([''], 'mon-cv.pdf')]]; }
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      };
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+
+      global.FormData = originalFormData;
+
+      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(notifyBody.data.cv).toBe('mon-cv.pdf');
+      expect(notifyBody.data.nom).toBe('Dupont');
+    });
+
+    it('uses empty string when File has no name in notify payload', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      setBody(`
+        <form id="contact-form">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+
+      const originalFormData = global.FormData;
+      global.FormData = class {
+        constructor() { this._entries = [['cv', new File([''], '')]]; }
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      };
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+
+      global.FormData = originalFormData;
+
+      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(notifyBody.data.cv).toBe('');
+    });
+
+    it('does not affect UX when the notify fetch fails', async () => {
+      vi.stubGlobal('fetch', vi.fn()
+        .mockResolvedValueOnce({ ok: true })           // Netlify Forms
+        .mockRejectedValueOnce(new Error('network'))   // notify
+      );
+      setBody(`
+        <form id="contact-form">
+          <input name="name" value="Alex">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      const successMsg = document.getElementById('form-success');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve(); await Promise.resolve();
+
+      expect(successMsg.hidden).toBe(false);
     });
 
     it('re-enables the button and shows error message when fetch fails', async () => {
