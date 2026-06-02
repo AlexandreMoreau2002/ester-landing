@@ -192,9 +192,9 @@ const TRANSLATIONS = {
     'footer.ml': 'Mentions légales & confidentialité',
 
     /* ── Métadonnées ──────────────────────────────────── */
-    'meta.home.title': 'ESTER SAS — Bureau d\'études structure · Gap, Hautes-Alpes',
+    'meta.home.title': 'ESTER SAS · Bureau d\'études structure · Gap, Hautes-Alpes',
     'meta.home.description': 'Bureau d\'études structure à Gap (Hautes-Alpes) depuis 1977. Calcul de structure béton et expertise structurelle. Qualification OPQIBI 1202.',
-    'meta.home.og.title': 'ESTER SAS — Bureau d\'études structure · Gap',
+    'meta.home.og.title': 'ESTER SAS · Bureau d\'études structure · Gap',
     'meta.home.og.description': 'Études structurelles et faisabilité pour les projets publics et privés des Hautes-Alpes. Implanté à Gap depuis 1977.',
 
     /* ── Attributs contact ────────────────────────────── */
@@ -203,7 +203,7 @@ const TRANSLATIONS = {
     'contact.map.title': 'Carte Google Maps — ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap',
 
     /* ── Mentions légales ─────────────────────────────── */
-    'legal.meta.title': 'ESTER SAS — Mentions légales',
+    'legal.meta.title': 'ESTER SAS · Mentions légales',
     'legal.logo.sub': 'Études Techniques<br/>&amp; TP Structures BA',
     'legal.back': '← Retour à l\'accueil',
     'legal.eyebrow': 'Informations légales',
@@ -443,9 +443,9 @@ const TRANSLATIONS = {
     'footer.ml': 'Legal notice & privacy policy',
 
     /* ── Metadata ─────────────────────────────────────── */
-    'meta.home.title': 'ESTER SAS — Structural engineering firm · Gap, Hautes-Alpes',
+    'meta.home.title': 'ESTER SAS · Structural engineering firm · Gap, Hautes-Alpes',
     'meta.home.description': 'Structural engineering firm in Gap, Hautes-Alpes, since 1977. Concrete structural calculation, building diagnosis, site supervision. OPQIBI 1202.',
-    'meta.home.og.title': 'ESTER SAS — Structural engineering firm · Gap',
+    'meta.home.og.title': 'ESTER SAS · Structural engineering firm · Gap',
     'meta.home.og.description': 'Structural studies, feasibility and site supervision for public and private projects in the Hautes-Alpes. Based in Gap since 1977.',
 
     /* ── Contact attributes ───────────────────────────── */
@@ -454,7 +454,7 @@ const TRANSLATIONS = {
     'contact.map.title': 'Google Maps — ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap',
 
     /* ── Legal notice ─────────────────────────────────── */
-    'legal.meta.title': 'ESTER SAS — Legal notice',
+    'legal.meta.title': 'ESTER SAS · Legal notice',
     'legal.logo.sub': 'Technical Studies<br/>&amp; Reinforced Concrete Structures',
     'legal.back': '← Back to home',
     'legal.eyebrow': 'Legal information',
