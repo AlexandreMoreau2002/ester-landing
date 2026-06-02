@@ -734,8 +734,13 @@
                 <label for="contact-cv" class="form-label">
                   <span data-i18n="contact.cv.label">Pièce jointe</span>
                 </label>
-                <input type="file" id="contact-cv" name="cv" class="form-input form-input-file"
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.xlsm,.csv,.jpg,.jpeg,.png,.gif,.webp,.bmp,.txt,.rtf,.odt,.ods,.odp,.ppt,.pptx">
+                <div class="file-input-wrapper">
+                  <button type="button" class="file-input-btn" id="contact-cv-btn" data-i18n="contact.cv.btn">Choisir un fichier</button>
+                  <span class="file-input-name" id="contact-cv-name" data-i18n="contact.cv.empty">Aucun fichier choisi</span>
+                  <input type="file" id="contact-cv" name="cv" class="file-input-native"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.xlsm,.csv,.jpg,.jpeg,.png,.gif,.webp,.bmp,.txt,.rtf,.odt,.ods,.odp,.ppt,.pptx"
+                    aria-labelledby="contact-cv-btn">
+                </div>
                 <p class="form-hint" data-i18n="contact.cv.hint">Formats acceptés : PDF, Word, Excel, images — max 10 Mo.</p>
               </div>
 

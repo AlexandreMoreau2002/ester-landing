@@ -28,6 +28,28 @@ document.querySelectorAll('[data-preselect-sujet]').forEach(link => {
   });
 });
 
+const cvInput = document.getElementById('contact-cv');
+const cvBtn   = document.getElementById('contact-cv-btn');
+const cvName  = document.getElementById('contact-cv-name');
+
+if (cvBtn && cvInput) {
+  cvBtn.addEventListener('click', () => cvInput.click());
+  cvInput.addEventListener('change', () => {
+    const file = cvInput.files?.[0];
+    if (cvName) {
+      if (file) {
+        cvName.textContent = file.name;
+        cvName.removeAttribute('data-i18n');
+        cvName.classList.add('has-file');
+      } else {
+        cvName.dataset.i18n = 'contact.cv.empty';
+        if (window.getEsterTranslation) cvName.textContent = window.getEsterTranslation('contact.cv.empty');
+        cvName.classList.remove('has-file');
+      }
+    }
+  });
+}
+
 if (form) {
   const sujetSelect = form.querySelector('#contact-sujet');
   const sujetLabel  = form.querySelector('#sujet-label');
@@ -104,6 +126,11 @@ if (form) {
 
       form.reset();
       form.classList.remove('was-validated');
+      if (cvName) {
+        cvName.dataset.i18n = 'contact.cv.empty';
+        if (window.getEsterTranslation) cvName.textContent = window.getEsterTranslation('contact.cv.empty');
+        cvName.classList.remove('has-file');
+      }
       submitBtn.disabled = false;
       submitBtn.hidden   = true;
       successMsg.hidden  = false;

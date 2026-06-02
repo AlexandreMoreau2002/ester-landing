@@ -803,6 +803,176 @@ describe('DOM behavior modules', () => {
       await Promise.resolve(); await Promise.resolve();
     });
 
+    it('clicking the file button triggers the hidden file input click', async () => {
+      setBody(`
+        <form id="contact-form">
+          <button type="button" id="contact-cv-btn">Choisir un fichier</button>
+          <span id="contact-cv-name" data-i18n="contact.cv.empty">Aucun fichier choisi</span>
+          <input type="file" id="contact-cv" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const cvInput = document.getElementById('contact-cv');
+      const clickSpy = vi.spyOn(cvInput, 'click');
+      document.getElementById('contact-cv-btn').click();
+      expect(clickSpy).toHaveBeenCalledOnce();
+    });
+
+    it('selecting a file updates the name display and removes data-i18n', async () => {
+      setBody(`
+        <form id="contact-form">
+          <button type="button" id="contact-cv-btn">Choisir un fichier</button>
+          <span id="contact-cv-name" data-i18n="contact.cv.empty">Aucun fichier choisi</span>
+          <input type="file" id="contact-cv" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const cvInput = document.getElementById('contact-cv');
+      const cvName  = document.getElementById('contact-cv-name');
+
+      Object.defineProperty(cvInput, 'files', { value: [new File(['x'], 'mon-cv.pdf')], configurable: true });
+      cvInput.dispatchEvent(new Event('change'));
+
+      expect(cvName.textContent).toBe('mon-cv.pdf');
+      expect(cvName.dataset.i18n).toBeUndefined();
+      expect(cvName.classList.contains('has-file')).toBe(true);
+    });
+
+    it('clearing the file restores the empty i18n key', async () => {
+      vi.stubGlobal('getEsterTranslation', vi.fn(key => `t:${key}`));
+      setBody(`
+        <form id="contact-form">
+          <button type="button" id="contact-cv-btn">Choisir un fichier</button>
+          <span id="contact-cv-name" data-i18n="contact.cv.empty">Aucun fichier choisi</span>
+          <input type="file" id="contact-cv" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const cvInput = document.getElementById('contact-cv');
+      const cvName  = document.getElementById('contact-cv-name');
+
+      Object.defineProperty(cvInput, 'files', { value: [new File(['x'], 'cv.pdf')], configurable: true });
+      cvInput.dispatchEvent(new Event('change'));
+
+      Object.defineProperty(cvInput, 'files', { value: [], configurable: true });
+      cvInput.dispatchEvent(new Event('change'));
+
+      expect(cvName.dataset.i18n).toBe('contact.cv.empty');
+      expect(cvName.textContent).toBe('t:contact.cv.empty');
+      expect(cvName.classList.contains('has-file')).toBe(false);
+    });
+
+    it('resets the file name display after successful submit', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      vi.stubGlobal('getEsterTranslation', vi.fn(key => `t:${key}`));
+      setBody(`
+        <form id="contact-form">
+          <button type="button" id="contact-cv-btn">Choisir un fichier</button>
+          <span id="contact-cv-name">mon-cv.pdf</span>
+          <input type="file" id="contact-cv" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+
+      const cvName = document.getElementById('contact-cv-name');
+      expect(cvName.dataset.i18n).toBe('contact.cv.empty');
+      expect(cvName.textContent).toBe('t:contact.cv.empty');
+      expect(cvName.classList.contains('has-file')).toBe(false);
+    });
+
+    it('does not crash when contact-cv-name is absent on file change', async () => {
+      setBody(`
+        <form id="contact-form">
+          <button type="button" id="contact-cv-btn">Choisir un fichier</button>
+          <input type="file" id="contact-cv" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const cvInput = document.getElementById('contact-cv');
+      Object.defineProperty(cvInput, 'files', { value: [new File(['x'], 'cv.pdf')], configurable: true });
+      expect(() => cvInput.dispatchEvent(new Event('change'))).not.toThrow();
+    });
+
+    it('does not crash when clearing file without getEsterTranslation', async () => {
+      setBody(`
+        <form id="contact-form">
+          <button type="button" id="contact-cv-btn">Choisir un fichier</button>
+          <span id="contact-cv-name" data-i18n="contact.cv.empty">Aucun fichier choisi</span>
+          <input type="file" id="contact-cv" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+        </form>
+      `);
+
+      await importFresh('contact');
+      const cvInput = document.getElementById('contact-cv');
+      const cvName  = document.getElementById('contact-cv-name');
+
+      Object.defineProperty(cvInput, 'files', { value: [], configurable: true });
+      expect(() => cvInput.dispatchEvent(new Event('change'))).not.toThrow();
+      expect(cvName.dataset.i18n).toBe('contact.cv.empty');
+    });
+
+    it('resets file name display after submit without getEsterTranslation', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      setBody(`
+        <form id="contact-form">
+          <button type="button" id="contact-cv-btn">Choisir un fichier</button>
+          <span id="contact-cv-name">mon-cv.pdf</span>
+          <input type="file" id="contact-cv" name="cv">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+
+      const cvName = document.getElementById('contact-cv-name');
+      expect(cvName.dataset.i18n).toBe('contact.cv.empty');
+      expect(cvName.classList.contains('has-file')).toBe(false);
+    });
+
     it('does nothing when the contact form is absent', async () => {
       setBody('<main></main>');
 
