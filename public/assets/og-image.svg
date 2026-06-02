@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Fond bleu principal -->
+  <rect width="1200" height="630" fill="#1660B0"/>
+
+  <!-- Bande inférieure légèrement plus foncée -->
+  <rect y="520" width="1200" height="110" fill="#1254A0" opacity="0.6"/>
+
+  <!-- Forme montagne abstraite — sobre, géométrique -->
+  <polygon points="900,520 1050,280 1100,340 1200,180 1200,520" fill="#FFFFFF" opacity="0.06"/>
+  <polygon points="980,520 1100,320 1200,400 1200,520" fill="#FFFFFF" opacity="0.06"/>
+  <polygon points="0,520 0,300 80,380 200,200 320,340 420,260 540,380 600,520" fill="#FFFFFF" opacity="0.05"/>
+
+  <!-- Ligne de séparation horizontale -->
+  <rect x="80" y="400" width="120" height="3" fill="#FFFFFF" opacity="0.7"/>
+
+  <!-- Nom de marque principal -->
+  <text
+    x="80"
+    y="290"
+    font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+    font-size="110"
+    font-weight="700"
+    letter-spacing="6"
+    fill="#FFFFFF">ESTER SAS</text>
+
+  <!-- Sous-titre -->
+  <text
+    x="82"
+    y="360"
+    font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+    font-size="32"
+    font-weight="400"
+    letter-spacing="1"
+    fill="#FFFFFF"
+    opacity="0.88">Bureau d'études structure · Gap, Hautes-Alpes</text>
+
+  <!-- Mention basse -->
+  <text
+    x="82"
+    y="570"
+    font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+    font-size="22"
+    font-weight="400"
+    letter-spacing="0.5"
+    fill="#FFFFFF"
+    opacity="0.55">ester-gap.fr · Depuis 1977 · Qualification OPQIBI 1202</text>
+</svg>
