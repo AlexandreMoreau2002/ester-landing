@@ -14,7 +14,7 @@ describe('form-notify Netlify Function', () => {
   const originalEnv = { ...process.env };
 
   beforeEach(() => {
-    process.env = { ...originalEnv, RESEND_API_KEY: 'test-key', NOTIFY_EMAIL: 'philippe@example.com' };
+    process.env = { ...originalEnv, RESEND_API_KEY: 'test-key', CONTACT_TO_EMAIL: 'philippe@example.com' };
   });
 
   afterEach(() => {
@@ -49,6 +49,18 @@ describe('form-notify Netlify Function', () => {
     expect(body.reply_to).toBe('alex@test.fr');
     expect(body.to).toEqual(['philippe@example.com']);
     expect(options.headers.Authorization).toBe('Bearer test-key');
+  });
+
+  it('uses RESEND_FROM env var as sender when set', async () => {
+    process.env.RESEND_FROM = 'ESTER <contact@ester-bet.fr>';
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+    const { default: handler } = await freshImport();
+    await handler(makeRequest({ nom: 'X', prenom: 'Y', email: 'x@test.fr', message: 'msg' }));
+
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.from).toBe('ESTER <contact@ester-bet.fr>');
+    delete process.env.RESEND_FROM;
   });
 
   it('omits Tél and Entreprise lines when those fields are empty', async () => {
@@ -112,7 +124,7 @@ describe('form-notify Netlify Function', () => {
 
   it('returns 500 when env vars are missing', async () => {
     delete process.env.RESEND_API_KEY;
-    delete process.env.NOTIFY_EMAIL;
+    delete process.env.CONTACT_TO_EMAIL;
 
     const { default: handler } = await freshImport();
     const res = await handler(makeRequest({ nom: 'X', prenom: 'Y', email: 'x@test.fr', message: 'msg' }));

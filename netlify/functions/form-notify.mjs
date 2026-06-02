@@ -3,8 +3,8 @@ export default async (request) => {
     const payload = await request.json();
     const data = payload.data ?? {};
 
-    if (!process.env.RESEND_API_KEY || !process.env.NOTIFY_EMAIL) {
-      console.error('[form-notify] Missing RESEND_API_KEY or NOTIFY_EMAIL');
+    if (!process.env.RESEND_API_KEY || !process.env.CONTACT_TO_EMAIL) {
+      console.error('[form-notify] Missing RESEND_API_KEY or CONTACT_TO_EMAIL');
       return Response.json({ error: 'Missing env vars' }, { status: 500 });
     }
 
@@ -31,8 +31,8 @@ export default async (request) => {
         Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from:     'ESTER Site Web <onboarding@resend.dev>',
-        to:       [process.env.NOTIFY_EMAIL],
+        from:     process.env.RESEND_FROM || 'ESTER Site Web <onboarding@resend.dev>',
+        to:       [process.env.CONTACT_TO_EMAIL],
         ...(email ? { reply_to: email } : {}),
         subject,
         text,
