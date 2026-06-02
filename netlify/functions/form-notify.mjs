@@ -22,7 +22,7 @@ export default async (request) => {
     ].filter(Boolean);
 
     const textParts = [message, '\n---\n', ...contactLines].filter(Boolean);
-    const text = textParts.join('\n');
+    const text = textParts.join('\n') + '\n';
 
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
