@@ -160,6 +160,11 @@ describe('DOM behavior modules', () => {
 
     it('passes file name (not File object) in notify payload for file inputs', async () => {
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      // File with empty content (size 0) → cv tracked but fileToBase64 not called
+      vi.stubGlobal('FormData', class {
+        constructor() { this._entries = [['nom', 'Dupont'], ['cv', new File([''], 'mon-cv.pdf')]]; }
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      });
       setBody(`
         <form id="contact-form">
           <input name="nom" value="Dupont">
@@ -175,18 +180,9 @@ describe('DOM behavior modules', () => {
       const form = document.getElementById('contact-form');
       form.checkValidity = vi.fn(() => true);
 
-      // Patch FormData to simulate a File entry
-      const originalFormData = global.FormData;
-      global.FormData = class {
-        constructor() { this._entries = [['nom', 'Dupont'], ['cv', new File([''], 'mon-cv.pdf')]]; }
-        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
-      };
-
       await importFresh('contact');
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
-
-      global.FormData = originalFormData;
 
       const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
       expect(notifyBody.data.cv).toBe('mon-cv.pdf');
@@ -195,6 +191,10 @@ describe('DOM behavior modules', () => {
 
     it('uses empty string when File has no name in notify payload', async () => {
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      vi.stubGlobal('FormData', class {
+        constructor() { this._entries = [['cv', new File([''], '')]]; }
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      });
       setBody(`
         <form id="contact-form">
           <button id="form-submit" type="submit">
@@ -208,20 +208,165 @@ describe('DOM behavior modules', () => {
       const form = document.getElementById('contact-form');
       form.checkValidity = vi.fn(() => true);
 
-      const originalFormData = global.FormData;
-      global.FormData = class {
-        constructor() { this._entries = [['cv', new File([''], '')]]; }
-        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
-      };
-
       await importFresh('contact');
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
 
-      global.FormData = originalFormData;
-
       const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
       expect(notifyBody.data.cv).toBe('');
+    });
+
+    it('includes cv_base64 and cv_type in notify payload when a file is selected', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      // File with real content (size > 0) → fileToBase64 is called
+      vi.stubGlobal('FormData', class {
+        constructor() {
+          this._entries = [['nom', 'Dupont'], ['cv', new File(['x'], 'cv.pdf', { type: 'application/pdf' })]];
+        }
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      });
+      // FileReader as a class so `new FileReader()` works — fires onload synchronously
+      vi.stubGlobal('FileReader', class {
+        constructor() {
+          this.result = 'data:application/pdf;base64,dGVzdGNvbnRlbnQ=';
+          this.onload  = null;
+          this.onerror = null;
+          this.readAsDataURL = vi.fn(() => { this.onload?.(); });
+        }
+      });
+
+      setBody(`
+        <form id="contact-form">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+      await Promise.resolve(); await Promise.resolve();
+
+      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(notifyBody.data.cv_base64).toBe('dGVzdGNvbnRlbnQ=');
+      expect(notifyBody.data.cv_type).toBe('application/pdf');
+    });
+
+    it('omits cv_base64 from notify payload when FileReader fails', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+      const mockReader = {
+        readAsDataURL: vi.fn(function () { this.onerror?.(); }),
+        onload: null,
+        onerror: null,
+      };
+      vi.stubGlobal('FileReader', vi.fn(() => mockReader));
+
+      // File with real content (size > 0) so cvFileForNotify is set, but FileReader fails
+      vi.stubGlobal('FormData', class {
+        constructor() { this._entries = [['cv', new File(['x'], 'cv.pdf', { type: 'application/pdf' })]]; }
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      });
+      vi.stubGlobal('FileReader', class {
+        constructor() {
+          this.onload  = null;
+          this.onerror = null;
+          this.readAsDataURL = vi.fn(() => { this.onerror?.(); });
+        }
+      });
+
+      setBody(`
+        <form id="contact-form">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+      await Promise.resolve(); await Promise.resolve();
+
+      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(notifyBody.data.cv_base64).toBeUndefined();
+    });
+
+    it('omits cv_base64 when FileReader result has no comma-separated base64', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      vi.stubGlobal('FormData', class {
+        constructor() { this._entries = [['cv', new File(['x'], 'cv.pdf', { type: 'application/pdf' })]]; }
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      });
+      vi.stubGlobal('FileReader', class {
+        constructor() {
+          this.result = 'no-comma-here'; // split(',')[1] → undefined → ?? null
+          this.onload  = null;
+          this.onerror = null;
+          this.readAsDataURL = vi.fn(() => { this.onload?.(); });
+        }
+      });
+      setBody(`
+        <form id="contact-form">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+      await Promise.resolve(); await Promise.resolve();
+      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(notifyBody.data.cv_base64).toBeUndefined();
+    });
+
+    it('falls back to application/octet-stream type when file has no type', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+      vi.stubGlobal('FormData', class {
+        constructor() { this._entries = [['cv', new File(['x'], 'doc.bin')]]; } // no type → ''
+        forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
+      });
+      vi.stubGlobal('FileReader', class {
+        constructor() {
+          this.result = 'data:;base64,eA==';
+          this.onload  = null;
+          this.onerror = null;
+          this.readAsDataURL = vi.fn(() => { this.onload?.(); });
+        }
+      });
+      setBody(`
+        <form id="contact-form">
+          <button id="form-submit" type="submit">
+            <span class="form-submit-label">Envoyer</span>
+            <span class="form-submit-loading" hidden></span>
+          </button>
+          <p id="form-success" hidden>Merci</p>
+        </form>
+      `);
+      const form = document.getElementById('contact-form');
+      form.checkValidity = vi.fn(() => true);
+      await importFresh('contact');
+      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      await Promise.resolve(); await Promise.resolve();
+      await Promise.resolve(); await Promise.resolve();
+      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(notifyBody.data.cv_type).toBe('application/octet-stream');
     });
 
     it('does not affect UX when the notify fetch fails', async () => {

@@ -132,18 +132,63 @@ describe('form-notify Netlify Function', () => {
     expect(body.reply_to).toBeUndefined();
   });
 
-  it('includes a CV attachment link in the contact block when cv field is present', async () => {
+  it('includes a CV filename in the contact block when cv field is present', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
 
     const { default: handler } = await freshImport();
     await handler(makeRequest({
       nom: 'Moreau', prenom: 'Alexandre', email: 'a@test.fr',
       sujet_label: 'Candidature', message: 'Mon CV ci-joint.',
-      cv: 'https://uploads.netlify.com/abc123/cv.pdf',
+      cv: 'cv.pdf',
     }));
 
     const body = JSON.parse(fetch.mock.calls[0][1].body);
-    expect(body.text).toContain('Pièce jointe : https://uploads.netlify.com/abc123/cv.pdf');
+    expect(body.text).toContain('Pièce jointe : cv.pdf');
+  });
+
+  it('attaches file to email when cv_base64 and cv are provided', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+    const { default: handler } = await freshImport();
+    await handler(makeRequest({
+      nom: 'Moreau', prenom: 'Alexandre', email: 'a@test.fr',
+      sujet_label: 'Candidature', message: 'Mon CV ci-joint.',
+      cv: 'cv.pdf', cv_base64: 'dGVzdA==', cv_type: 'application/pdf',
+    }));
+
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.attachments).toEqual([{
+      filename: 'cv.pdf',
+      content:  'dGVzdA==',
+      content_type: 'application/pdf',
+    }]);
+  });
+
+  it('attaches file without content_type when cv_type is absent', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+    const { default: handler } = await freshImport();
+    await handler(makeRequest({
+      nom: 'Moreau', prenom: 'Alexandre', email: 'a@test.fr',
+      sujet_label: 'Candidature', message: 'CV joint.',
+      cv: 'cv.pdf', cv_base64: 'dGVzdA==',
+    }));
+
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.attachments).toEqual([{ filename: 'cv.pdf', content: 'dGVzdA==' }]);
+  });
+
+  it('does not include attachments when cv_base64 is absent', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+    const { default: handler } = await freshImport();
+    await handler(makeRequest({
+      nom: 'Moreau', prenom: 'Alexandre', email: 'a@test.fr',
+      sujet_label: 'Autre', message: 'Pas de fichier.',
+    }));
+
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.attachments).toBeUndefined();
   });
 
   it('returns 500 when request.json() throws', async () => {

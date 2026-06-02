@@ -8,7 +8,7 @@ export default async (request) => {
       return Response.json({ error: 'Missing env vars' }, { status: 500 });
     }
 
-    const { nom, prenom, email, tel, societe, sujet_label, sujet, message, cv } = data;
+    const { nom, prenom, email, tel, societe, sujet_label, sujet, message, cv, cv_base64, cv_type } = data;
 
     const subjectType = sujet_label || sujet || 'Contact';
     const subjectName = [nom, prenom].filter(Boolean).join(' ');
@@ -37,6 +37,13 @@ export default async (request) => {
         ...(email ? { reply_to: email } : {}),
         subject,
         text,
+        ...(cv_base64 && cv ? {
+          attachments: [{
+            filename: cv,
+            content:  cv_base64,
+            ...(cv_type ? { content_type: cv_type } : {}),
+          }],
+        } : {}),
       }),
     });
 

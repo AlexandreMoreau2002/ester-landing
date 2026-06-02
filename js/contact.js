@@ -3,6 +3,13 @@ const submitBtn  = document.getElementById('form-submit');
 const successMsg = document.getElementById('form-success');
 const errorMsg   = document.getElementById('form-error');
 
+const fileToBase64 = (file) => new Promise((resolve) => {
+  const reader = new FileReader();
+  reader.onload  = () => resolve(reader.result.split(',')[1] ?? null);
+  reader.onerror = () => resolve(null);
+  reader.readAsDataURL(file);
+});
+
 // CTA "Candidature spontanée" → scroll vers le formulaire + pré-sélection
 document.querySelectorAll('[data-preselect-sujet]').forEach(link => {
   link.addEventListener('click', e => {
@@ -70,9 +77,25 @@ if (form) {
 
       // Notifier immédiatement sans attendre le webhook Netlify
       const notifyData = {};
+      let cvFileForNotify = null;
       formData.forEach((v, k) => {
-        notifyData[k] = v instanceof File ? (v.name || '') : String(v);
+        if (v instanceof File) {
+          notifyData[k] = v.name || '';
+          if (k === 'cv' && v.size > 0) cvFileForNotify = v;
+        } else {
+          notifyData[k] = String(v);
+        }
       });
+
+      // Joindre le fichier en base64 si présent (size 0 = aucun fichier sélectionné)
+      if (cvFileForNotify) {
+        const b64 = await fileToBase64(cvFileForNotify);
+        if (b64) {
+          notifyData.cv_base64 = b64;
+          notifyData.cv_type   = cvFileForNotify.type || 'application/octet-stream';
+        }
+      }
+
       fetch('/.netlify/functions/form-notify', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
