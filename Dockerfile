@@ -1,0 +1,35 @@
+FROM node:22-alpine AS build
+WORKDIR /app
+
+ARG NOTION_TOKEN
+ARG NOTION_DATABASE_ID
+ARG GOOGLE_PLACES_API_KEY
+ARG GOOGLE_PLACE_ID
+ARG ESTER_MODE=prod
+ARG VITE_APP_VERSION
+
+ENV NOTION_TOKEN=$NOTION_TOKEN \
+    NOTION_DATABASE_ID=$NOTION_DATABASE_ID \
+    GOOGLE_PLACES_API_KEY=$GOOGLE_PLACES_API_KEY \
+    GOOGLE_PLACE_ID=$GOOGLE_PLACE_ID \
+    ESTER_MODE=$ESTER_MODE \
+    VITE_APP_VERSION=$VITE_APP_VERSION
+
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production \
+    PORT=3000
+
+COPY package.json ./
+COPY server.mjs ./
+COPY netlify/functions/form-notify.mjs ./netlify/functions/form-notify.mjs
+COPY --from=build /app/dist ./dist
+
+USER node
+EXPOSE 3000
+CMD ["node", "server.mjs"]
