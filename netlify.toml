@@ -41,7 +41,7 @@
 # ── Redirections www → non-www (ou inverse selon domaine final) ──
 # À activer une fois le domaine configuré dans Netlify
 # [[redirects]]
-#   from = "https://ester-gap.fr/*"
-#   to = "https://www.ester-gap.fr/:splat"
+#   from = "https://ester-sas.fr/*"
+#   to = "https://www.ester-sas.fr/:splat"
 #   status = 301
 #   force = true

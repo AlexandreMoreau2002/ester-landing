@@ -80,3 +80,8 @@ Tags : `vMAJEUR.MINEUR.PATCH`.
 ## Licence
 
 Code propriétaire — tous droits réservés.
+
+## Hébergement
+
+- **Dev** : VPS OVH via Dokploy, `https://dev.ester-sas.fr` (branche `develop`, build par `Dockerfile`, `server.mjs` sert `dist/` et le formulaire de contact). Un push sur `develop` redéploie automatiquement.
+- **Prod** : à mettre en place (domaine `ester-sas.fr`, actuellement chez OVH).

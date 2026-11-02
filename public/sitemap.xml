@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.ester-gap.fr/</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.ester-gap.fr/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ester-gap.fr/"/>
-    <lastmod>2026-06-02</lastmod>
+    <loc>https://www.ester-sas.fr/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.ester-sas.fr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ester-sas.fr/"/>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.ester-gap.fr/mentions-legales.html</loc>
-    <lastmod>2026-06-02</lastmod>
+    <loc>https://www.ester-sas.fr/mentions-legales.html</loc>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
