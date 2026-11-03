@@ -1,0 +1,38 @@
+@prod = https://ester-sas.fr
+@dev = https://dev.ester-sas.fr
+
+### Santé production
+GET {{prod}}/
+
+### Contact production — envoi de vérification
+POST {{prod}}/api/contact
+Content-Type: application/json
+
+{
+  "data": {
+    "nom": "Test",
+    "prenom": "Production",
+    "email": "no-reply@example.com",
+    "tel": "0600000000",
+    "societe": "ESTER QA",
+    "sujet_label": "Test technique",
+    "message": "Message de vérification du formulaire — aucune action requise."
+  }
+}
+
+### Santé développement
+GET {{dev}}/
+
+### Contact développement — envoi de vérification
+POST {{dev}}/api/contact
+Content-Type: application/json
+
+{
+  "data": {
+    "nom": "Test",
+    "prenom": "Développement",
+    "email": "no-reply@example.com",
+    "sujet_label": "Test technique",
+    "message": "Message de vérification du formulaire de développement — aucune action requise."
+  }
+}
