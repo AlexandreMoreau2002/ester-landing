@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let importId = 0;
@@ -58,6 +60,44 @@ describe('DOM behavior modules', () => {
     document.body.innerHTML = '';
     delete window.getEsterTranslation;
     MockIntersectionObserver.instances = [];
+  });
+
+  describe('crawlable SEO metadata', () => {
+    it('uses the apex domain for crawlable URLs', () => {
+      const html = readFileSync('index.html', 'utf8');
+      const robots = readFileSync('public/robots.txt', 'utf8');
+      const sitemap = readFileSync('public/sitemap.xml', 'utf8');
+      const parsedDocument = new DOMParser().parseFromString(html, 'text/html');
+      expect(parsedDocument.querySelector('link[rel="canonical"]')).not.toBeNull();
+      expect(robots).toMatch(/^Sitemap:\s*\S+/m);
+      const htmlUrls = [
+        ...[...parsedDocument.querySelectorAll('link[rel="canonical"], link[rel="alternate"]')].map(el => el.href),
+        ...[...parsedDocument.querySelectorAll('meta[property="og:url"], meta[property="og:image"], meta[name="twitter:image"]')].map(el => el.content),
+      ];
+      const declaredUrls = [
+        ...htmlUrls,
+        ...[...robots.matchAll(/^Sitemap:\s*(\S+)/gm)].map(match => match[1]),
+      ];
+      const sitemapUrls = [
+        ...[...sitemap.matchAll(/<loc>(https?:\/\/[^\s"<>]+)<\/loc>/g)].map(match => match[1]),
+        ...[...sitemap.matchAll(/href="(https?:\/\/[^\s"<>]+)"/g)].map(match => match[1]),
+      ];
+      expect(sitemapUrls.length).toBeGreaterThan(0);
+
+      for (const url of [...declaredUrls, ...sitemapUrls]) {
+        expect(new URL(url).origin).toBe('https://ester-sas.fr');
+      }
+    });
+
+    it('contains parseable JSON-LD with apex-domain business URLs', () => {
+      const html = readFileSync('index.html', 'utf8');
+      const parsedDocument = new DOMParser().parseFromString(html, 'text/html');
+      const jsonLd = JSON.parse(parsedDocument.querySelector('script[type="application/ld+json"]').textContent);
+
+      for (const url of [jsonLd['@id'], jsonLd.url, jsonLd.logo, jsonLd.image]) {
+        expect(new URL(url).origin).toBe('https://ester-sas.fr');
+      }
+    });
   });
 
   describe('contact.js', () => {

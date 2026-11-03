@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.ester-sas.fr/sitemap.xml
+Sitemap: https://ester-sas.fr/sitemap.xml
