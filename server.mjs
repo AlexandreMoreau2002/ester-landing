@@ -134,6 +134,9 @@ export function createRequestHandler({ distDir = join(ROOT_DIR, 'dist'), contact
   const rootDir = resolve(distDir);
   return async (req, res) => {
     try {
+      if (req.headers.host === 'www.ester-sas.fr') {
+        return sendResponse(res, 308, { Location: `https://ester-sas.fr${req.url}` }, null);
+      }
       const { pathname } = new URL(req.url, 'http://localhost');
       if (pathname === CONTACT_PATH) return await handleContact(req, res, contactHandler);
       return await serveStatic(req, res, rootDir);

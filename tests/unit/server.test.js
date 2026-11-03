@@ -48,6 +48,18 @@ function rawGet(path) {
   });
 }
 
+function rawRequest({ path, method, host }) {
+  return new Promise((resolveRequest, rejectRequest) => {
+    const url = new URL(baseUrl);
+    const req = httpRequest({ host: url.hostname, port: url.port, path, method, headers: { Host: host } }, (res) => {
+      res.resume();
+      res.on('end', () => resolveRequest({ status: res.statusCode, location: res.headers.location }));
+    });
+    req.on('error', rejectRequest);
+    req.end('payload');
+  });
+}
+
 beforeAll(async () => {
   distDir = mkdtempSync(join(tmpdir(), 'ester-dist-'));
   mkdirSync(join(distDir, 'assets'));
@@ -78,6 +90,17 @@ afterEach(() => {
 });
 
 describe('static serving', () => {
+  it('redirects www requests permanently while preserving the URL and POST method', async () => {
+    const response = await rawRequest({
+      path: '/contact?source=header',
+      method: 'POST',
+      host: 'www.ester-sas.fr',
+    });
+
+    expect(response.status).toBe(308);
+    expect(response.location).toBe('https://ester-sas.fr/contact?source=header');
+  });
+
   it('serves index.html for / with security headers and no cache header', async () => {
     const res = await fetch(`${baseUrl}/`);
 
