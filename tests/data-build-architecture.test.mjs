@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const text = path => readFileSync(path, 'utf8');
 
-assert.ok(existsSync('package.json'), 'package.json must exist for Netlify build commands');
+assert.ok(existsSync('package.json'), 'package.json must exist for build commands');
 const pkg = JSON.parse(text('package.json'));
 assert.equal(pkg.scripts?.build, 'node scripts/generate-data.mjs && vite build');
 assert.equal(pkg.scripts?.dev, 'node scripts/generate-data.mjs && vite --host 0.0.0.0');

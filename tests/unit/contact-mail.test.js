@@ -1,16 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let importId = 0;
-const freshImport = () => import(/* @vite-ignore */ `../../netlify/functions/form-notify.mjs?t=${++importId}`);
+const freshImport = () => import(/* @vite-ignore */ `../../server/contact-mail.mjs?t=${++importId}`);
 
 function makeRequest(data) {
-  return new Request('http://localhost/.netlify/functions/form-notify', {
+  return new Request('http://localhost/api/contact', {
     method: 'POST',
     body: JSON.stringify({ data }),
   });
 }
 
-describe('form-notify Netlify Function', () => {
+describe('contact-mail handler', () => {
   const originalEnv = { ...process.env };
 
   beforeEach(() => {
@@ -20,6 +20,16 @@ describe('form-notify Netlify Function', () => {
   afterEach(() => {
     process.env = { ...originalEnv };
     vi.unstubAllGlobals();
+  });
+
+  it('falls back to an empty payload when the body has no data key', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }));
+
+    const { default: handler } = await freshImport();
+    const res = await handler(new Request('http://localhost/api/contact', { method: 'POST', body: '{}' }));
+
+    expect(res.status).toBe(200);
+    expect(JSON.parse(fetch.mock.calls[0][1].body).subject).toBe('Site internet - Contact - ');
   });
 
   it('sends an email with correct subject, body, and contact block', async () => {

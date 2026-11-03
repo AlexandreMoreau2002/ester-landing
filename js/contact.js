@@ -1,3 +1,5 @@
+const CONTACT_ENDPOINT = '/api/contact';
+
 const form       = document.getElementById('contact-form');
 const submitBtn  = document.getElementById('form-submit');
 const successMsg = document.getElementById('form-success');
@@ -91,38 +93,32 @@ if (form) {
 
     try {
       const formData = new FormData(form);
-      const res = await fetch('/', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!res.ok) throw new Error(res.statusText);
-
-      // Notifier immédiatement sans attendre le webhook Netlify
-      const notifyData = {};
-      let cvFileForNotify = null;
+      const contactData = {};
+      let cvFile = null;
       formData.forEach((v, k) => {
         if (v instanceof File) {
-          notifyData[k] = v.name || '';
-          if (k === 'cv' && v.size > 0) cvFileForNotify = v;
+          contactData[k] = v.name || '';
+          if (k === 'cv' && v.size > 0) cvFile = v;
         } else {
-          notifyData[k] = String(v);
+          contactData[k] = String(v);
         }
       });
 
       // Joindre le fichier en base64 si présent (size 0 = aucun fichier sélectionné)
-      if (cvFileForNotify) {
-        const b64 = await fileToBase64(cvFileForNotify);
+      if (cvFile) {
+        const b64 = await fileToBase64(cvFile);
         if (b64) {
-          notifyData.cv_base64 = b64;
-          notifyData.cv_type   = cvFileForNotify.type || 'application/octet-stream';
+          contactData.cv_base64 = b64;
+          contactData.cv_type   = cvFile.type || 'application/octet-stream';
         }
       }
 
-      fetch('/.netlify/functions/form-notify', {
+      const res = await fetch(CONTACT_ENDPOINT, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ data: notifyData }),
-      }).catch(err => console.error('[contact] notify:', err));
+        body:    JSON.stringify({ data: contactData }),
+      });
+      if (!res.ok) throw new Error(res.statusText);
 
       form.reset();
       form.classList.remove('was-validated');

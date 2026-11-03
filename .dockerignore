@@ -3,7 +3,6 @@ dist
 coverage
 .git
 .env*
-.netlify
 docs
 .claude
 tests

@@ -15,13 +15,13 @@ import {
   startIfEntryPoint,
 } from '../../server.mjs';
 
-const FORM_PATH = '/.netlify/functions/form-notify';
+const FORM_PATH = '/api/contact';
 const MAX_BODY_BYTES = 15 * 1024 * 1024;
 
 let distDir;
 let server;
 let baseUrl;
-let notifyHandler;
+let contactHandler;
 
 function listenOnRandomPort(httpServer) {
   return new Promise((resolveListen) => {
@@ -61,8 +61,8 @@ beforeAll(async () => {
   writeFileSync(join(distDir, 'folder', 'index.html'), '<h1>folder</h1>');
   writeFileSync(join(distDir, '..', `${distDir.split('/').pop()}-secret.txt`), 'secret');
 
-  notifyHandler = vi.fn(async () => Response.json({ ok: true }));
-  server = createServer({ distDir, notifyHandler });
+  contactHandler = vi.fn(async () => Response.json({ ok: true }));
+  server = createServer({ distDir, contactHandler });
   baseUrl = await listenOnRandomPort(server);
 });
 
@@ -73,7 +73,7 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  notifyHandler.mockClear();
+  contactHandler.mockClear();
   vi.restoreAllMocks();
 });
 
@@ -152,9 +152,9 @@ describe('static serving', () => {
   });
 });
 
-describe('form-notify route', () => {
+describe('contact route', () => {
   it('adapts the Node request to a Web Request and relays the Response', async () => {
-    notifyHandler.mockImplementationOnce(async (request) => {
+    contactHandler.mockImplementationOnce(async (request) => {
       const payload = await request.json();
       return Response.json({ received: payload.data.nom }, { status: 201 });
     });
@@ -168,13 +168,13 @@ describe('form-notify route', () => {
     expect(res.status).toBe(201);
     expect(await res.json()).toEqual({ received: 'Moreau' });
     expect(res.headers.get('x-frame-options')).toBe('DENY');
-    const [request] = notifyHandler.mock.calls[0];
+    const [request] = contactHandler.mock.calls[0];
     expect(request.method).toBe('POST');
     expect(request.headers.get('content-type')).toBe('application/json');
   });
 
   it('defaults the content type to JSON and the response type when absent', async () => {
-    notifyHandler.mockImplementationOnce(async (request) => {
+    contactHandler.mockImplementationOnce(async (request) => {
       const response = new Response(request.headers.get('content-type'), { status: 200 });
       response.headers.delete('content-type');
       return response;
@@ -197,7 +197,7 @@ describe('form-notify route', () => {
   });
 
   it('rejects bodies above the limit with 413 based on content-length', async () => {
-    const handler = createRequestHandler({ distDir, notifyHandler });
+    const handler = createRequestHandler({ distDir, contactHandler });
     const req = { method: 'POST', url: FORM_PATH, headers: { 'content-length': String(MAX_BODY_BYTES + 1) } };
     const res = { setHeader: vi.fn(), writeHead: vi.fn(), end: vi.fn() };
 
@@ -205,7 +205,7 @@ describe('form-notify route', () => {
 
     expect(res.writeHead).toHaveBeenCalledWith(413, expect.any(Object));
     expect(res.setHeader).toHaveBeenCalledWith('Connection', 'close');
-    expect(notifyHandler).not.toHaveBeenCalled();
+    expect(contactHandler).not.toHaveBeenCalled();
   });
 
   it('rejects oversized chunked bodies with 413', async () => {
@@ -224,7 +224,7 @@ describe('form-notify route', () => {
       .catch(() => 'connection-closed');
 
     expect([413, 'connection-closed']).toContain(outcome);
-    expect(notifyHandler).not.toHaveBeenCalled();
+    expect(contactHandler).not.toHaveBeenCalled();
   });
 
   it('rejects non-POST methods with 405', async () => {
@@ -235,7 +235,7 @@ describe('form-notify route', () => {
 
   it('returns 500 when the handler throws', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    notifyHandler.mockRejectedValueOnce(new Error('boom'));
+    contactHandler.mockRejectedValueOnce(new Error('boom'));
 
     const res = await fetch(`${baseUrl}${FORM_PATH}`, { method: 'POST', body: '{}' });
 
@@ -245,7 +245,7 @@ describe('form-notify route', () => {
 
   it('rethrows unexpected body read errors as 500', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    const handler = createRequestHandler({ distDir, notifyHandler });
+    const handler = createRequestHandler({ distDir, contactHandler });
     const brokenStream = {
       method: 'POST',
       url: FORM_PATH,
@@ -263,7 +263,7 @@ describe('form-notify route', () => {
 });
 
 describe('default handler wiring', () => {
-  it('uses the real form-notify function and dist folder by default', async () => {
+  it('uses the real contact-mail handler and dist folder by default', async () => {
     const defaultServer = createServer();
     const url = await listenOnRandomPort(defaultServer);
     const originalEnv = { ...process.env };

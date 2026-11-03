@@ -2,10 +2,10 @@ import { extname, join, resolve, sep } from 'node:path';
 import { createServer as createHttpServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import formNotify from './netlify/functions/form-notify.mjs';
+import contactMail from './server/contact-mail.mjs';
 
 const ROOT_DIR = fileURLToPath(new URL('.', import.meta.url));
-const FORM_NOTIFY_PATH = '/.netlify/functions/form-notify';
+const CONTACT_PATH = '/api/contact';
 const MAX_BODY_BYTES = 15 * 1024 * 1024;
 const DEFAULT_PORT = 3000;
 const HOST = '0.0.0.0';
@@ -110,7 +110,7 @@ async function readBody(req) {
   return Buffer.concat(chunks);
 }
 
-async function handleFormNotify(req, res, notifyHandler) {
+async function handleContact(req, res, contactHandler) {
   if (req.method !== 'POST') return sendText(res, 405, 'Method Not Allowed');
   let body;
   try {
@@ -120,22 +120,22 @@ async function handleFormNotify(req, res, notifyHandler) {
     res.setHeader('Connection', 'close');
     return sendText(res, 413, 'Payload Too Large');
   }
-  const request = new Request(`http://localhost${FORM_NOTIFY_PATH}`, {
+  const request = new Request(`http://localhost${CONTACT_PATH}`, {
     method: 'POST',
     headers: { 'Content-Type': req.headers['content-type'] ?? 'application/json' },
     body,
   });
-  const response = await notifyHandler(request);
+  const response = await contactHandler(request);
   const headers = { 'Content-Type': response.headers.get('content-type') ?? 'application/json' };
   return sendResponse(res, response.status, headers, Buffer.from(await response.arrayBuffer()));
 }
 
-export function createRequestHandler({ distDir = join(ROOT_DIR, 'dist'), notifyHandler = formNotify } = {}) {
+export function createRequestHandler({ distDir = join(ROOT_DIR, 'dist'), contactHandler = contactMail } = {}) {
   const rootDir = resolve(distDir);
   return async (req, res) => {
     try {
       const { pathname } = new URL(req.url, 'http://localhost');
-      if (pathname === FORM_NOTIFY_PATH) return await handleFormNotify(req, res, notifyHandler);
+      if (pathname === CONTACT_PATH) return await handleContact(req, res, contactHandler);
       return await serveStatic(req, res, rootDir);
     } catch (error) {
       console.error('[server] Unhandled error:', error);

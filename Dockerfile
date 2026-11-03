@@ -27,7 +27,7 @@ ENV NODE_ENV=production \
 
 COPY package.json ./
 COPY server.mjs ./
-COPY netlify/functions/form-notify.mjs ./netlify/functions/form-notify.mjs
+COPY server ./server
 COPY --from=build /app/dist ./dist
 
 USER node

@@ -9,7 +9,7 @@ export default defineConfig({
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: 'coverage',
       all: true,
-      include: ['main.js', 'js/**/*.js', 'scripts/**/*.mjs', 'server.mjs'],
+      include: ['main.js', 'js/**/*.js', 'scripts/**/*.mjs', 'server.mjs', 'server/**/*.mjs'],
       thresholds: {
         statements: 100,
         branches: 100,

@@ -4,7 +4,7 @@ export default async (request) => {
     const data = payload.data ?? {};
 
     if (!process.env.RESEND_API_KEY || !process.env.CONTACT_TO_EMAIL) {
-      console.error('[form-notify] Missing RESEND_API_KEY or CONTACT_TO_EMAIL');
+      console.error('[contact-mail] Missing RESEND_API_KEY or CONTACT_TO_EMAIL');
       return Response.json({ error: 'Missing env vars' }, { status: 500 });
     }
 
@@ -48,13 +48,13 @@ export default async (request) => {
 
     if (!res.ok) {
       const err = await res.text();
-      console.error('[form-notify] Resend error:', err);
+      console.error('[contact-mail] Resend error:', err);
       return Response.json({ error: err }, { status: 502 });
     }
 
     return Response.json({ ok: true });
   } catch (err) {
-    console.error('[form-notify] Error:', err);
+    console.error('[contact-mail] Error:', err);
     return Response.json({ error: err.message }, { status: 500 });
   }
 };

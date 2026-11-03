@@ -151,11 +151,11 @@ describe('DOM behavior modules', () => {
       expect(successMsg.hidden).toBe(false);
       expect(successMsg.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'nearest' });
 
-      // Notify function called directly — no webhook delay
-      expect(fetch).toHaveBeenCalledTimes(2);
-      expect(fetch.mock.calls[1][0]).toBe('/.netlify/functions/form-notify');
-      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(notifyBody).toHaveProperty('data');
+      // JSON posted once to the contact endpoint
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch.mock.calls[0][0]).toBe('/api/contact');
+      const contactBody = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(contactBody).toHaveProperty('data');
     });
 
     it('passes file name (not File object) in notify payload for file inputs', async () => {
@@ -184,9 +184,9 @@ describe('DOM behavior modules', () => {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
 
-      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(notifyBody.data.cv).toBe('mon-cv.pdf');
-      expect(notifyBody.data.nom).toBe('Dupont');
+      const contactBody = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(contactBody.data.cv).toBe('mon-cv.pdf');
+      expect(contactBody.data.nom).toBe('Dupont');
     });
 
     it('uses empty string when File has no name in notify payload', async () => {
@@ -212,8 +212,8 @@ describe('DOM behavior modules', () => {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
 
-      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(notifyBody.data.cv).toBe('');
+      const contactBody = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(contactBody.data.cv).toBe('');
     });
 
     it('includes cv_base64 and cv_type in notify payload when a file is selected', async () => {
@@ -253,9 +253,9 @@ describe('DOM behavior modules', () => {
       await Promise.resolve(); await Promise.resolve();
       await Promise.resolve(); await Promise.resolve();
 
-      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(notifyBody.data.cv_base64).toBe('dGVzdGNvbnRlbnQ=');
-      expect(notifyBody.data.cv_type).toBe('application/pdf');
+      const contactBody = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(contactBody.data.cv_base64).toBe('dGVzdGNvbnRlbnQ=');
+      expect(contactBody.data.cv_type).toBe('application/pdf');
     });
 
     it('omits cv_base64 from notify payload when FileReader fails', async () => {
@@ -268,7 +268,7 @@ describe('DOM behavior modules', () => {
       };
       vi.stubGlobal('FileReader', vi.fn(() => mockReader));
 
-      // File with real content (size > 0) so cvFileForNotify is set, but FileReader fails
+      // File with real content (size > 0) so cvFile is set, but FileReader fails
       vi.stubGlobal('FormData', class {
         constructor() { this._entries = [['cv', new File(['x'], 'cv.pdf', { type: 'application/pdf' })]]; }
         forEach(cb) { this._entries.forEach(([k, v]) => cb(v, k)); }
@@ -299,8 +299,8 @@ describe('DOM behavior modules', () => {
       await Promise.resolve(); await Promise.resolve();
       await Promise.resolve(); await Promise.resolve();
 
-      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(notifyBody.data.cv_base64).toBeUndefined();
+      const contactBody = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(contactBody.data.cv_base64).toBeUndefined();
     });
 
     it('omits cv_base64 when FileReader result has no comma-separated base64', async () => {
@@ -332,8 +332,8 @@ describe('DOM behavior modules', () => {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
       await Promise.resolve(); await Promise.resolve();
-      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(notifyBody.data.cv_base64).toBeUndefined();
+      const contactBody = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(contactBody.data.cv_base64).toBeUndefined();
     });
 
     it('falls back to application/octet-stream type when file has no type', async () => {
@@ -365,35 +365,8 @@ describe('DOM behavior modules', () => {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       await Promise.resolve(); await Promise.resolve();
       await Promise.resolve(); await Promise.resolve();
-      const notifyBody = JSON.parse(fetch.mock.calls[1][1].body);
-      expect(notifyBody.data.cv_type).toBe('application/octet-stream');
-    });
-
-    it('does not affect UX when the notify fetch fails', async () => {
-      vi.stubGlobal('fetch', vi.fn()
-        .mockResolvedValueOnce({ ok: true })           // Netlify Forms
-        .mockRejectedValueOnce(new Error('network'))   // notify
-      );
-      setBody(`
-        <form id="contact-form">
-          <input name="name" value="Alex">
-          <button id="form-submit" type="submit">
-            <span class="form-submit-label">Envoyer</span>
-            <span class="form-submit-loading" hidden></span>
-          </button>
-          <p id="form-success" hidden>Merci</p>
-        </form>
-      `);
-
-      const form = document.getElementById('contact-form');
-      const successMsg = document.getElementById('form-success');
-      form.checkValidity = vi.fn(() => true);
-
-      await importFresh('contact');
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-      await Promise.resolve(); await Promise.resolve(); await Promise.resolve();
-
-      expect(successMsg.hidden).toBe(false);
+      const contactBody = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(contactBody.data.cv_type).toBe('application/octet-stream');
     });
 
     it('re-enables the button and shows error message when fetch fails', async () => {
