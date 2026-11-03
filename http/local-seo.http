@@ -5,7 +5,9 @@
 ### Page canonique
 GET {{apex}}/
 
-### Redirection www vers apex (vérifier 308 + Location)
+### Redirection www vers apex
+# REST Client peut suivre les redirections. Pour vérifier le 308 et son Location initial,
+# utilisez la commande curl --max-redirs 0 du guide-test.md (ou un client équivalent sans suivi).
 GET {{www}}/mentions-legales.html?source=manual
 
 ### Redirection www sur la racine

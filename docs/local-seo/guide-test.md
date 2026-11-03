@@ -15,6 +15,15 @@
 3. Vérifier l’en-tête `Location: https://ester-sas.fr/mentions-legales.html?source=manual`.
 4. Répéter avec une requête HEAD sur `https://www.ester-sas.fr/`.
 
+Pour inspecter la réponse initiale sans suivre la redirection, utiliser par exemple :
+
+```sh
+curl -I --max-redirs 0 https://www.ester-sas.fr/
+curl -sS -D - -o /dev/null --max-redirs 0 'https://www.ester-sas.fr/mentions-legales.html?source=manual'
+```
+
+Le fichier REST Client ci-joint facilite les requêtes, mais l’extension peut suivre les redirections; utiliser ces commandes (ou un client équivalent sans suivi) pour contrôler le statut et l’en-tête `Location` d’origine.
+
 Résultat attendu : les deux variantes arrivent sur l’apex, et le chemin ainsi que la query string sont conservés.
 
 ### 2. Vérifier robots.txt et le sitemap
