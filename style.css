@@ -1508,9 +1508,13 @@ body.ester-nav-open { overflow: hidden; }
 }
 
 .recrutement-points li::before {
-  content: '—';
+  content: '';
   position: absolute;
   left: 0;
+  top: 0.7em;
+  width: 0.5rem;
+  height: 2px;
+  background: var(--vert);
   color: var(--vert);
   font-weight: 700;
 }
