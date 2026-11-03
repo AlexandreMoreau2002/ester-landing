@@ -8,7 +8,8 @@ const SITEMAP_PATH = join(process.cwd(), 'public', 'sitemap.xml');
 const DATA_DIR = join(process.cwd(), 'public', 'data');
 const GOOGLE_FIELDS = 'rating,user_ratings_total,reviews,url';
 
-const MOCK_AVIS = {
+/* Avis Google réels, repris en dur : servis en dev et dès que GOOGLE_PLACES_API_KEY est absente. */
+const FALLBACK_AVIS = {
   note_moyenne: 4.5,
   total: 2,
   url: 'https://www.google.com/maps/place/Ester+Sarl/@44.5624537,6.0846692,17z/data=!3m1!4b1!4m6!3m5!1s0x12cb4069d06a9419:0x72daaab867139eef!8m2!3d44.5624537!4d6.0846692!16s%2Fg%2F1v7x_w0s',
@@ -93,8 +94,8 @@ export async function fetchJson(url, options = {}) {
 export async function generateAvis(env) {
   if (env.ESTER_MODE === 'dev' || !env.GOOGLE_PLACES_API_KEY) {
     return {
-      ...MOCK_AVIS,
-      avis: starsOnly(MOCK_AVIS.avis),
+      ...FALLBACK_AVIS,
+      avis: starsOnly(FALLBACK_AVIS.avis),
     };
   }
 
