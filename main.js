@@ -7,6 +7,7 @@ import './js/contact.js';
 import './js/mountains.js';
 import './js/smooth-scroll.js';
 import { loadGoogleAvis } from './js/avis.js';
+import { initMapConsent } from './js/map-consent.js';
 import { initPagination } from './js/pagination.js';
 import { loadNotionRealisations } from './js/notion.js';
 
@@ -22,6 +23,7 @@ document.querySelectorAll('.ester-age-dynamic').forEach(el => {
 });
 
 /* Pagination d'abord, puis injection Notion (qui la reconstruit après fetch) */
+initMapConsent();
 initPagination();
 loadNotionRealisations();
 loadGoogleAvis();

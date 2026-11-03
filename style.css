@@ -1719,6 +1719,7 @@ body.ester-nav-open { overflow: hidden; }
   line-height: 1.6;
   max-width: 38ch;
 }
+.form-mention a { color: var(--bleu); text-decoration: underline; text-underline-offset: 2px; }
 
 .form-submit {
   flex-shrink: 0;
@@ -1822,6 +1823,23 @@ body.ester-nav-open { overflow: hidden; }
   border-top: 1px solid var(--pierre-mid);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.contact-map-consent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  background: var(--pierre);
+}
+
+.contact-map-consent-text {
+  max-width: 34ch;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--gris);
 }
 
 .contact-map-frame {

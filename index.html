@@ -749,7 +749,7 @@
               </div>
 
               <div class="form-footer">
-                <p class="form-mention" data-i18n="contact.mention">Les champs marqués * sont obligatoires. Vos données ne sont utilisées qu'aux fins de réponse à votre demande.</p>
+                <p class="form-mention" data-i18n-html="contact.mention">Les champs marqués * sont obligatoires. Ces données sont utilisées uniquement pour répondre à votre demande, envoyées par e‑mail à ESTER SAS et conservées 3 ans maximum. Détail et exercice de vos droits : <a href="/mentions-legales.html#rgpd">mentions légales</a>.</p>
                 <button type="submit" class="btn btn-primary form-submit" id="form-submit">
                   <span class="form-submit-label" data-i18n="contact.submit">Envoyer le message</span>
                   <span class="form-submit-loading" aria-hidden="true" hidden data-i18n="contact.loading">Envoi…</span>
@@ -795,15 +795,10 @@
             </ul>
 
             <div class="contact-map" aria-label="Localisation ESTER SAS : 3 bis avenue Maréchal Foch, 05000 Gap" data-i18n-aria="contact.map.aria">
-              <iframe
-                class="contact-map-frame"
-                src="https://www.google.com/maps?q=3+B+Avenue+Mar%C3%A9chal+Foch%2C+05000+Gap%2C+France&output=embed"
-                title="Carte Google Maps : ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap"
-                data-i18n-title="contact.map.title"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                allowfullscreen>
-              </iframe>
+              <div class="contact-map-consent" id="map-consent">
+                <p class="contact-map-consent-text" data-i18n="contact.map.consent.text">Pour afficher la carte, votre navigateur se connectera aux serveurs de Google, qui pourront recevoir votre adresse IP. Aucune connexion n'est établie sans votre accord.</p>
+                <button type="button" class="btn btn-primary contact-map-consent-btn" id="map-consent-btn" data-i18n="contact.map.consent.btn">Afficher la carte</button>
+              </div>
               <a href="https://www.google.com/maps/dir/?api=1&destination=3+B+Avenue+Mar%C3%A9chal+Foch%2C+05000+Gap%2C+France" target="_blank" rel="noopener" class="contact-map-link" data-i18n="contact.map.directions">Itinéraire Google Maps →</a>
             </div>
 

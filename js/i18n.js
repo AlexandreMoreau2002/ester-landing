@@ -166,11 +166,13 @@ const TRANSLATIONS = {
     'contact.sujet.o6': 'Candidature',
     'contact.msg.label':      'Message',
     'contact.msg.placeholder':'Décrivez brièvement votre projet ou votre demande…',
-    'contact.mention': 'Les champs marqués * sont obligatoires. Vos données ne sont utilisées qu\'aux fins de réponse à votre demande.',
+    'contact.mention': 'Les champs marqués * sont obligatoires. Ces données sont utilisées uniquement pour répondre à votre demande, envoyées par e‑mail à ESTER SAS et conservées 3 ans maximum. Détail et exercice de vos droits : <a href="/mentions-legales.html#rgpd">mentions légales</a>.',
     'contact.submit':  'Envoyer le message',
     'contact.success': 'Message envoyé. Nous vous répondrons dans les meilleurs délais.',
     'contact.error':   'Une erreur est survenue. Veuillez réessayer ou nous contacter directement.',
     'contact.map.directions': 'Itinéraire Google Maps →',
+    'contact.map.consent.text': 'Pour afficher la carte, votre navigateur se connectera aux serveurs de Google, qui pourront recevoir votre adresse IP. Aucune connexion n\'est établie sans votre accord.',
+    'contact.map.consent.btn': 'Afficher la carte',
 
     /* ── Pagination ──────────────────────────────────── */
     'pagination.prev': '← Précédent',
@@ -215,11 +217,12 @@ const TRANSLATIONS = {
     'legal.publisher.legal.value': 'Société par actions simplifiée',
     'legal.publisher.address.label': 'Siège social',
     'legal.publisher.phone.label': 'Téléphone',
-    'legal.publisher.capital.label': 'Capital social',
     'legal.publisher.rcs.label': 'RCS',
+    'legal.publisher.rcs.value': 'RCS Gap 311 605 406',
+    'legal.publisher.vat.label': 'TVA intracommunautaire',
     'legal.publisher.director.label': 'Directeur de la publication',
     'legal.host.title': 'Hébergeur',
-    'legal.host.value': '<strong style="color:white">OVH SAS</strong><br/>2 rue Kellermann<br/>59100 Roubaix, France<br/><span style="color:rgba(255,255,255,.55)">ovhcloud.com</span>',
+    'legal.host.value': '<strong style="color:white">OVH SAS</strong><br/>2 rue Kellermann<br/>59100 Roubaix, France<br/>+33 9 72 10 10 07<br/><span style="color:rgba(255,255,255,.55)">ovhcloud.com</span>',
     'legal.host.note': 'Le site est hébergé sur un serveur privé virtuel (VPS) situé à Gravelines (France). Les données de visite sont hébergées en France, au sein de l\'Union européenne.',
     'legal.insurance.title': 'Assurance professionnelle',
     'legal.insurance.insurer.label': 'Assureur',
@@ -231,25 +234,25 @@ const TRANSLATIONS = {
     'legal.privacy.intro': 'Conformément au Règlement (UE) 2016/679 (RGPD) et à la Loi Informatique et Libertés modifiée, vous disposez d\'un droit d\'accès, de rectification, d\'effacement, de portabilité, de limitation et d\'opposition au traitement de vos données.',
     'legal.privacy.controller.label': 'Responsable du traitement',
     'legal.privacy.legalbasis.label': 'Base légale',
-    'legal.privacy.legalbasis.value': 'Consentement (formulaire de contact), art. 6.1.a du RGPD<br/>Intérêt légitime (mesure d\'audience anonyme), art. 6.1.f',
+    'legal.privacy.legalbasis.value': 'Réponse à votre demande de contact : mesures précontractuelles et intérêt légitime, art. 6.1.b et 6.1.f du RGPD<br/>Carte Google Maps : consentement (clic sur « Afficher la carte »), art. 6.1.a',
     'legal.privacy.data.label': 'Données collectées',
-    'legal.privacy.data.value': 'Via le formulaire de contact : nom, e‑mail, message, et toute donnée que vous choisissez de communiquer. Aucun cookie publicitaire n\'est déposé.',
+    'legal.privacy.data.value': 'Via le formulaire de contact : nom, prénom, entreprise et téléphone (facultatifs), e‑mail, objet, message et pièce jointe éventuelle (CV, document). Aucun cookie publicitaire et aucun outil de mesure d\'audience ne sont utilisés. Votre choix de langue est mémorisé dans votre navigateur (stockage local), sans transmission à un tiers. Comme tout serveur web, notre hébergeur enregistre des journaux techniques (adresse IP, date, page demandée).',
     'legal.privacy.retention.label': 'Durée de conservation',
-    'legal.privacy.retention.value': '3 ans à compter du dernier contact pour les prospects ; durée de la relation contractuelle pour les clients, puis archivage conforme aux obligations légales.',
-    'legal.privacy.processor.label': 'Sous‑traitant du formulaire',
-    'legal.privacy.processor.value': '<strong style="color:white">Resend, Inc.</strong> (États‑Unis) assure l\'envoi de l\'e‑mail généré par le formulaire, pour notre compte. Ce transfert hors de l\'Union européenne est encadré par des clauses contractuelles types. Aucun partage de données à des fins commerciales.',
+    'legal.privacy.retention.value': '3 ans à compter du dernier contact pour les prospects ; durée de la relation contractuelle pour les clients, puis archivage conforme aux obligations légales ; 2 ans maximum pour les candidatures non retenues. Journaux techniques : 12 mois maximum.',
+    'legal.privacy.processor.label': 'Sous‑traitants',
+    'legal.privacy.processor.value': '<strong style="color:white">Resend, Inc.</strong> (États‑Unis) assure l\'envoi de l\'e‑mail généré par le formulaire, pour notre compte. Ce transfert hors de l\'Union européenne est encadré par des clauses contractuelles types.<br/><strong style="color:white">OVH SAS</strong> (France) héberge le site. Aucun partage de données à des fins commerciales.',
     'legal.privacy.rights.label': 'Exercer vos droits',
     'legal.privacy.rights.value': 'Par courrier à l\'adresse du siège, ou par e‑mail à <a href="mailto:contact@ester-bet.fr" style="color:white">contact@ester-bet.fr</a>.<br/>Réclamation possible auprès de la <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
     'legal.third.title': 'Services tiers intégrés',
     'legal.third.maps.label': 'Google Maps',
-    'legal.third.maps.value': 'La page Contact intègre une carte Google Maps afin d\'afficher la localisation d\'ESTER SAS au 3 bis avenue Maréchal Foch, 05000 Gap. Lors du chargement de cette carte, votre navigateur établit une connexion avec les serveurs de Google. Des données techniques, telles que votre adresse IP, les informations de votre navigateur et la page consultée, peuvent alors être transmises à Google.',
+    'legal.third.maps.value': 'La page Contact propose une carte Google Maps pour situer ESTER SAS au 3 bis avenue Maréchal Foch, 05000 Gap. Cette carte n\'est chargée qu\'après votre clic sur « Afficher la carte ». Une fois affichée, votre navigateur se connecte aux serveurs de Google, qui peuvent recevoir votre adresse IP, les informations de votre navigateur et la page consultée.',
     'legal.third.purpose.label': 'Finalité',
     'legal.third.purpose.value': 'Ce service est utilisé uniquement pour faciliter l\'accès aux locaux d\'ESTER SAS et proposer un lien d\'itinéraire vers Google Maps. ESTER SAS ne reçoit pas les données collectées par Google dans ce cadre.',
     'legal.third.google.label': 'Politique de confidentialité Google',
     'legal.third.google.value': 'Pour plus d\'informations sur le traitement réalisé par Google, vous pouvez consulter la politique de confidentialité de Google : <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:white">policies.google.com/privacy</a>.',
     'legal.ip.title': 'Propriété intellectuelle',
     'legal.ip.text': 'L\'ensemble du contenu de ce site (textes, images, photographies, logos, structure) est la propriété exclusive d\'ESTER SAS, sauf mention contraire, et protégé par le Code de la propriété intellectuelle. Toute reproduction, même partielle, est soumise à autorisation préalable écrite.',
-    'legal.foot.updated': 'Dernière mise à jour · {{ date_maj }}',
+    'legal.foot.updated': 'Dernière mise à jour : novembre 2026',
     'legal.foot.company': 'ESTER SAS · Gap, Hautes‑Alpes',
   },
 
@@ -417,11 +420,13 @@ const TRANSLATIONS = {
     'contact.sujet.o6': 'Application',
     'contact.msg.label':      'Message',
     'contact.msg.placeholder':'Briefly describe your project or request…',
-    'contact.mention': 'Fields marked * are required. Your data is used solely to respond to your request.',
+    'contact.mention': 'Fields marked * are required. This data is used solely to answer your request, sent by email to ESTER SAS and kept for 3 years at most. Details and your rights: <a href="/mentions-legales.html#rgpd">legal notice</a>.',
     'contact.submit':  'Send message',
     'contact.success': 'Message sent. We will get back to you as soon as possible.',
     'contact.error':   'An error occurred. Please try again or contact us directly.',
     'contact.map.directions': 'Google Maps directions →',
+    'contact.map.consent.text': 'To display the map, your browser will connect to Google servers, which may receive your IP address. No connection is made without your consent.',
+    'contact.map.consent.btn': 'Show the map',
 
     /* ── Pagination ──────────────────────────────────── */
     'pagination.prev': '← Previous',
@@ -466,11 +471,12 @@ const TRANSLATIONS = {
     'legal.publisher.legal.value': 'Simplified joint-stock company',
     'legal.publisher.address.label': 'Registered office',
     'legal.publisher.phone.label': 'Phone',
-    'legal.publisher.capital.label': 'Share capital',
     'legal.publisher.rcs.label': 'Trade register',
+    'legal.publisher.rcs.value': 'Gap Trade and Companies Register no. 311 605 406',
+    'legal.publisher.vat.label': 'VAT number',
     'legal.publisher.director.label': 'Publication director',
     'legal.host.title': 'Hosting provider',
-    'legal.host.value': '<strong style="color:white">OVH SAS</strong><br/>2 rue Kellermann<br/>59100 Roubaix, France<br/><span style="color:rgba(255,255,255,.55)">ovhcloud.com</span>',
+    'legal.host.value': '<strong style="color:white">OVH SAS</strong><br/>2 rue Kellermann<br/>59100 Roubaix, France<br/>+33 9 72 10 10 07<br/><span style="color:rgba(255,255,255,.55)">ovhcloud.com</span>',
     'legal.host.note': 'The site is hosted on a virtual private server (VPS) located in Gravelines (France). Visitor data is hosted in France, within the European Union.',
     'legal.insurance.title': 'Professional insurance',
     'legal.insurance.insurer.label': 'Insurer',
@@ -482,25 +488,25 @@ const TRANSLATIONS = {
     'legal.privacy.intro': 'In accordance with Regulation (EU) 2016/679 (GDPR) and the amended French Data Protection Act, you have the right to access, rectify, erase, port, restrict and object to the processing of your personal data.',
     'legal.privacy.controller.label': 'Data controller',
     'legal.privacy.legalbasis.label': 'Legal basis',
-    'legal.privacy.legalbasis.value': 'Consent (contact form), Art. 6.1.a GDPR<br/>Legitimate interest (anonymous audience measurement), Art. 6.1.f',
+    'legal.privacy.legalbasis.value': 'Answering your contact request: pre-contractual measures and legitimate interest, Art. 6.1.b and 6.1.f GDPR<br/>Google Maps: consent (click on “Show the map”), Art. 6.1.a',
     'legal.privacy.data.label': 'Data collected',
-    'legal.privacy.data.value': 'Via the contact form: name, email, message, and any information you choose to provide. No advertising cookies are placed.',
+    'legal.privacy.data.value': 'Via the contact form: last name, first name, company and phone (optional), email, subject, message and any attachment (CV, document). No advertising cookies and no audience-measurement tool are used. Your language choice is stored in your browser (local storage), with no transfer to any third party. Like any web server, our host records technical logs (IP address, date, requested page).',
     'legal.privacy.retention.label': 'Retention period',
-    'legal.privacy.retention.value': '3 years from the last contact for prospects; for clients, for the duration of the contractual relationship, then archived in accordance with legal obligations.',
-    'legal.privacy.processor.label': 'Form processor',
-    'legal.privacy.processor.value': '<strong style="color:white">Resend, Inc.</strong> (United States) sends the email generated by the form on our behalf. This transfer outside the European Union is covered by standard contractual clauses. No data is shared for commercial purposes.',
+    'legal.privacy.retention.value': '3 years from the last contact for prospects; duration of the contractual relationship for clients, then archiving in line with legal obligations; 2 years maximum for unsuccessful applications. Technical logs: 12 months maximum.',
+    'legal.privacy.processor.label': 'Processors',
+    'legal.privacy.processor.value': '<strong style="color:white">Resend, Inc.</strong> (United States) sends the email generated by the form on our behalf. This transfer outside the European Union is covered by standard contractual clauses.<br/><strong style="color:white">OVH SAS</strong> (France) hosts the site. No data is shared for commercial purposes.',
     'legal.privacy.rights.label': 'Exercise your rights',
     'legal.privacy.rights.value': 'By post to the registered office address, or by email at <a href="mailto:contact@ester-bet.fr" style="color:white">contact@ester-bet.fr</a>.<br/>You may also lodge a complaint with the <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
     'legal.third.title': 'Integrated third-party services',
     'legal.third.maps.label': 'Google Maps',
-    'legal.third.maps.value': 'The Contact page embeds a Google Maps map to display the location of ESTER SAS at 3 bis avenue Maréchal Foch, 05000 Gap. When this map loads, your browser connects to Google servers. Technical data, such as your IP address, browser information and the page viewed, may then be transmitted to Google.',
+    'legal.third.maps.value': 'The Contact section offers a Google Maps map showing ESTER SAS at 3 bis avenue Maréchal Foch, 05000 Gap. The map is loaded only after you click “Show the map”. Once displayed, your browser connects to Google servers, which may receive your IP address, browser information and the page viewed.',
     'legal.third.purpose.label': 'Purpose',
     'legal.third.purpose.value': 'This service is used only to make it easier to access ESTER SAS premises and to provide a route link to Google Maps. ESTER SAS does not receive the data collected by Google in this context.',
     'legal.third.google.label': 'Google privacy policy',
     'legal.third.google.value': 'For more information about Google processing, you can read Google\'s privacy policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:white">policies.google.com/privacy</a>.',
     'legal.ip.title': 'Intellectual property',
     'legal.ip.text': 'All content on this website (texts, images, photographs, logos, structure) is the exclusive property of ESTER SAS unless otherwise stated, and is protected by the French Intellectual Property Code. Any reproduction, even partial, requires prior written authorization.',
-    'legal.foot.updated': 'Last updated · {{ date_maj }}',
+    'legal.foot.updated': 'Last updated: November 2026',
     'legal.foot.company': 'ESTER SAS · Gap, Hautes‑Alpes',
   }
 };
@@ -565,13 +571,15 @@ function applyTranslations(lang) {
   });
 
   currentLang = lang;
-  localStorage.setItem('ester-lang', lang);
 }
 
 function initI18n() {
   /* Boutons toggle */
   document.querySelectorAll('.nav-lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => applyTranslations(btn.dataset.lang));
+    btn.addEventListener('click', () => {
+      applyTranslations(btn.dataset.lang);
+      try { localStorage.setItem('ester-lang', btn.dataset.lang); } catch { /* stockage indisponible */ }
+    });
   });
 
   /* Application initiale */

@@ -117,7 +117,7 @@ describe('i18n', () => {
 
     expect(document.documentElement.lang).toBe('en');
     expect(document.querySelector('[data-i18n]').textContent).toBe('Last name');
-    expect(localStorage.getItem('ester-lang')).toBe('en');
+    expect(localStorage.getItem('ester-lang')).toBe('de');
   });
 
   it('falls back to userLanguage when navigator.language is empty', async () => {
@@ -140,7 +140,7 @@ describe('i18n', () => {
 
     expect(document.documentElement.lang).toBe('fr');
     expect(document.querySelector('[data-i18n]').textContent).toBe('Email');
-    expect(localStorage.getItem('ester-lang')).toBe('fr');
+    expect(localStorage.getItem('ester-lang')).toBeNull();
   });
 
   it('defaults to French when browser language values are empty', async () => {
@@ -175,7 +175,7 @@ describe('i18n', () => {
     expect(document.querySelector('[data-i18n-aria]').getAttribute('aria-label')).toBe('keep aria');
     expect(document.querySelector('[data-i18n-title]').getAttribute('title')).toBe('keep title');
     expect(document.querySelector('[data-i18n-content]').getAttribute('content')).toBe('keep content');
-    expect(localStorage.getItem('ester-lang')).toBe('fr');
+    expect(localStorage.getItem('ester-lang')).toBeNull();
   });
 
   it('exposes lookup helpers with current language, explicit language, and key fallback', async () => {
