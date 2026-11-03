@@ -1,0 +1,21 @@
+### SEO local — production ESTER
+@apex = https://ester-sas.fr
+@www = https://www.ester-sas.fr
+
+### Page canonique
+GET {{apex}}/
+
+### Redirection www vers apex (vérifier 308 + Location)
+GET {{www}}/mentions-legales.html?source=manual
+
+### Redirection www sur la racine
+HEAD {{www}}/
+
+### Robots et annonce du sitemap
+GET {{apex}}/robots.txt
+
+### Sitemap XML
+GET {{apex}}/sitemap.xml
+
+### Mentions légales référencées dans le sitemap
+GET {{apex}}/mentions-legales.html
