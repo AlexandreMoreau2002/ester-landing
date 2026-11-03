@@ -67,7 +67,7 @@ describe('i18n', () => {
     expect(document.querySelector('[data-i18n-placeholder]').placeholder).toBe('your@email.com');
     expect(document.querySelector('[data-i18n-aria]').getAttribute('aria-label')).toBe('Open menu');
     expect(document.querySelector('[data-i18n-title]').getAttribute('title')).toBe(
-      'Google Maps — ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap',
+      'Google Maps : ESTER SAS, 3 bis avenue Maréchal Foch, 05000 Gap',
     );
     expect(document.querySelector('[data-i18n-content]').getAttribute('content')).toBe(
       'Structural engineering firm in Gap, Hautes-Alpes, since 1977. Concrete structural calculation, building diagnosis, site supervision. OPQIBI 1202.',

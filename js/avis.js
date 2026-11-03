@@ -2,7 +2,7 @@
 
 /**
  * Rendu des étoiles pour une note 1–5.
- * Utilise ★ (plein) et ☆ (vide) — arrondi à l'entier le plus proche.
+ * Utilise ★ (plein) et ☆ (vide) : arrondi à l'entier le plus proche.
  */
 function t(key, fallback, params = {}) {
   const translated = window.getEsterTranslation ? window.getEsterTranslation(key) : fallback;
