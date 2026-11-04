@@ -285,6 +285,48 @@ describe('Notion realisations loading', () => {
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(1);
   });
 
+  it.each([null, {}, { realisations: {} }])('uses development fallback for an invalid runtime payload: %j', async payload => {
+    vi.stubEnv('DEV', true);
+    seedRealisationCards(1);
+    fetch.mockResolvedValueOnce(makeResponse(payload))
+      .mockResolvedValueOnce(makeResponse({ realisations: [realisation({ titre: 'Projet local valide' })] }));
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+
+    await loadNotionRealisations();
+
+    expect(fetch.mock.calls.map(([url]) => url)).toEqual(['/api/realisations', '/data/realisations.json']);
+    expect(document.querySelector('.realisation-title').textContent).toBe('Projet local valide');
+  });
+
+  it.each([null, {}, { realisations: {} }])('preserves production cards without static fallback for an invalid runtime payload: %j', async payload => {
+    seedRealisationCards(1);
+    fetch.mockResolvedValueOnce(makeResponse({ realisations: [realisation({ titre: 'Projet conservé' })] }))
+      .mockResolvedValueOnce(makeResponse(payload));
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+
+    await loadNotionRealisations();
+    const card = document.querySelector('.realisation-card');
+    await vi.advanceTimersByTimeAsync(30_000);
+
+    expect(fetch.mock.calls.map(([url]) => url)).toEqual(['/api/realisations', '/api/realisations']);
+    expect(document.querySelector('.realisation-card')).toBe(card);
+    expect(document.querySelector('.realisation-title').textContent).toBe('Projet conservé');
+    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(1);
+  });
+
+  it('accepts an empty runtime array in development without static fallback', async () => {
+    vi.stubEnv('DEV', true);
+    seedRealisationCards(1);
+    fetch.mockResolvedValueOnce(makeResponse({ realisations: [] }));
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+
+    await loadNotionRealisations();
+
+    expect(fetch.mock.calls.map(([url]) => url)).toEqual(['/api/realisations']);
+    expect(document.querySelector('.realisations-grid').hidden).toBe(true);
+    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(1);
+  });
+
   it('never requests generated mocks in production after runtime JSON fails', async () => {
     seedRealisationCards(1);
     fetch.mockResolvedValueOnce(makeResponse({ realisations: [realisation({ titre: 'Projet runtime' })] }))

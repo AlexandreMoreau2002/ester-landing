@@ -70,23 +70,25 @@ export async function loadNotionRealisations() {
     if (window.rebuildRealisationsPagination) window.rebuildRealisationsPagination();
   }
 
+  async function readRealisations(response) {
+    if (!response.ok) throw new Error('Realisations unavailable');
+    const data = await response.json();
+    if (!Array.isArray(data?.realisations)) throw new Error('Realisations unavailable');
+    return data.realisations;
+  }
+
   async function refreshRealisations() {
     if (refreshing) return;
     refreshing = true;
 
     try {
-      let data;
+      let realisations;
       try {
-        const response = await fetch('/api/realisations', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Realisations unavailable');
-        data = await response.json();
+        realisations = await readRealisations(await fetch('/api/realisations', { cache: 'no-store' }));
       } catch (error) {
         if (!import.meta.env.DEV) throw error;
-        const response = await fetch('/data/realisations.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Realisations unavailable');
-        data = await response.json();
+        realisations = await readRealisations(await fetch('/data/realisations.json', { cache: 'no-store' }));
       }
-      const realisations = data.realisations || [];
       if (realisations.length === 0) showEmptyState();
       else showGrid(realisations);
       rendered = true;
