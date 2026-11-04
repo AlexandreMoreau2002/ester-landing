@@ -2,7 +2,7 @@
 
 ## Prérequis et périmètre
 
-Ce guide décrit une recette sur la production uniquement. Aucun envoi de courriel depuis un serveur local ou l'environnement de développement. Les accès, modifications externes et déploiements sont réservés au responsable d'exploitation après revue des documents et confirmation explicite au moment de l'action. Ce document ne vaut pas autorisation d'exécuter ces opérations.
+La recette des services externes décrite ici concerne la production uniquement. Les contrôles des données fictives utilisent le développement local. Aucun envoi de courriel depuis un serveur local ou l'environnement de développement. Les accès, modifications externes et déploiements sont réservés au responsable d'exploitation après revue des documents et confirmation explicite au moment de l'action. Ce document ne vaut pas autorisation d'exécuter ces opérations.
 
 Préparer la version validée, l'accès autorisé à Dokploy/Resend/Notion, une boîte de test contrôlée et le destinataire final. Garder les valeurs de variables dans le gestionnaire de secrets ou les consoles privées ; ne pas les recopier dans Git, captures ou rapports. Relever la configuration existante dans cet espace privé pour pouvoir la restaurer.
 
@@ -27,7 +27,7 @@ Préparer la version validée, l'accès autorisé à Dokploy/Resend/Notion, une 
 2. En FR puis EN, vérifier les textes, l'adresse publique `estersarl.ing@gmail.com`, les liens de contact et le titre contenant « ingénierie structurelle » en FR.
 3. Ouvrir les mentions légales ; dans Réseau, vérifier l'absence de 404 sur CSS, JS, images et `assets/favicon-32.png`. Vérifier le favicon de l'onglet.
 4. Lire `GET /api/realisations` : attendre `200`, `Cache-Control: no-store` et `{ "realisations": [...] }`, sans token ni identifiant de base. Vérifier cartes et pagination.
-5. Après autorisation d'édition Notion, modifier temporairement un titre publié. Garder l'onglet visible et attendre jusqu'à environ deux minutes plus la latence. Vérifier la mise à jour sans déploiement, puis restaurer le titre et constater sa restauration.
+5. Après autorisation d'édition Notion, modifier temporairement un titre publié. Garder l'onglet visible : cache serveur de 15 secondes et interrogation toutes les 30 secondes, soit environ 45 secondes de délai maximal normal cumulé, hors latence et panne. Vérifier la mise à jour sans déploiement, puis restaurer le titre et constater sa restauration.
 
 ## 4. Envoyer un seul test contrôlé
 
@@ -44,6 +44,13 @@ Préparer la version validée, l'accès autorisé à Dokploy/Resend/Notion, une 
 2. Préserver les autres variables et redéployer. Vérifier le déploiement sain et le destinataire configuré dans l'environnement actif, sans le publier dans des logs.
 3. Aucun second envoi automatique : tout nouveau test demande une nouvelle confirmation à l'instant de l'action.
 4. En cas de déploiement défaillant, restaurer la configuration/version privée relevée avant intervention, après accord du responsable, puis vérifier l'état du service.
+
+## Contrôle local du repli mocké
+
+1. Définir `ESTER_MODE=dev` sans renseigner de token Notion, puis lancer `npm run dev`. Le générateur écrit une réalisation fictive déterministe dans `public/data/realisations.json` (non versionné).
+2. Avec l’API runtime absente ou en erreur, vérifier dans Réseau l’essai de `/api/realisations`, puis le repli `/data/realisations.json` et l’affichage de la réalisation fictive générée.
+3. Avec une API simulée, vérifier qu’un JSON invalide déclenche le repli en développement, tandis qu’une liste valide vide affiche l’état vide.
+4. Vérifier avec les tests et le bundle de production que ce repli reste réservé à `import.meta.env.DEV` ; `ESTER_MODE=dev` seul n’active pas le repli dans un build de production. Ne soumettre aucun formulaire local.
 
 ## Cas limites à vérifier avec des doubles de test, sans modifier la production
 
@@ -64,4 +71,4 @@ Préparer la version validée, l'accès autorisé à Dokploy/Resend/Notion, une 
 - [ ] Activité Resend et logs vérifiés sans recopier de données sensibles.
 - [x] Destinataire final rétabli et production redéployée avec succès.
 
-Statut de recette au 4 novembre 2026, confirmé par le responsable : le formulaire de production a affiché le succès et le message a été reçu dans la boîte de test. `CONTACT_TO_EMAIL` a ensuite été rétabli vers `estersarl.ing@gmail.com` et la production a été redéployée avec succès. Les autres cases restent à renseigner selon leurs preuves respectives. Conserver uniquement date, version et résultats dans le relevé, jamais les secrets ni l'adresse de test.
+Statut de recette au 4 novembre 2026, confirmé par le responsable : le formulaire de production a affiché le succès et le message a été reçu dans la boîte de test. `CONTACT_TO_EMAIL` a ensuite été rétabli vers `estersarl.ing@gmail.com` et la production a été redéployée avec succès. La migration Notion au runtime et son actualisation restent à tester en production ; les autres cases restent à renseigner selon leurs preuves respectives. Conserver uniquement date, version et résultats dans le relevé, jamais les secrets ni l'adresse de test.

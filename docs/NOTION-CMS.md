@@ -7,13 +7,13 @@ L'éditeur ajoute et modifie les réalisations dans une base Notion. Le site les
 ```text
 Éditeur → base Notion ← intégration privée du serveur ESTER
                                     ^
-                                    | cache mémoire de 60 s
+                                    | cache mémoire de 15 s
 Navigateur → GET /api/realisations --+
      ^                              |
      +----- { realisations: [...] }-+
 ```
 
-Le navigateur interroge au chargement puis toutes les minutes lorsque l'onglet est visible. Le serveur relit Notion à la première requête suivant l'expiration du cache ; plusieurs lecteurs partagent le même rafraîchissement. Les deux cycles peuvent donner un délai d'environ deux minutes plus la latence, sans garantie en cas de panne. Aucun déploiement n'est nécessaire pour les modifications de contenu.
+Le navigateur interroge au chargement puis toutes les 30 secondes lorsque l'onglet est visible. Le serveur relit Notion à la première requête suivant l'expiration du cache ; plusieurs lecteurs partagent le même rafraîchissement. Le cache serveur de 15 secondes et la lecture toutes les 30 secondes donnent un délai maximal normal cumulé d'environ 45 secondes, hors latence et panne. Aucun déploiement n'est nécessaire pour les modifications de contenu.
 
 ## Préparer la base
 
@@ -41,7 +41,11 @@ Conserver le champ `Publié` : en son absence, le code considère la ligne publi
 4. Dans Dokploy, définir `NOTION_TOKEN` et `NOTION_DATABASE_ID` dans **Environment runtime**, puis supprimer leurs anciennes entrées **Build Args**, en préservant les autres variables.
 5. Après confirmation explicite du déploiement, redéployer pour charger cette configuration.
 
-Le token reste côté serveur. `server/notion-realisations.mjs` appelle Notion ; `server.mjs` expose uniquement les données normalisées via `GET /api/realisations`. `js/notion.js` affiche les cartes et relance la pagination. Le fichier `public/data/realisations.json` produit au build contient une liste vide et n'est plus la source des cartes. Les avis Google restent générés au build par `scripts/generate-data.mjs`.
+Le token reste côté serveur. `server/notion-realisations.mjs` appelle Notion ; `server.mjs` expose uniquement les données normalisées via `GET /api/realisations`. `js/notion.js` affiche les cartes et relance la pagination. En production, le fichier `public/data/realisations.json` produit au build contient une liste vide et n'est plus la source des cartes. Les avis Google restent générés au build par `scripts/generate-data.mjs`.
+
+## Développement local sans Notion
+
+Avec `ESTER_MODE=dev`, la génération écrit une réalisation fictive déterministe dans `public/data/realisations.json`, sans token. Sous Vite en développement uniquement (`import.meta.env.DEV`), le navigateur essaie l’API puis utilise ce JSON si la requête échoue ou si la réponse est invalide. Une réponse API valide vide ne déclenche pas le repli. En production, le JSON généré reste vide et le navigateur utilise uniquement l’API runtime, même si le build a été lancé avec `ESTER_MODE=dev`.
 
 ## Modifier une réalisation
 
@@ -56,4 +60,4 @@ Une liste valide est conservée en mémoire pendant la vie du processus. Si la l
 
 Une liste vide publiée est un résultat valide. En cas d'absence inattendue de cartes, vérifier en privé le partage de la base, la configuration runtime et les cases `Publié`. Ne pas changer de secrets ou simuler une panne sur la production pour tester : utiliser des doubles de test.
 
-Voir [hébergement](HEBERGEMENT.md) et [guide de test](site-refresh/guide-test.md). Statut : architecture documentée ; accès Notion, migration Dokploy et recette publique non exécutés dans cette tâche.
+Voir [hébergement](HEBERGEMENT.md) et [guide de test](site-refresh/guide-test.md). Statut au 4 novembre 2026 : la recette du formulaire Resend en production est terminée (succès affiché et message reçu, destinataire final rétabli, redéploiement réussi). La migration Notion au runtime et son actualisation restent à tester en production. Aucune action externe n’est effectuée pour cette mise à jour documentaire.
