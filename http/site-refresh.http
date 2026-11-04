@@ -1,0 +1,35 @@
+# VS Code REST Client — gabarit, ne déclenche aucune requête automatiquement.
+# Renseigner l'URL de production approuvée uniquement au moment de la recette.
+@baseUrl = https://production.example.invalid
+@contactEmail = testeur@example.com
+
+### CMS public — aucune authentification ni token Notion côté client
+# Attendu : 200 { "realisations": [...] }, Cache-Control: no-store.
+# Sans cache et Notion indisponible : 503 { "error": "Notion CMS unavailable" }.
+GET {{baseUrl}}/api/realisations
+Accept: application/json
+
+### Contact — ENVOI RÉEL, production seulement, confirmation juste avant exécution
+# Domaine Resend Verified ; conteneur redéployé avec destinataire de test autorisé.
+# Ce POST remplace le test du navigateur : une seule soumission au total.
+# Le destinataire dépend de CONTACT_TO_EMAIL serveur, pas de contactEmail.
+# Attendu : 200 { "ok": true }, puis vérifier la réception séparément.
+POST {{baseUrl}}/api/contact
+Content-Type: application/json
+Accept: application/json
+
+{
+  "data": {
+    "nom": "Test",
+    "prenom": "Production",
+    "email": "{{contactEmail}}",
+    "tel": "",
+    "societe": "Recette ESTER",
+    "sujet": "autre",
+    "sujet_label": "Autre demande",
+    "message": "Test unique autorisé du formulaire de production.",
+    "cv": "",
+    "cv_base64": "",
+    "cv_type": ""
+  }
+}
