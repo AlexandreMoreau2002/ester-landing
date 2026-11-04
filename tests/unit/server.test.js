@@ -1,10 +1,11 @@
 // @vitest-environment node
-import { afterEach, beforeAll, afterAll, describe, expect, it, vi } from 'vitest';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
-import { request as httpRequest } from 'node:http';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { join, resolve } from 'node:path';
+import { request as httpRequest } from 'node:http';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { afterEach, beforeAll, afterAll, describe, expect, it, vi } from 'vitest';
+import { createNotionRealisationsService } from '../../server/notion-realisations.mjs';
 import {
   cacheControlFor,
   contentTypeFor,
@@ -343,5 +344,66 @@ describe('helpers', () => {
     expect(start).not.toHaveBeenCalled();
     expect(startIfEntryPoint(fileURLToPath(moduleUrl), moduleUrl, start)).toBe(true);
     expect(start).toHaveBeenCalledOnce();
+  });
+});
+
+describe('runtime realisations route', () => {
+  async function requestRealisations(service, method = 'GET') {
+    const apiServer = createServer({ distDir, notionService: service });
+    const url = await listenOnRandomPort(apiServer);
+    try {
+      const response = await fetch(`${url}/api/realisations`, { method });
+      return { status: response.status, headers: response.headers, body: await response.text() };
+    } finally {
+      await closeServer(apiServer);
+    }
+  }
+
+  it('returns normalized JSON with no-store so HTTP caches cannot hide CMS updates', async () => {
+    const service = createNotionRealisationsService({
+      env: { NOTION_TOKEN: 'secret', NOTION_DATABASE_ID: 'db' },
+      fetch: async () => Response.json({ results: [{ properties: {} }], has_more: false }),
+    });
+    const res = await requestRealisations(service);
+    expect(res.status).toBe(200);
+    expect(JSON.parse(res.body)).toEqual({ realisations: [{
+      titre: 'Projet ESTER', type: 'Bâtiment public', categorie: '', lieu: 'Hautes-Alpes', description: '', image: '',
+    }] });
+    expect(res.headers.get('content-type')).toBe('application/json; charset=utf-8');
+    expect(res.headers.get('cache-control')).toBe('no-store');
+    expect(res.headers.get('x-content-type-options')).toBe('nosniff');
+    expect(res.body).not.toContain('secret');
+  });
+
+  it('returns cached JSON with 200 when a refresh fails', async () => {
+    let time = 0;
+    const notionFetch = vi.fn()
+      .mockImplementationOnce(async () => Response.json({ results: [], has_more: false }))
+      .mockRejectedValueOnce(new Error('private upstream details'));
+    const service = createNotionRealisationsService({
+      env: { NOTION_TOKEN: 'secret', NOTION_DATABASE_ID: 'db' },
+      fetch: notionFetch,
+      now: () => time,
+    });
+    await service.getRealisations();
+    time = 60000;
+    const res = await requestRealisations(service);
+    expect(res.status).toBe(200);
+    expect(JSON.parse(res.body)).toEqual({ realisations: [] });
+    expect(res.headers.get('cache-control')).toBe('no-store');
+  });
+
+  it('returns a generic 503 JSON response when no cache exists', async () => {
+    const service = createNotionRealisationsService({ env: {} });
+    const res = await requestRealisations(service);
+    expect(res.status).toBe(503);
+    expect(JSON.parse(res.body)).toEqual({ error: 'Notion CMS unavailable' });
+    expect(res.headers.get('content-type')).toBe('application/json; charset=utf-8');
+    expect(res.headers.get('cache-control')).toBe('no-store');
+  });
+
+  it('rejects unsupported methods', async () => {
+    const res = await requestRealisations(createNotionRealisationsService({ env: {} }), 'POST');
+    expect(res.status).toBe(405);
   });
 });

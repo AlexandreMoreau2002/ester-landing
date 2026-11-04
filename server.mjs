@@ -1,11 +1,13 @@
+import { fileURLToPath } from 'node:url';
+import { readFile, stat } from 'node:fs/promises';
+import contactMail from './server/contact-mail.mjs';
 import { extname, join, resolve, sep } from 'node:path';
 import { createServer as createHttpServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import contactMail from './server/contact-mail.mjs';
+import { createNotionRealisationsService } from './server/notion-realisations.mjs';
 
 const ROOT_DIR = fileURLToPath(new URL('.', import.meta.url));
 const CONTACT_PATH = '/api/contact';
+const REALISATIONS_PATH = '/api/realisations';
 const MAX_BODY_BYTES = 15 * 1024 * 1024;
 const DEFAULT_PORT = 3000;
 const HOST = '0.0.0.0';
@@ -130,7 +132,25 @@ async function handleContact(req, res, contactHandler) {
   return sendResponse(res, response.status, headers, Buffer.from(await response.arrayBuffer()));
 }
 
-export function createRequestHandler({ distDir = join(ROOT_DIR, 'dist'), contactHandler = contactMail } = {}) {
+async function handleRealisations(req, res, notionService) {
+  if (req.method !== 'GET') return sendText(res, 405, 'Method Not Allowed');
+  const headers = {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+  };
+  try {
+    const { realisations } = await notionService.getRealisations();
+    return sendResponse(res, 200, headers, JSON.stringify({ realisations }));
+  } catch {
+    return sendResponse(res, 503, headers, JSON.stringify({ error: 'Notion CMS unavailable' }));
+  }
+}
+
+export function createRequestHandler({
+  distDir = join(ROOT_DIR, 'dist'),
+  contactHandler = contactMail,
+  notionService = createNotionRealisationsService(),
+} = {}) {
   const rootDir = resolve(distDir);
   return async (req, res) => {
     try {
@@ -139,6 +159,7 @@ export function createRequestHandler({ distDir = join(ROOT_DIR, 'dist'), contact
       }
       const { pathname } = new URL(req.url, 'http://localhost');
       if (pathname === CONTACT_PATH) return await handleContact(req, res, contactHandler);
+      if (pathname === REALISATIONS_PATH) return await handleRealisations(req, res, notionService);
       return await serveStatic(req, res, rootDir);
     } catch (error) {
       console.error('[server] Unhandled error:', error);
