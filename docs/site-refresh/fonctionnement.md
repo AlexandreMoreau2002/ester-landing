@@ -50,6 +50,6 @@ Avec `ESTER_MODE=dev`, le générateur écrit une réalisation fictive détermin
 | `server/contact-mail.mjs`, `js/contact.js` | Envoi Resend et résultat du formulaire |
 | `scripts/generate-data.mjs`, `Dockerfile`, `.env.example` | Séparent génération au build et secrets runtime |
 | `index.html`, `mentions-legales.html`, `js/i18n.js`, `style.css` | Textes FR/EN, contact et présentation |
-| `vite.config.js`, `public/assets/favicon-32.png`, `public/sitemap.xml` | Pages construites, favicon et référencement |
+| `vite.config.js`, `assets/favicon-32.png`, `public/sitemap.xml` | Pages construites, favicon et référencement |
 
 Procédure d'exploitation : [guide de test](guide-test.md), [hébergement](../HEBERGEMENT.md), [CMS](../NOTION-CMS.md). La recette Resend du 4 novembre 2026 est terminée : succès du formulaire et réception du message confirmés, destinataire final rétabli et production redéployée. La migration Notion au runtime et son actualisation restent à tester en production. Cette mise à jour documentaire n'effectue aucune action externe.

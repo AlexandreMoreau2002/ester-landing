@@ -32,7 +32,7 @@ const TRANSLATIONS = {
     /* ── Hero ─────────────────────────────────────────── */
     'hero.kicker':       'Hautes-Alpes · Fondé en 1977 · OPQIBI 1202',
     'hero.kicker.short': 'Gap · Depuis 1977',
-    'hero.heading':      'L\'ingénierie structure<br />à Gap, <em>depuis 49&nbsp;ans.</em>',
+    'hero.heading':      'L\'ingénierie structurelle<br />à Gap, <em>depuis 49&nbsp;ans.</em>',
     'hero.sub':          'ESTER SAS accompagne architectes, maîtres d\'ouvrage et collectivités des Hautes-Alpes dans leurs projets structurels. Dimensionnement béton et expertise structurelle.',
     'hero.sub.short':    'ESTER SAS, études structures béton et expertise structurelle dans les Hautes-Alpes.',
     'hero.cta.write':    'Nous écrire',

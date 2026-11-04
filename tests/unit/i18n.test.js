@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 let importCount = 0;
@@ -74,6 +75,7 @@ describe('i18n', () => {
       'Structural engineering firm in Gap, Hautes-Alpes, since 1977. Concrete structural calculation, building diagnosis, site supervision. OPQIBI 1202.',
     );
     expect(localStorage.getItem('ester-lang')).toBe('en');
+    expect(window.getEsterTranslation('hero.heading', 'fr')).toMatch(/^L'ingénierie structurelle<br/);
   });
 
   it('updates language buttons, localStorage, and translated DOM when a button is clicked', async () => {
@@ -180,12 +182,16 @@ describe('i18n', () => {
   });
 
   it('keeps service, recruitment, SEO, and legal contact translations consistent in both languages', async () => {
+    const source = new DOMParser().parseFromString(readFileSync('index.html', 'utf8'), 'text/html');
+    const heading = source.querySelector('#hero-heading');
+    expect(heading.textContent.trim()).toMatch(/^L'ingénierie structurelle/);
     document.head.innerHTML = `
       <title data-i18n="meta.home.title"></title>
       <meta property="og:title" data-i18n-content="meta.home.og.title">
       <meta name="twitter:title" data-i18n-content="meta.home.title">
     `;
     document.body.innerHTML = `
+      ${heading.outerHTML}
       <h3 data-i18n="services.s2.title"></h3>
       <a data-i18n-aria="services.s2.quote.aria"></a>
       <select><option value="risques" data-i18n="contact.sujet.o2"></option></select>
@@ -202,6 +208,7 @@ describe('i18n', () => {
     ]) {
       window.applyEsterTranslations(lang);
       expect(document.title).toBe(title);
+      expect(document.querySelector('h1').textContent).toMatch(lang === 'fr' ? /^L'ingénierie structurelle/ : /^Structural engineering/);
       expect(document.querySelector('[property="og:title"]').content).toBe(title);
       expect(document.querySelector('[name="twitter:title"]').content).toBe(title);
       expect(document.querySelector('h3').textContent).toBe(label);
