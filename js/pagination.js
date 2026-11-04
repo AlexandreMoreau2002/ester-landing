@@ -23,9 +23,13 @@ export function initPagination() {
     return Array.from(grid.querySelectorAll('.realisation-card'));
   }
 
-  function buildPagination() {
+  let currentPage = 0;
+
+  function buildPagination({ preservePage = false } = {}) {
     const cards   = getCards();
     const perPage = getPerPage();
+    const totalPages = Math.ceil(cards.length / perPage);
+    currentPage = preservePage ? Math.min(currentPage, Math.max(0, totalPages - 1)) : 0;
 
     const existing = section.querySelector('.realisations-pagination');
     if (existing) existing.remove();
@@ -34,9 +38,6 @@ export function initPagination() {
       cards.forEach(c => (c.style.display = ''));
       return;
     }
-
-    let currentPage   = 0;
-    const totalPages  = Math.ceil(cards.length / perPage);
 
     const nav = document.createElement('nav');
     nav.className = 'realisations-pagination';
@@ -105,7 +106,7 @@ export function initPagination() {
     prevBtn.addEventListener('click', () => { if (currentPage > 0) goTo(currentPage - 1); });
     nextBtn.addEventListener('click', () => { if (currentPage < totalPages - 1) goTo(currentPage + 1); });
 
-    renderPage(0);
+    renderPage(currentPage);
   }
 
   buildPagination();

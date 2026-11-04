@@ -1,7 +1,10 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+
+// Keep helper exports compatible for existing consumers; all CMS fetching is runtime-only.
+export { plainText, firstProp, propText, propImage, propPublished, normalizeRealisation } from '../server/notion-realisations.mjs';
 
 const SITEMAP_PATH = join(process.cwd(), 'public', 'sitemap.xml');
 
@@ -131,87 +134,20 @@ export async function generateAvis(env) {
   };
 }
 
-export function plainText(items = []) {
-  return items.map(item => item.plain_text || '').join('').trim();
-}
-
-export function firstProp(properties, names) {
-  return names.map(name => properties[name]).find(Boolean);
-}
-
-export function propText(properties, names) {
-  const prop = firstProp(properties, names);
-  if (!prop) return '';
-
-  if (prop.type === 'title') return plainText(prop.title);
-  if (prop.type === 'rich_text') return plainText(prop.rich_text);
-  if (prop.type === 'select') return prop.select?.name || '';
-  if (prop.type === 'multi_select') return (prop.multi_select || []).map(item => item.name).join(', ');
-  if (prop.type === 'url') return prop.url || '';
-  if (prop.type === 'number') return String(prop.number ?? '');
-  if (prop.type === 'date') return prop.date?.start || '';
-  return '';
-}
-
-export function propImage(properties, names) {
-  const prop = firstProp(properties, names);
-  const file = prop?.files?.[0];
-  if (!file) return '';
-  return file.type === 'external' ? file.external?.url || '' : file.file?.url || '';
-}
-
-export function propPublished(properties) {
-  const prop = firstProp(properties, ['Publié', 'Publie', 'Published', 'Statut', 'Status']);
-  if (!prop) return true;
-  if (prop.type === 'checkbox') return Boolean(prop.checkbox);
-  if (prop.type === 'status') return /publi|publish|live|online/i.test(prop.status?.name || '');
-  if (prop.type === 'select') return /publi|publish|live|online/i.test(prop.select?.name || '');
-  return true;
-}
-
-export function normalizeRealisation(page) {
-  const p = page.properties || {};
-  return {
-    titre: propText(p, ['Titre', 'Nom', 'Name', 'Projet', 'Title']) || 'Projet ESTER',
-    type: propText(p, ['Type', 'Typologie', 'Catégorie principale']) || 'Bâtiment public',
-    categorie: propText(p, ['Catégorie', 'Categorie', 'Category']),
-    lieu: propText(p, ['Lieu', 'Ville', 'Location']) || 'Hautes-Alpes',
-    description: propText(p, ['Description', 'Résumé', 'Resume', 'Summary']),
-    image: propImage(p, ['Image', 'Photo', 'Cover', 'Visuel']),
-  };
-}
-
 export async function generateRealisations(env) {
-  if (env.ESTER_MODE === 'dev' && (!env.NOTION_TOKEN || !env.NOTION_DATABASE_ID)) {
-    return { realisations: [] };
+  // Local fixtures keep Vite development usable without runtime Notion access.
+  if (env.ESTER_MODE === 'dev') {
+    return { realisations: [{
+      titre: 'Projet de démonstration',
+      type: 'Bâtiment public',
+      categorie: 'Diagnostic structurel',
+      lieu: 'Gap',
+      description: 'Exemple fictif pour le développement local du site ESTER.',
+      image: '',
+    }] };
   }
-
-  const token = required(env, 'NOTION_TOKEN');
-  const databaseId = required(env, 'NOTION_DATABASE_ID');
-  const data = await fetchJson(`https://api.notion.com/v1/databases/${databaseId}/query`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Notion-Version': '2022-06-28',
-    },
-    body: JSON.stringify({
-      page_size: 100,
-      sorts: [
-        {
-          timestamp: 'created_time',
-          direction: 'descending',
-        },
-      ],
-    }),
-  });
-
-  const realisations = (data.results || [])
-    .filter(page => propPublished(page.properties || {}))
-    .map(normalizeRealisation)
-    .filter(item => item.titre);
-
-  return { realisations };
+  // Live projects are fetched by the server; production keeps an empty build fallback.
+  return { realisations: [] };
 }
 
 export function todayIso() {

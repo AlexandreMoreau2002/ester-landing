@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 let importCount = 0;
@@ -11,6 +12,7 @@ const i18nImports = [
   () => import('../../js/i18n.js?test=6'),
   () => import('../../js/i18n.js?test=7'),
   () => import('../../js/i18n.js?test=8'),
+  () => import('../../js/i18n.js?test=9'),
 ];
 
 function setNavigatorLanguage(language, userLanguage = undefined) {
@@ -73,6 +75,7 @@ describe('i18n', () => {
       'Structural engineering firm in Gap, Hautes-Alpes, since 1977. Concrete structural calculation, building diagnosis, site supervision. OPQIBI 1202.',
     );
     expect(localStorage.getItem('ester-lang')).toBe('en');
+    expect(window.getEsterTranslation('hero.heading', 'fr')).toMatch(/^L'ingénierie structurelle<br/);
   });
 
   it('updates language buttons, localStorage, and translated DOM when a button is clicked', async () => {
@@ -176,6 +179,46 @@ describe('i18n', () => {
     expect(document.querySelector('[data-i18n-title]').getAttribute('title')).toBe('keep title');
     expect(document.querySelector('[data-i18n-content]').getAttribute('content')).toBe('keep content');
     expect(localStorage.getItem('ester-lang')).toBeNull();
+  });
+
+  it('keeps service, recruitment, SEO, and legal contact translations consistent in both languages', async () => {
+    const source = new DOMParser().parseFromString(readFileSync('index.html', 'utf8'), 'text/html');
+    const heading = source.querySelector('#hero-heading');
+    expect(heading.textContent.trim()).toMatch(/^L'ingénierie structurelle/);
+    document.head.innerHTML = `
+      <title data-i18n="meta.home.title"></title>
+      <meta property="og:title" data-i18n-content="meta.home.og.title">
+      <meta name="twitter:title" data-i18n-content="meta.home.title">
+    `;
+    document.body.innerHTML = `
+      ${heading.outerHTML}
+      <h3 data-i18n="services.s2.title"></h3>
+      <a data-i18n-aria="services.s2.quote.aria"></a>
+      <select><option value="risques" data-i18n="contact.sujet.o2"></option></select>
+      <li data-i18n="recru.li4"></li>
+      <div data-i18n-html="legal.privacy.rights.value"></div>
+    `;
+
+    await loadI18n();
+    startI18n();
+
+    for (const [lang, title, label, recruitment, aria] of [
+      ['fr', 'ESTER SAS, ingénierie structurelle à Gap', 'Diagnostics techniques solidité', 'Travail en équipe', 'Nous contacter pour les diagnostics techniques solidité'],
+      ['en', 'ESTER SAS, structural engineering in Gap', 'Technical structural assessments', 'Teamwork', 'Contact us about technical structural assessments'],
+    ]) {
+      window.applyEsterTranslations(lang);
+      expect(document.title).toBe(title);
+      expect(document.querySelector('h1').textContent).toMatch(lang === 'fr' ? /^L'ingénierie structurelle/ : /^Structural engineering/);
+      expect(document.querySelector('[property="og:title"]').content).toBe(title);
+      expect(document.querySelector('[name="twitter:title"]').content).toBe(title);
+      expect(document.querySelector('h3').textContent).toBe(label);
+      expect(document.querySelector('option').textContent).toBe(label);
+      expect(document.querySelector('[data-i18n-aria]').getAttribute('aria-label')).toBe(aria);
+      expect(document.querySelector('li').textContent).toBe(recruitment);
+      const email = document.querySelector('[data-i18n-html] a');
+      expect(email.getAttribute('href')).toBe('mailto:estersarl.ing@gmail.com');
+      expect(email.textContent).toBe('estersarl.ing@gmail.com');
+    }
   });
 
   it('exposes lookup helpers with current language, explicit language, and key fallback', async () => {

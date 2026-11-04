@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readFile, unlink, writeFile } from 'node:fs/promises';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   fetchJson,
@@ -8,12 +8,7 @@ import {
   getBuildEnv,
   loadEnvFile,
   main,
-  normalizeRealisation,
   parseEnv,
-  plainText,
-  propImage,
-  propPublished,
-  propText,
   required,
   starsOnly,
   todayIso,
@@ -166,128 +161,30 @@ describe('generate-data helpers', () => {
     });
   });
 
-  it('extracts Notion text, images and publication status', () => {
-    const properties = {
-      Titre: { type: 'title', title: [{ plain_text: 'Projet' }] },
-      Description: { type: 'rich_text', rich_text: [{ plain_text: 'Résumé' }] },
-      Type: { type: 'select', select: { name: 'Tourisme' } },
-      Tags: { type: 'multi_select', multi_select: [{ name: 'A' }, { name: 'B' }] },
-      Link: { type: 'url', url: 'https://site.test' },
-      Count: { type: 'number', number: 7 },
-      When: { type: 'date', date: { start: '2026-01-01' } },
-      EmptyNumber: { type: 'number', number: null },
-      EmptySelect: { type: 'select', select: null },
-      EmptyMulti: { type: 'multi_select', multi_select: [{}, { name: 'B' }] },
-      EmptyUrl: { type: 'url', url: null },
-      EmptyDate: { type: 'date', date: null },
-      Photo: { files: [{ type: 'external', external: { url: 'https://image.test/a.jpg' } }] },
-      Cover: { files: [{ type: 'file', file: { url: 'https://image.test/b.jpg' } }] },
-      EmptyPhoto: { files: [{ type: 'external', external: null }] },
-      EmptyCover: { files: [{ type: 'file', file: null }] },
-    };
+  it('generates deterministic development card fixtures without credentials or network access', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => { throw new Error('Build must not call Notion'); }));
+    const generated = await generateRealisations({ ESTER_MODE: 'dev' });
 
-    expect(propText(properties, ['Titre'])).toBe('Projet');
-    expect(propText(properties, ['Description'])).toBe('Résumé');
-    expect(propText(properties, ['Type'])).toBe('Tourisme');
-    expect(propText(properties, ['Tags'])).toBe('A, B');
-    expect(propText(properties, ['Link'])).toBe('https://site.test');
-    expect(propText(properties, ['Count'])).toBe('7');
-    expect(propText(properties, ['When'])).toBe('2026-01-01');
-    expect(propText(properties, ['EmptyNumber'])).toBe('');
-    expect(propText(properties, ['EmptySelect'])).toBe('');
-    expect(propText(properties, ['EmptyMulti'])).toBe(', B');
-    expect(propText(properties, ['EmptyUrl'])).toBe('');
-    expect(propText(properties, ['EmptyDate'])).toBe('');
-    expect(propText(properties, ['Missing'])).toBe('');
-    expect(propText({ Other: { type: 'unknown' } }, ['Other'])).toBe('');
-    expect(plainText([{}])).toBe('');
-    expect(propText({ EmptyMultiNull: { type: 'multi_select', multi_select: null } }, ['EmptyMultiNull'])).toBe('');
-    expect(propImage(properties, ['Photo'])).toBe('https://image.test/a.jpg');
-    expect(propImage(properties, ['Cover'])).toBe('https://image.test/b.jpg');
-    expect(propImage(properties, ['EmptyPhoto'])).toBe('');
-    expect(propImage(properties, ['EmptyCover'])).toBe('');
-    expect(propImage({ Photo: {} }, ['Photo'])).toBe('');
-    expect(propImage(properties, ['Missing'])).toBe('');
-    expect(propPublished({})).toBe(true);
-    expect(propPublished({ Publié: { type: 'checkbox', checkbox: true } })).toBe(true);
-    expect(propPublished({ Publié: { type: 'checkbox', checkbox: false } })).toBe(false);
-    expect(propPublished({ Status: { type: 'status', status: { name: 'Published' } } })).toBe(true);
-    expect(propPublished({ Status: { type: 'status', status: { name: 'Draft' } } })).toBe(false);
-    expect(propPublished({ Status: { type: 'status', status: null } })).toBe(false);
-    expect(propPublished({ Status: { type: 'select', select: { name: 'Published' } } })).toBe(true);
-    expect(propPublished({ Status: { type: 'select', select: { name: 'Draft' } } })).toBe(false);
-    expect(propPublished({ Status: { type: 'select', select: null } })).toBe(false);
-    expect(propPublished({ Status: { type: 'rich_text' } })).toBe(true);
+    expect(generated.realisations.length).toBeGreaterThan(0);
+    for (const card of generated.realisations) {
+      expect(Object.keys(card).sort()).toEqual(['categorie', 'description', 'image', 'lieu', 'titre', 'type']);
+      for (const value of Object.values(card)) expect(typeof value).toBe('string');
+      expect(card.titre.length).toBeGreaterThan(0);
+      expect(card.type.length).toBeGreaterThan(0);
+      expect(card.lieu.length).toBeGreaterThan(0);
+    }
+    expect(await generateRealisations({ ESTER_MODE: 'dev' })).toEqual(generated);
+    expect(await generateRealisations({ ESTER_MODE: 'dev', NOTION_TOKEN: 'secret', NOTION_DATABASE_ID: 'db' })).toEqual(generated);
+    expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('normalizes Notion pages with defaults', () => {
-    expect(normalizeRealisation({ properties: {} })).toEqual({
-      titre: 'Projet ESTER',
-      type: 'Bâtiment public',
-      categorie: '',
-      lieu: 'Hautes-Alpes',
-      description: '',
-      image: '',
-    });
-    expect(normalizeRealisation({}).titre).toBe('Projet ESTER');
-  });
-
-  it('generates empty realisations in dev when Notion is not configured', async () => {
-    await expect(generateRealisations({ ESTER_MODE: 'dev' })).resolves.toEqual({ realisations: [] });
-  });
-
-  it('uses Notion in dev when credentials are present', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({}),
-    }));
-
-    await expect(generateRealisations({
-      ESTER_MODE: 'dev',
-      NOTION_TOKEN: 'secret',
-      NOTION_DATABASE_ID: 'db',
-    })).resolves.toEqual({ realisations: [] });
-  });
-
-  it('generates published Notion realisations', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({
-        results: [
-          {
-            properties: {
-              Titre: { type: 'title', title: [{ plain_text: 'Publié' }] },
-              Publié: { type: 'checkbox', checkbox: true },
-            },
-          },
-          {
-            properties: {},
-          },
-          {
-            properties: {
-              Titre: { type: 'title', title: [{ plain_text: 'Brouillon' }] },
-              Publié: { type: 'checkbox', checkbox: false },
-            },
-          },
-          {},
-        ],
-      }),
-    }));
-
-    const data = await generateRealisations({
-      ESTER_MODE: 'prod',
-      NOTION_TOKEN: 'secret',
-      NOTION_DATABASE_ID: 'db',
-    });
-
-    expect(fetch).toHaveBeenCalledWith('https://api.notion.com/v1/databases/db/query', expect.objectContaining({
-      method: 'POST',
-      headers: expect.objectContaining({ Authorization: 'Bearer secret' }),
-    }));
-    expect(data.realisations).toHaveLength(3);
-    expect(data.realisations[0].titre).toBe('Publié');
-    expect(data.realisations[1].titre).toBe('Projet ESTER');
-    expect(data.realisations[2].titre).toBe('Projet ESTER');
+  it.each([
+    { ESTER_MODE: 'prod' },
+    { ESTER_MODE: 'prod', NOTION_TOKEN: 'secret', NOTION_DATABASE_ID: 'db' },
+  ])('writes an empty build fallback without contacting Notion: %j', async env => {
+    vi.stubGlobal('fetch', vi.fn(() => { throw new Error('Build must not call Notion'); }));
+    await expect(generateRealisations(env)).resolves.toEqual({ realisations: [] });
+    expect(fetch).not.toHaveBeenCalled();
   });
 
   it('loads build env from .env files and process.env defaults', async () => {
@@ -347,21 +244,19 @@ describe('generate-data helpers', () => {
     process.env.ESTER_MODE = 'prod';
     process.env.GOOGLE_PLACES_API_KEY = 'key';
     process.env.GOOGLE_PLACE_ID = 'place';
-    process.env.NOTION_TOKEN = 'secret';
-    process.env.NOTION_DATABASE_ID = 'db';
+    delete process.env.NOTION_TOKEN;
+    delete process.env.NOTION_DATABASE_ID;
     vi.stubGlobal('fetch', vi.fn()
       .mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ status: 'OK', result: { reviews: [{}] } }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ results: [] }),
       }));
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     await main();
 
     expect(log).toHaveBeenCalledWith('Generated public data for ESTER_MODE=prod');
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(await readFile('public/data/realisations.json', 'utf8'))).toEqual({ realisations: [] });
   });
 });
