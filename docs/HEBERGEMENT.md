@@ -49,4 +49,4 @@ Suivre [le guide de recette production](site-refresh/guide-test.md) : revue des 
 
 Conserver un relevé privé de la configuration précédente pour la restauration. Les preuves versionnées contiennent uniquement version, date et statuts. Le renouvellement du domaine reste à surveiller auprès du registrar.
 
-Statut documentaire : aucun accès Dokploy/Resend/DNS, déploiement ou test public effectué dans cette tâche. La configuration effective reste à contrôler par le responsable autorisé.
+Statut de recette au 4 novembre 2026, confirmé par le responsable : le formulaire de production a retourné le succès et le message a été reçu dans la boîte de test. `CONTACT_TO_EMAIL` a ensuite été rétabli vers `estersarl.ing@gmail.com` et la production a été redéployée avec succès. Cette mise à jour documentaire ne réalise aucune nouvelle intervention externe et ne consigne ni secret ni adresse de test.

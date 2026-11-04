@@ -60,8 +60,8 @@ Préparer la version validée, l'accès autorisé à Dokploy/Resend/Notion, une 
 - [ ] Variables Notion déplacées au runtime, autres variables préservées.
 - [ ] Version, HTTPS, contenus FR/EN, mentions légales, favicon et ressources vérifiés.
 - [ ] API CMS et actualisation sans redéploiement vérifiées ; donnée de test restaurée.
-- [ ] Confirmation d'envoi obtenue ; un seul test envoyé et reçu.
+- [x] Test du formulaire de production réussi et message reçu dans la boîte de test.
 - [ ] Activité Resend et logs vérifiés sans recopier de données sensibles.
-- [ ] Destinataire final configuré et redéploiement sain.
+- [x] Destinataire final rétabli et production redéployée avec succès.
 
-Statut à la rédaction : procédure documentée ; contrôles externes, envoi et bascule **non exécutés**. Reporter ensuite uniquement date, version et résultats (réussi/échoué/non exécuté), jamais les secrets ni l'adresse de test.
+Statut de recette au 4 novembre 2026, confirmé par le responsable : le formulaire de production a affiché le succès et le message a été reçu dans la boîte de test. `CONTACT_TO_EMAIL` a ensuite été rétabli vers `estersarl.ing@gmail.com` et la production a été redéployée avec succès. Les autres cases restent à renseigner selon leurs preuves respectives. Conserver uniquement date, version et résultats dans le relevé, jamais les secrets ni l'adresse de test.
