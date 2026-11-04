@@ -66,6 +66,45 @@ describe('runtime Notion realisations', () => {
     expect(await service.getRealisations()).toEqual({ realisations: [], stale: false });
   });
 
+  it.each(['fetch', 'json'])('bounds a hanging %s refresh, serves stale data, and permits a later retry', async stage => {
+    vi.useFakeTimers();
+    try {
+      let time = 0;
+      let finish;
+      const latePage = { properties: { Titre: { type: 'title', title: [{ plain_text: 'Late response' }] } } };
+      const pending = new Promise(resolve => { finish = resolve; });
+      const fetch = vi.fn()
+        .mockImplementationOnce(async () => response())
+        .mockImplementationOnce(() => stage === 'fetch' ? pending : Promise.resolve({ ok: true, json: () => pending }))
+        .mockImplementationOnce(async () => response([]));
+      const service = createNotionRealisationsService({ env, fetch, now: () => time });
+      const original = await service.getRealisations();
+      expect(vi.getTimerCount()).toBe(0);
+      time = 60000;
+      const completed = [];
+      const first = service.getRealisations().then(result => completed.push(result));
+      const second = service.getRealisations().then(result => completed.push(result));
+
+      await vi.advanceTimersByTimeAsync(9999);
+      expect(completed).toEqual([]);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(completed).toEqual([{ ...original, stale: true }, { ...original, stale: true }]);
+      await Promise.all([first, second]);
+      expect(fetch.mock.calls[1][1].signal.aborted).toBe(true);
+      expect(fetch).toHaveBeenCalledTimes(2);
+      expect(vi.getTimerCount()).toBe(0);
+
+      // Even a transport that ignores abort must not publish its late result.
+      finish(stage === 'fetch' ? response([latePage]) : { results: [latePage], has_more: false });
+      await vi.advanceTimersByTimeAsync(0);
+      expect(await service.getRealisations()).toEqual({ realisations: [], stale: false });
+      expect(fetch).toHaveBeenCalledTimes(3);
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it.each([{}, { NOTION_TOKEN: 'secret' }, { NOTION_DATABASE_ID: 'db' }])('rejects missing runtime configuration without calling Notion: %j', async config => {
     const fetch = vi.fn();
     const service = createNotionRealisationsService({ env: config, fetch });

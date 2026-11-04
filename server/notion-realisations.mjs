@@ -1,4 +1,5 @@
 const CACHE_TTL_MS = 60_000;
+const REFRESH_DEADLINE_MS = 10_000;
 
 export function plainText(items = []) {
   return items.map(item => item.plain_text || '').join('').trim();
@@ -58,7 +59,7 @@ export function createNotionRealisationsService({
   let cache = null;
   let refresh = null;
 
-  async function fetchRealisations() {
+  async function fetchRealisations(signal) {
     if (!env.NOTION_TOKEN || !env.NOTION_DATABASE_ID) throw new Error('Notion CMS unavailable');
 
     const realisations = [];
@@ -67,6 +68,7 @@ export function createNotionRealisationsService({
     do {
       const response = await fetch(`https://api.notion.com/v1/databases/${env.NOTION_DATABASE_ID}/query`, {
         method: 'POST',
+        signal,
         headers: {
           Authorization: `Bearer ${env.NOTION_TOKEN}`,
           'Content-Type': 'application/json',
@@ -78,8 +80,10 @@ export function createNotionRealisationsService({
           ...(cursor ? { start_cursor: cursor } : {}),
         }),
       });
+      signal.throwIfAborted();
       if (!response.ok) throw new Error('Notion CMS unavailable');
       const data = await response.json();
+      signal.throwIfAborted();
       if (!Array.isArray(data.results)) throw new Error('Notion CMS unavailable');
 
       realisations.push(...data.results
@@ -96,12 +100,30 @@ export function createNotionRealisationsService({
     return { realisations, stale: false };
   }
 
+  async function refreshWithDeadline() {
+    const controller = new AbortController();
+    let timer;
+    const deadline = new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        const error = new Error('Notion CMS unavailable');
+        controller.abort(error);
+        reject(error);
+      }, REFRESH_DEADLINE_MS);
+    });
+    try {
+      // The race also bounds body consumption and transports that ignore abort.
+      return await Promise.race([fetchRealisations(controller.signal), deadline]);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   return {
     async getRealisations() {
       if (cache && now() - cache.fetchedAt < CACHE_TTL_MS) {
         return { realisations: cache.realisations, stale: false };
       }
-      if (!refresh) refresh = fetchRealisations().finally(() => { refresh = null; });
+      if (!refresh) refresh = refreshWithDeadline().finally(() => { refresh = null; });
       try {
         return await refresh;
       } catch (error) {
