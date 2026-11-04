@@ -1,4 +1,4 @@
-const CACHE_TTL_MS = 60_000;
+const CACHE_TTL_MS = 15_000;
 const REFRESH_DEADLINE_MS = 10_000;
 
 export function plainText(items = []) {

@@ -1,4 +1,4 @@
-/* ── Notion CMS : chargement des données générées au build ─── */
+/* ── Notion CMS : chargement runtime et secours local en développement ─── */
 const ICONS = {
   'Bâtiment public':    `<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 58H62" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/><path d="M16 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/><path d="M26 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/><path d="M36 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/><path d="M46 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/><path d="M56 58V40" stroke="rgba(255,255,255,0.85)" stroke-width="1.8"/><path d="M12 40H60" stroke="rgba(255,255,255,0.9)" stroke-width="2"/><path d="M36 22L8 40H64L36 22Z" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linejoin="round"/></svg>`,
   'Logement collectif': `<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="44" height="44" rx="1.5" stroke="rgba(255,255,255,0.9)" stroke-width="2"/><path d="M14 28H58" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/><path d="M14 42H58" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/><rect x="19" y="17.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/><rect x="32.5" y="17.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/><rect x="46" y="17.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/><rect x="19" y="31.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/><rect x="46" y="31.5" width="7" height="8" rx="0.75" stroke="rgba(255,255,255,0.8)" stroke-width="1.4"/><path d="M30 58V46H42V58" stroke="rgba(255,255,255,0.75)" stroke-width="1.4"/><path d="M8 58H64" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/></svg>`,
@@ -75,10 +75,17 @@ export async function loadNotionRealisations() {
     refreshing = true;
 
     try {
-      const response = await fetch('/api/realisations', { cache: 'no-store' });
-      if (!response.ok) throw new Error('Realisations unavailable');
-
-      const data = await response.json();
+      let data;
+      try {
+        const response = await fetch('/api/realisations', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Realisations unavailable');
+        data = await response.json();
+      } catch (error) {
+        if (!import.meta.env.DEV) throw error;
+        const response = await fetch('/data/realisations.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Realisations unavailable');
+        data = await response.json();
+      }
       const realisations = data.realisations || [];
       if (realisations.length === 0) showEmptyState();
       else showGrid(realisations);
@@ -95,7 +102,7 @@ export async function loadNotionRealisations() {
       clearInterval(interval);
       interval = null;
     } else if (interval === null) {
-      interval = setInterval(refreshRealisations, 60_000);
+      interval = setInterval(refreshRealisations, 30_000);
     }
   }
 

@@ -224,6 +224,7 @@ describe('Notion realisations loading', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.stubEnv('DEV', false);
     visibility = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible');
     eventListeners = vi.spyOn(document, 'addEventListener');
     document.body.innerHTML = '';
@@ -239,9 +240,64 @@ describe('Notion realisations loading', () => {
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
     delete globalThis.fetch;
     delete window.applyEsterTranslations;
     delete window.rebuildRealisationsPagination;
+  });
+
+  it.each(['HTTP error', 'network error', 'invalid JSON'])('uses generated mocks in Vite development after a runtime %s', async failure => {
+    vi.stubEnv('DEV', true);
+    seedRealisationCards(1);
+    if (failure === 'HTTP error') fetch.mockResolvedValueOnce(makeResponse({}, false));
+    if (failure === 'network error') fetch.mockRejectedValueOnce(new Error('network'));
+    if (failure === 'invalid JSON') {
+      fetch.mockResolvedValueOnce({ ok: true, json: async () => { throw new Error('invalid JSON'); } });
+    }
+    fetch.mockResolvedValueOnce(makeResponse({ realisations: [realisation({ titre: 'Projet local' })] }));
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+
+    await loadNotionRealisations();
+
+    expect(fetch.mock.calls.map(([url]) => url)).toEqual(['/api/realisations', '/data/realisations.json']);
+    expect(document.querySelector('.realisation-title').textContent).toBe('Projet local');
+    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['HTTP error', 'invalid JSON'])('preserves development cards when runtime and fallback both fail with a fallback %s', async failure => {
+    vi.stubEnv('DEV', true);
+    seedRealisationCards(1);
+    fetch.mockResolvedValueOnce(makeResponse({ realisations: [realisation({ titre: 'Projet conservé' })] }))
+      .mockRejectedValueOnce(new Error('runtime unavailable'));
+    if (failure === 'HTTP error') fetch.mockResolvedValueOnce(makeResponse({}, false));
+    if (failure === 'invalid JSON') {
+      fetch.mockResolvedValueOnce({ ok: true, json: async () => { throw new Error('invalid JSON'); } });
+    }
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+
+    await loadNotionRealisations();
+    const card = document.querySelector('.realisation-card');
+    await vi.advanceTimersByTimeAsync(30_000);
+
+    expect(fetch.mock.calls.map(([url]) => url)).toEqual(['/api/realisations', '/api/realisations', '/data/realisations.json']);
+    expect(document.querySelector('.realisation-card')).toBe(card);
+    expect(document.querySelector('.realisation-title').textContent).toBe('Projet conservé');
+    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(1);
+  });
+
+  it('never requests generated mocks in production after runtime JSON fails', async () => {
+    seedRealisationCards(1);
+    fetch.mockResolvedValueOnce(makeResponse({ realisations: [realisation({ titre: 'Projet runtime' })] }))
+      .mockResolvedValue({ ok: true, json: async () => { throw new Error('HTML instead of JSON'); } });
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+
+    await loadNotionRealisations();
+    const card = document.querySelector('.realisation-card');
+    await vi.advanceTimersByTimeAsync(30_000);
+
+    expect(fetch.mock.calls.map(([url]) => url)).toEqual(['/api/realisations', '/api/realisations']);
+    expect(document.querySelector('.realisation-card')).toBe(card);
+    expect(document.querySelector('.realisation-title').textContent).toBe('Projet runtime');
   });
 
   it('does nothing when the realisations grid is missing', async () => {
@@ -291,7 +347,7 @@ describe('Notion realisations loading', () => {
     expect(window.applyEsterTranslations).not.toHaveBeenCalled();
   });
 
-  it('refreshes cards every 60 seconds and rebuilds pagination after each render', async () => {
+  it('refreshes cards every 30 seconds and rebuilds pagination after each render', async () => {
     seedRealisationCards(1);
     fetch
       .mockResolvedValueOnce(makeResponse({ realisations: [realisation({ titre: 'Avant modification' })] }))
@@ -301,14 +357,14 @@ describe('Notion realisations loading', () => {
     await loadNotionRealisations();
     expect(document.querySelector('.realisation-title').textContent).toBe('Avant modification');
 
-    await vi.advanceTimersByTimeAsync(59_999);
+    await vi.advanceTimersByTimeAsync(29_999);
     expect(fetch).toHaveBeenCalledTimes(1);
     await vi.advanceTimersByTimeAsync(1);
 
     expect(document.querySelector('.realisation-title').textContent).toBe('Après modification');
     expect(fetch).toHaveBeenLastCalledWith('/api/realisations', { cache: 'no-store' });
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(2);
-    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(30_000);
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(3);
   });
 
@@ -320,7 +376,7 @@ describe('Notion realisations loading', () => {
     await Promise.all([loadNotionRealisations(), loadNotionRealisations()]);
     await loadNotionRealisations();
     expect(fetch).toHaveBeenCalledTimes(1);
-    await vi.advanceTimersByTimeAsync(120_000);
+    await vi.advanceTimersByTimeAsync(60_000);
 
     expect(fetch).toHaveBeenCalledTimes(3);
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(3);
@@ -332,7 +388,7 @@ describe('Notion realisations loading', () => {
     const { loadNotionRealisations } = await importFresh('../../js/notion.js');
 
     await loadNotionRealisations();
-    await vi.advanceTimersByTimeAsync(30_000);
+    await vi.advanceTimersByTimeAsync(15_000);
     visibility.mockReturnValue('hidden');
     document.dispatchEvent(new Event('visibilitychange'));
     document.dispatchEvent(new Event('visibilitychange'));
@@ -342,7 +398,7 @@ describe('Notion realisations loading', () => {
     visibility.mockReturnValue('visible');
     document.dispatchEvent(new Event('visibilitychange'));
     document.dispatchEvent(new Event('visibilitychange'));
-    await vi.advanceTimersByTimeAsync(59_999);
+    await vi.advanceTimersByTimeAsync(29_999);
     expect(fetch).toHaveBeenCalledTimes(1);
     await vi.advanceTimersByTimeAsync(1);
     expect(fetch).toHaveBeenCalledTimes(2);
@@ -356,11 +412,11 @@ describe('Notion realisations loading', () => {
 
     await loadNotionRealisations();
     expect(document.querySelector('.realisation-title').textContent).toBe('Mairie de test');
-    await vi.advanceTimersByTimeAsync(120_000);
+    await vi.advanceTimersByTimeAsync(60_000);
     expect(fetch).toHaveBeenCalledTimes(1);
     visibility.mockReturnValue('visible');
     document.dispatchEvent(new Event('visibilitychange'));
-    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(30_000);
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
@@ -377,12 +433,12 @@ describe('Notion realisations loading', () => {
 
     await loadNotionRealisations();
     const card = document.querySelector('.realisation-card');
-    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(30_000);
 
     expect(document.querySelector('.realisation-card')).toBe(card);
     expect(document.querySelector('.realisations-grid').hidden).toBe(false);
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(1);
-    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(30_000);
     expect(document.querySelector('.realisation-title').textContent).toBe('Donnée rétablie');
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(2);
   });
@@ -396,11 +452,11 @@ describe('Notion realisations loading', () => {
     const { loadNotionRealisations } = await importFresh('../../js/notion.js');
 
     await loadNotionRealisations();
-    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(30_000);
     expect(document.querySelector('.realisations-grid').children).toHaveLength(0);
     expect(document.querySelector('.realisations-empty').hidden).toBe(false);
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(2);
-    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(30_000);
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(2);
   });
 
@@ -419,7 +475,7 @@ describe('Notion realisations loading', () => {
     resolveRefresh(makeResponse({ realisations: [realisation({ titre: 'Refresh terminé' })] }));
     await vi.advanceTimersByTimeAsync(0);
     expect(document.querySelector('.realisation-title').textContent).toBe('Refresh terminé');
-    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(30_000);
     expect(document.querySelector('.realisation-title').textContent).toBe('Refresh suivant');
   });
 

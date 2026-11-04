@@ -40,15 +40,15 @@ describe('runtime Notion realisations', () => {
     }));
   });
 
-  it('reuses the cache before 60 seconds and refreshes at the boundary', async () => {
+  it('reuses the cache before 15 seconds and refreshes at the boundary', async () => {
     let time = 1000;
     const fetch = vi.fn().mockImplementationOnce(async () => response()).mockImplementationOnce(async () => response([]));
     const service = createNotionRealisationsService({ env, fetch, now: () => time });
     await service.getRealisations();
-    time = 60999;
+    time = 15999;
     expect((await service.getRealisations()).realisations[0].titre).toBe('École');
     expect(fetch).toHaveBeenCalledTimes(1);
-    time = 61000;
+    time = 16000;
     expect(await service.getRealisations()).toEqual({ realisations: [], stale: false });
     expect(fetch).toHaveBeenCalledTimes(2);
   });
