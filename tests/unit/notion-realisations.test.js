@@ -53,6 +53,36 @@ describe('runtime Notion realisations', () => {
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
+  it.each([false, true])('cools down sequential upstream failures with previous cache=%s', async withCache => {
+    let time = 0;
+    const fetch = vi.fn();
+    if (withCache) fetch.mockImplementationOnce(async () => response());
+    fetch.mockImplementation(async () => new Response('rate limited', { status: 429 }));
+    const service = createNotionRealisationsService({ env, fetch, now: () => time });
+    let original;
+    if (withCache) original = await service.getRealisations();
+    time = 15000;
+    async function expectUnavailable() {
+      if (withCache) expect(await service.getRealisations()).toEqual({ ...original, stale: true });
+      else await expect(service.getRealisations()).rejects.toThrow('Notion CMS unavailable');
+    }
+    await expectUnavailable();
+    const initialCalls = withCache ? 2 : 1;
+    for (let request = 0; request < 5; request += 1) await expectUnavailable();
+    time = 29999;
+    await expectUnavailable();
+    expect(fetch).toHaveBeenCalledTimes(initialCalls);
+    time = 30000;
+    await expectUnavailable();
+    expect(fetch).toHaveBeenCalledTimes(initialCalls + 1);
+    await expectUnavailable();
+    expect(fetch).toHaveBeenCalledTimes(initialCalls + 1);
+    time = 45000;
+    fetch.mockImplementation(async () => response([]));
+    expect(await service.getRealisations()).toEqual({ realisations: [], stale: false });
+    expect(fetch).toHaveBeenCalledTimes(initialCalls + 2);
+  });
+
   it('serves the last good cache after refresh failure and retries later', async () => {
     let time = 0;
     const fetch = vi.fn()
@@ -63,6 +93,7 @@ describe('runtime Notion realisations', () => {
     const first = await service.getRealisations();
     time = 60000;
     expect(await service.getRealisations()).toEqual({ ...first, stale: true });
+    time += 15000;
     expect(await service.getRealisations()).toEqual({ realisations: [], stale: false });
   });
 
@@ -97,6 +128,7 @@ describe('runtime Notion realisations', () => {
       // Even a transport that ignores abort must not publish its late result.
       finish(stage === 'fetch' ? response([latePage]) : { results: [latePage], has_more: false });
       await vi.advanceTimersByTimeAsync(0);
+      time += 15000;
       expect(await service.getRealisations()).toEqual({ realisations: [], stale: false });
       expect(fetch).toHaveBeenCalledTimes(3);
       expect(vi.getTimerCount()).toBe(0);

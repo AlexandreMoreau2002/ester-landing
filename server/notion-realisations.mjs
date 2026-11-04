@@ -1,4 +1,5 @@
 const CACHE_TTL_MS = 15_000;
+const FAILURE_COOLDOWN_MS = 15_000;
 const REFRESH_DEADLINE_MS = 10_000;
 
 export function plainText(items = []) {
@@ -58,6 +59,7 @@ export function createNotionRealisationsService({
 } = {}) {
   let cache = null;
   let refresh = null;
+  let retryAfter = 0;
 
   async function fetchRealisations(signal) {
     if (!env.NOTION_TOKEN || !env.NOTION_DATABASE_ID) throw new Error('Notion CMS unavailable');
@@ -123,12 +125,21 @@ export function createNotionRealisationsService({
       if (cache && now() - cache.fetchedAt < CACHE_TTL_MS) {
         return { realisations: cache.realisations, stale: false };
       }
-      if (!refresh) refresh = refreshWithDeadline().finally(() => { refresh = null; });
+      if (now() < retryAfter) {
+        if (cache) return { realisations: cache.realisations, stale: true };
+        throw new Error('Notion CMS unavailable');
+      }
+      if (!refresh) {
+        refresh = refreshWithDeadline().catch(error => {
+          retryAfter = now() + FAILURE_COOLDOWN_MS;
+          throw error;
+        }).finally(() => { refresh = null; });
+      }
       try {
         return await refresh;
-      } catch (error) {
+      } catch {
         if (cache) return { realisations: cache.realisations, stale: true };
-        throw error;
+        throw new Error('Notion CMS unavailable');
       }
     },
   };

@@ -342,6 +342,65 @@ describe('Notion realisations loading', () => {
     expect(document.querySelector('.realisation-title').textContent).toBe('Projet runtime');
   });
 
+  it('keeps page two and existing DOM when a real pagination poll returns unchanged cards', async () => {
+    seedRealisationCards(1);
+    setViewport(1024);
+    window.scrollTo = vi.fn();
+    const cards = Array.from({ length: 13 }, (_, index) => realisation({ titre: `Projet ${index + 1}` }));
+    fetch.mockResolvedValueOnce(makeResponse({ realisations: cards }))
+      .mockResolvedValue(makeResponse({ stale: true, realisations: cards.map(card => Object.fromEntries(Object.entries(card).reverse())) }));
+    const { initPagination } = await importFresh('../../js/pagination.js');
+    initPagination();
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+    await loadNotionRealisations();
+    document.querySelector('.pagination-next').click();
+    const card = document.querySelectorAll('.realisation-card')[6];
+    const navigation = document.querySelector('.realisations-pagination');
+    window.scrollTo.mockClear();
+
+    await vi.advanceTimersByTimeAsync(30_000);
+
+    expect(document.querySelectorAll('.realisation-card')[6]).toBe(card);
+    expect(document.querySelector('.realisations-pagination')).toBe(navigation);
+    expect(document.querySelector('.pagination-dot.is-active').getAttribute('aria-label')).toContain('2');
+    expect(card.style.display).toBe('');
+    expect(document.querySelector('.realisation-card').style.display).toBe('none');
+    expect(window.scrollTo).not.toHaveBeenCalled();
+  });
+
+  it('preserves the current page for changed cards and clamps it as real pagination shrinks', async () => {
+    seedRealisationCards(1);
+    setViewport(1024);
+    window.scrollTo = vi.fn();
+    const cards = Array.from({ length: 13 }, (_, index) => realisation({ titre: `Projet ${index + 1}` }));
+    fetch.mockResolvedValueOnce(makeResponse({ realisations: cards }))
+      .mockResolvedValueOnce(makeResponse({ realisations: cards.map(card => ({ ...card, description: 'Modification' })) }))
+      .mockResolvedValueOnce(makeResponse({ realisations: cards.slice(0, 7) }))
+      .mockResolvedValueOnce(makeResponse({ realisations: cards.slice(0, 2) }))
+      .mockResolvedValueOnce(makeResponse({ realisations: cards }));
+    const { initPagination } = await importFresh('../../js/pagination.js');
+    initPagination();
+    const { loadNotionRealisations } = await importFresh('../../js/notion.js');
+    await loadNotionRealisations();
+    document.querySelectorAll('.pagination-dot')[2].click();
+    window.scrollTo.mockClear();
+
+    await vi.advanceTimersByTimeAsync(30_000);
+    expect(document.querySelectorAll('.realisation-card')[12].style.display).toBe('');
+    expect(document.querySelector('.pagination-dot.is-active').getAttribute('aria-label')).toContain('3');
+    await vi.advanceTimersByTimeAsync(30_000);
+    expect(document.querySelectorAll('.realisation-card')[6].style.display).toBe('');
+    expect(document.querySelector('.pagination-next').disabled).toBe(true);
+    expect(document.querySelector('.realisation-card').style.display).toBe('none');
+    await vi.advanceTimersByTimeAsync(30_000);
+    expect(document.querySelector('.realisations-pagination')).toBeNull();
+    expect([...document.querySelectorAll('.realisation-card')].every(card => card.style.display === '')).toBe(true);
+    await vi.advanceTimersByTimeAsync(30_000);
+    expect(document.querySelector('.pagination-prev').disabled).toBe(true);
+    expect(document.querySelector('.realisation-card').style.display).toBe('');
+    expect(window.scrollTo).not.toHaveBeenCalled();
+  });
+
   it('does nothing when the realisations grid is missing', async () => {
     const { loadNotionRealisations } = await importFresh('../../js/notion.js');
 
@@ -407,7 +466,8 @@ describe('Notion realisations loading', () => {
     expect(fetch).toHaveBeenLastCalledWith('/api/realisations', { cache: 'no-store' });
     expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(2);
     await vi.advanceTimersByTimeAsync(30_000);
-    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(3);
+    expect(fetch).toHaveBeenCalledTimes(3);
+    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(2);
   });
 
   it('keeps one refresh schedule when startup is called repeatedly', async () => {
@@ -421,7 +481,7 @@ describe('Notion realisations loading', () => {
     await vi.advanceTimersByTimeAsync(60_000);
 
     expect(fetch).toHaveBeenCalledTimes(3);
-    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(3);
+    expect(window.rebuildRealisationsPagination).toHaveBeenCalledTimes(1);
   });
 
   it('stops polling while hidden and resumes a single schedule when visible', async () => {

@@ -54,20 +54,21 @@ export async function loadNotionRealisations() {
   let interval = null;
   let refreshing = false;
   let rendered = false;
+  let renderedSignature = null;
 
   function showEmptyState() {
     grid.innerHTML = '';
     grid.hidden = true;
     if (emptyState) emptyState.hidden = false;
     if (window.applyEsterTranslations) window.applyEsterTranslations();
-    if (window.rebuildRealisationsPagination) window.rebuildRealisationsPagination();
+    if (window.rebuildRealisationsPagination) window.rebuildRealisationsPagination({ preservePage: true });
   }
 
   function showGrid(realisations) {
     grid.innerHTML = realisations.map(buildCard).join('\n');
     grid.hidden = false;
     if (emptyState) emptyState.hidden = true;
-    if (window.rebuildRealisationsPagination) window.rebuildRealisationsPagination();
+    if (window.rebuildRealisationsPagination) window.rebuildRealisationsPagination({ preservePage: true });
   }
 
   async function readRealisations(response) {
@@ -89,9 +90,13 @@ export async function loadNotionRealisations() {
         if (!import.meta.env.DEV) throw error;
         realisations = await readRealisations(await fetch('/data/realisations.json', { cache: 'no-store' }));
       }
+      const signature = JSON.stringify(realisations.map(({ titre, type, categorie, lieu, description, image }) =>
+        [titre, type, categorie, lieu, description, image]));
+      if (signature === renderedSignature) return;
       if (realisations.length === 0) showEmptyState();
       else showGrid(realisations);
       rendered = true;
+      renderedSignature = signature;
     } catch {
       if (!rendered) showEmptyState();
     } finally {
