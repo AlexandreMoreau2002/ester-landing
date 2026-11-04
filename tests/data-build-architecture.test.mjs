@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { build } from 'vite';
+import { JSDOM } from 'jsdom';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { once } from 'node:events';
@@ -60,6 +61,7 @@ await test('serves built legal CSS and modules plus the existing favicon', async
     const cssPaths = [...legal.matchAll(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/g)].map(match => match[1]);
     assert.ok(modulePaths.length, 'legal translations must be bundled as a module');
     assert.ok(cssPaths.length, 'legal CSS must be emitted by Vite');
+    const stylesheets = new Map();
     for (const [paths, type] of [[modulePaths, 'text/javascript'], [cssPaths, 'text/css']]) {
       for (const path of paths) {
         const response = await fetch(new URL(path, origin));
@@ -72,8 +74,25 @@ await test('serves built legal CSS and modules plus the existing favicon', async
           assert.equal(body.includes('contact@ester-bet.fr'), false);
         } else {
           assert.match(body, /--bleu/);
+          stylesheets.set(path, body);
         }
       }
+    }
+    // Preserve the emitted CSS order: Vite puts the shared stylesheet after the inline theme.
+    const renderedLegal = legal.replace(
+      /<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"[^>]*>/g,
+      (_tag, path) => `<style>${stylesheets.get(path)}</style>`,
+    );
+    const dom = new JSDOM(renderedLegal);
+    try {
+      const { document, getComputedStyle } = dom.window;
+      const theme = getComputedStyle(document.body);
+      assert.match(theme.backgroundImage, /^radial-gradient\(/, 'the legal page must keep its dark gradient after shared CSS loads');
+      assert.match(theme.backgroundImage, /rgb\(10, 31, 58\)/, 'the legal gradient must retain its dark background');
+      assert.equal(theme.color, 'rgb(255, 255, 255)', 'legal body text must stay white against the dark theme');
+      assert.equal(getComputedStyle(document.querySelector('.legal-text')).color, 'rgba(255, 255, 255, 0.78)');
+    } finally {
+      dom.window.close();
     }
     assert.match(home, /<title[^>]*>ESTER SAS, ingénierie structurelle à Gap<\/title>/);
     assert.match(home, /data-i18n="services.s2.title">Diagnostics techniques solidité</);
