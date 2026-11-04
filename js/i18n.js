@@ -53,13 +53,13 @@ const TRANSLATIONS = {
     'services.heading': 'Une expertise technique complète,<br />du diagnostic au dimensionnement.',
     'services.s1.title': 'Études de structures béton',
     'services.s1.desc':  'Calcul de structure et vérification des éléments porteurs en béton armé pour constructions neuves, extensions et réhabilitations. Notes de calcul conformes aux Eurocodes (Eurocode 2 béton, Eurocode 8 sismique).',
-    'services.s2.title': 'Évaluation des risques',
+    'services.s2.title': 'Diagnostics techniques solidité',
     'services.s2.desc':  'Diagnostic structurel de bâtiments existants, expertise des pathologies et évaluation des risques. Rapports techniques circonstanciés incluant les préconisations de renforcement structurel, pour maîtres d\'ouvrage et assureurs.',
     'services.s3.title': 'Études de faisabilité',
     'services.s3.desc':  'Analyse structurelle en phase de conception pour valider la faisabilité technique d\'un projet avant dépôt de permis, en tenant compte des contraintes sismiques et alpines propres aux Hautes-Alpes (zone 3, Gap). Aide à la décision pour les maîtres d\'ouvrage.',
     'services.quote':    'Demander un devis →',
     'services.s1.quote.aria': 'Nous contacter pour les études de structures béton',
-    'services.s2.quote.aria': 'Nous contacter pour l\'évaluation des risques',
+    'services.s2.quote.aria': 'Nous contacter pour les diagnostics techniques solidité',
     'services.s3.quote.aria': 'Nous contacter pour une étude de faisabilité',
 
     /* ── Réalisations ─────────────────────────────────── */
@@ -133,7 +133,7 @@ const TRANSLATIONS = {
     'recru.li1': 'Projets variés : logement, ERP, bâtiments industriels, réhabilitations',
     'recru.li2': 'Environnement technique rigoureux, taille humaine',
     'recru.li3': 'Gap, préfecture des Hautes-Alpes, qualité de vie exceptionnelle',
-    'recru.li4': 'Interlocuteur direct avec la direction',
+    'recru.li4': 'Travail en équipe',
     'recru.cta.label': 'Ingénieur·e structure expérimenté·e',
     'recru.cta.sub':   'Envoyez votre candidature spontanée',
     'recru.cta.btn':   'Candidature spontanée',
@@ -160,7 +160,7 @@ const TRANSLATIONS = {
     'contact.sujet.label':    'Nature de la demande',
     'contact.sujet.default':  'Sélectionnez',
     'contact.sujet.o1': 'Étude de structure béton',
-    'contact.sujet.o2': 'Évaluation des risques',
+    'contact.sujet.o2': 'Diagnostics techniques solidité',
     'contact.sujet.o3': 'Étude de faisabilité',
     'contact.sujet.o5': 'Autre demande',
     'contact.sujet.o6': 'Candidature',
@@ -194,9 +194,9 @@ const TRANSLATIONS = {
     'footer.ml': 'Mentions légales & confidentialité',
 
     /* ── Métadonnées ──────────────────────────────────── */
-    'meta.home.title': 'ESTER SAS Bureau d\'études structure à Gap',
+    'meta.home.title': 'ESTER SAS, ingénierie structurelle à Gap',
     'meta.home.description': 'Bureau d\'études structure à Gap (Hautes-Alpes) depuis 1977. Calcul de structure béton et expertise structurelle. Qualification OPQIBI 1202.',
-    'meta.home.og.title': 'ESTER SAS Bureau d\'études structure à Gap',
+    'meta.home.og.title': 'ESTER SAS, ingénierie structurelle à Gap',
     'meta.home.og.description': 'Études structurelles et faisabilité pour les projets publics et privés des Hautes-Alpes. Implanté à Gap depuis 1977.',
 
     /* ── Attributs contact ────────────────────────────── */
@@ -244,7 +244,7 @@ const TRANSLATIONS = {
     'legal.privacy.processor.label': 'Sous‑traitants',
     'legal.privacy.processor.value': '<strong style="color:white">Resend, Inc.</strong> (États‑Unis) assure l\'envoi de l\'e‑mail généré par le formulaire, pour notre compte. Ce transfert hors de l\'Union européenne est encadré par des clauses contractuelles types.<br/><strong style="color:white">OVH SAS</strong> (France) héberge le site. Aucun partage de données à des fins commerciales.',
     'legal.privacy.rights.label': 'Exercer vos droits',
-    'legal.privacy.rights.value': 'Par courrier à l\'adresse du siège, ou par e‑mail à <a href="mailto:contact@ester-bet.fr" style="color:white">contact@ester-bet.fr</a>.<br/>Réclamation possible auprès de la <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
+    'legal.privacy.rights.value': 'Par courrier à l\'adresse du siège, ou par e‑mail à <a href="mailto:estersarl.ing@gmail.com" style="color:white">estersarl.ing@gmail.com</a>.<br/>Réclamation possible auprès de la <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
     'legal.third.title': 'Services tiers intégrés',
     'legal.third.maps.label': 'Google Maps',
     'legal.third.maps.value': 'La page Contact propose une carte Google Maps pour situer ESTER SAS au 3 bis avenue Maréchal Foch, 05000 Gap. Cette carte n\'est chargée qu\'après votre clic sur « Afficher la carte ». Une fois affichée, votre navigateur se connecte aux serveurs de Google, qui peuvent recevoir votre adresse IP, les informations de votre navigateur et la page consultée.',
@@ -305,7 +305,7 @@ const TRANSLATIONS = {
     'services.heading': 'Comprehensive technical expertise,<br />from design to site supervision.',
     'services.s1.title': 'Concrete structural studies',
     'services.s1.desc':  'Structural calculation and verification of reinforced concrete load-bearing elements for new constructions, extensions and renovations. Calculations compliant with Eurocodes (Eurocode 2 concrete, Eurocode 8 seismic).',
-    'services.s2.title': 'Risk assessment',
+    'services.s2.title': 'Technical structural assessments',
     'services.s2.desc':  'Building structural diagnosis, assessment of existing structures and pathology evaluation. Detailed technical reports including structural reinforcement recommendations, for project owners and insurers.',
     'services.s3.title': 'Feasibility studies',
     'services.s3.desc':  'Structural analysis during the design phase to validate the technical feasibility of a project prior to planning permission, taking into account the seismic and Alpine constraints specific to the Hautes-Alpes (seismic zone 3, Gap area). Decision support for project owners.',
@@ -313,7 +313,7 @@ const TRANSLATIONS = {
     'services.s4.desc':  'Inspection visits, structural defect resolution and technical assistance during construction. A dedicated technical contact throughout the project, serving Gap and the Hautes-Alpes.',
     'services.quote':    'Request a quote →',
     'services.s1.quote.aria': 'Contact us about concrete structural studies',
-    'services.s2.quote.aria': 'Contact us about risk assessment',
+    'services.s2.quote.aria': 'Contact us about technical structural assessments',
     'services.s3.quote.aria': 'Contact us about a feasibility study',
     'services.s4.quote.aria': 'Contact us about site supervision',
 
@@ -388,7 +388,7 @@ const TRANSLATIONS = {
     'recru.li1': 'Varied projects: housing, ERP, industrial buildings, renovations',
     'recru.li2': 'Rigorous technical environment, human scale',
     'recru.li3': 'Gap, prefecture of the Hautes-Alpes, exceptional quality of life',
-    'recru.li4': 'Direct contact with management',
+    'recru.li4': 'Teamwork',
     'recru.cta.label': 'Experienced structural engineer',
     'recru.cta.sub':   'Send a spontaneous application',
     'recru.cta.btn':   'Spontaneous application',
@@ -415,7 +415,7 @@ const TRANSLATIONS = {
     'contact.sujet.label':    'Nature of request',
     'contact.sujet.default':  'Select',
     'contact.sujet.o1': 'Concrete structural study',
-    'contact.sujet.o2': 'Risk assessment',
+    'contact.sujet.o2': 'Technical structural assessments',
     'contact.sujet.o3': 'Feasibility study',
     'contact.sujet.o4': 'Site supervision',
     'contact.sujet.o5': 'Other request',
@@ -450,9 +450,9 @@ const TRANSLATIONS = {
     'footer.ml': 'Legal notice & privacy policy',
 
     /* ── Metadata ─────────────────────────────────────── */
-    'meta.home.title': 'ESTER SAS Structural engineering firm in Gap',
+    'meta.home.title': 'ESTER SAS, structural engineering in Gap',
     'meta.home.description': 'Structural engineering firm in Gap, Hautes-Alpes, since 1977. Concrete structural calculation, building diagnosis, site supervision. OPQIBI 1202.',
-    'meta.home.og.title': 'ESTER SAS Structural engineering firm in Gap',
+    'meta.home.og.title': 'ESTER SAS, structural engineering in Gap',
     'meta.home.og.description': 'Structural studies, feasibility and site supervision for public and private projects in the Hautes-Alpes. Based in Gap since 1977.',
 
     /* ── Contact attributes ───────────────────────────── */
@@ -500,7 +500,7 @@ const TRANSLATIONS = {
     'legal.privacy.processor.label': 'Processors',
     'legal.privacy.processor.value': '<strong style="color:white">Resend, Inc.</strong> (United States) sends the email generated by the form on our behalf. This transfer outside the European Union is covered by standard contractual clauses.<br/><strong style="color:white">OVH SAS</strong> (France) hosts the site. No data is shared for commercial purposes.',
     'legal.privacy.rights.label': 'Exercise your rights',
-    'legal.privacy.rights.value': 'By post to the registered office address, or by email at <a href="mailto:contact@ester-bet.fr" style="color:white">contact@ester-bet.fr</a>.<br/>You may also lodge a complaint with the <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
+    'legal.privacy.rights.value': 'By post to the registered office address, or by email at <a href="mailto:estersarl.ing@gmail.com" style="color:white">estersarl.ing@gmail.com</a>.<br/>You may also lodge a complaint with the <strong>CNIL</strong> (<a href="https://www.cnil.fr">cnil.fr</a>).',
     'legal.third.title': 'Integrated third-party services',
     'legal.third.maps.label': 'Google Maps',
     'legal.third.maps.value': 'The Contact section offers a Google Maps map showing ESTER SAS at 3 bis avenue Maréchal Foch, 05000 Gap. The map is loaded only after you click “Show the map”. Once displayed, your browser connects to Google servers, which may receive your IP address, browser information and the page viewed.',
