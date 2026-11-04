@@ -5,6 +5,7 @@
 
 # ── Docs locaux (non versionnés — pour Alex uniquement) ───
 docs/
+todo.md
 
 # ── Claude Code ───────────────────────────────────────────
 .claude/
