@@ -42,10 +42,18 @@ function buildCard(r) {
     </li>`;
 }
 
+let started = false;
+
 export async function loadNotionRealisations() {
+  if (started) return;
   const grid = document.querySelector('.realisations-grid');
   const emptyState = document.querySelector('.realisations-empty');
   if (!grid) return;
+  started = true;
+
+  let interval = null;
+  let refreshing = false;
+  let rendered = false;
 
   function showEmptyState() {
     grid.innerHTML = '';
@@ -56,28 +64,42 @@ export async function loadNotionRealisations() {
   }
 
   function showGrid(realisations) {
-    grid.hidden = false;
     grid.innerHTML = realisations.map(buildCard).join('\n');
+    grid.hidden = false;
     if (emptyState) emptyState.hidden = true;
     if (window.rebuildRealisationsPagination) window.rebuildRealisationsPagination();
   }
 
-  try {
-    const response = await fetch('/data/realisations.json', { cache: 'no-store' });
-    if (!response.ok) {
-      showEmptyState();
-      return;
-    }
+  async function refreshRealisations() {
+    if (refreshing) return;
+    refreshing = true;
 
-    const data = await response.json();
-    const realisations = data.realisations || [];
-    if (realisations.length === 0) {
-      showEmptyState();
-      return;
-    }
+    try {
+      const response = await fetch('/api/realisations', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Realisations unavailable');
 
-    showGrid(realisations);
-  } catch {
-    showEmptyState();
+      const data = await response.json();
+      const realisations = data.realisations || [];
+      if (realisations.length === 0) showEmptyState();
+      else showGrid(realisations);
+      rendered = true;
+    } catch {
+      if (!rendered) showEmptyState();
+    } finally {
+      refreshing = false;
+    }
   }
+
+  function updatePolling() {
+    if (document.visibilityState === 'hidden') {
+      clearInterval(interval);
+      interval = null;
+    } else if (interval === null) {
+      interval = setInterval(refreshRealisations, 60_000);
+    }
+  }
+
+  document.addEventListener('visibilitychange', updatePolling);
+  updatePolling();
+  await refreshRealisations();
 }
