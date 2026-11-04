@@ -41,11 +41,11 @@ Conserver le champ `Publié` : en son absence, le code considère la ligne publi
 4. Dans Dokploy, définir `NOTION_TOKEN` et `NOTION_DATABASE_ID` dans **Environment runtime**, puis supprimer leurs anciennes entrées **Build Args**, en préservant les autres variables.
 5. Après confirmation explicite du déploiement, redéployer pour charger cette configuration.
 
-Le token reste côté serveur. `server/notion-realisations.mjs` appelle Notion ; `server.mjs` expose uniquement les données normalisées via `GET /api/realisations`. `js/notion.js` affiche les cartes et relance la pagination. En production, le fichier `public/data/realisations.json` produit au build contient une liste vide et n'est plus la source des cartes. Les avis Google restent générés au build par `scripts/generate-data.mjs`.
+Le token reste côté serveur. `server/notion-realisations.mjs` appelle Notion ; `server.mjs` expose uniquement les données normalisées via `GET /api/realisations`. `js/notion.js` affiche les cartes et relance la pagination. Avec `ESTER_MODE=prod`, le fichier `public/data/realisations.json` produit au build contient une liste vide. Dans un bundle Vite de production, ce fichier n'est jamais la source des cartes. Les avis Google restent générés au build par `scripts/generate-data.mjs`.
 
 ## Développement local sans Notion
 
-Avec `ESTER_MODE=dev`, la génération écrit une réalisation fictive déterministe dans `public/data/realisations.json`, sans token. Sous Vite en développement uniquement (`import.meta.env.DEV`), le navigateur essaie l’API puis utilise ce JSON si la requête échoue ou si la réponse est invalide. Une réponse API valide vide ne déclenche pas le repli. En production, le JSON généré reste vide et le navigateur utilise uniquement l’API runtime, même si le build a été lancé avec `ESTER_MODE=dev`.
+Avec `ESTER_MODE=dev`, la génération écrit une réalisation fictive déterministe dans `public/data/realisations.json`, sans token. Sous Vite en développement uniquement (`import.meta.env.DEV`), le navigateur essaie l’API puis utilise ce JSON si la requête échoue ou si la réponse est invalide. Une réponse API valide vide ne déclenche pas le repli. Avec `ESTER_MODE=prod`, le JSON généré est vide ; avec `ESTER_MODE=dev`, il contient la réalisation fictive. Dans un bundle Vite de production, le navigateur utilise toujours uniquement l’API runtime, même lorsque le JSON contient les données fictives générées avec `ESTER_MODE=dev`.
 
 ## Modifier une réalisation
 
