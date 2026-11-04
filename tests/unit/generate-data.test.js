@@ -161,10 +161,25 @@ describe('generate-data helpers', () => {
     });
   });
 
+  it('generates deterministic development card fixtures without credentials or network access', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => { throw new Error('Build must not call Notion'); }));
+    const generated = await generateRealisations({ ESTER_MODE: 'dev' });
+
+    expect(generated.realisations.length).toBeGreaterThan(0);
+    for (const card of generated.realisations) {
+      expect(Object.keys(card).sort()).toEqual(['categorie', 'description', 'image', 'lieu', 'titre', 'type']);
+      for (const value of Object.values(card)) expect(typeof value).toBe('string');
+      expect(card.titre.length).toBeGreaterThan(0);
+      expect(card.type.length).toBeGreaterThan(0);
+      expect(card.lieu.length).toBeGreaterThan(0);
+    }
+    expect(await generateRealisations({ ESTER_MODE: 'dev' })).toEqual(generated);
+    expect(await generateRealisations({ ESTER_MODE: 'dev', NOTION_TOKEN: 'secret', NOTION_DATABASE_ID: 'db' })).toEqual(generated);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it.each([
-    { ESTER_MODE: 'dev' },
     { ESTER_MODE: 'prod' },
-    { ESTER_MODE: 'dev', NOTION_TOKEN: 'secret', NOTION_DATABASE_ID: 'db' },
     { ESTER_MODE: 'prod', NOTION_TOKEN: 'secret', NOTION_DATABASE_ID: 'db' },
   ])('writes an empty build fallback without contacting Notion: %j', async env => {
     vi.stubGlobal('fetch', vi.fn(() => { throw new Error('Build must not call Notion'); }));

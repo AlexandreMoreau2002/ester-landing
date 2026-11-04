@@ -134,8 +134,19 @@ export async function generateAvis(env) {
   };
 }
 
-export async function generateRealisations() {
-  // Live projects are fetched by the server; the static file is an empty fallback.
+export async function generateRealisations(env) {
+  // Local fixtures keep Vite development usable without runtime Notion access.
+  if (env.ESTER_MODE === 'dev') {
+    return { realisations: [{
+      titre: 'Projet de démonstration',
+      type: 'Bâtiment public',
+      categorie: 'Diagnostic structurel',
+      lieu: 'Gap',
+      description: 'Exemple fictif pour le développement local du site ESTER.',
+      image: '',
+    }] };
+  }
+  // Live projects are fetched by the server; production keeps an empty build fallback.
   return { realisations: [] };
 }
 
